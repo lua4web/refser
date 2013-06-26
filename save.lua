@@ -70,7 +70,7 @@ local function commize(saver)
 	end
 end
 
-local function save(x)
+local function save(x, ignore)
 	local saver = {}
 	saver.res = {}
 	saver.res_len = 0
