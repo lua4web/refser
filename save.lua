@@ -1,22 +1,13 @@
 --[[ TODO: 
-1. Errors should be returned as second result with nil
-2. Localize used global functions
-3. Test issues with string.format
+1. Add array support
+2. Catch recursive tables
 ]]
 
-local function isint(x)
-	return type(x) == "number" and x == math.floor(x)
-end
-
-local function trivial(x)
-	if type(x) == "number" then
-		return tostring(x)
-	elseif type(x) == "string" then
-		return string.format("%q", x) 
-	elseif type(x) == "boolean" then
-		return x and "true" or "false"
-	end
-end
+local type = type
+local next = next
+local tostring = tostring
+local format = string.format
+local concat = table.concat
 
 local function add(saver, s)
 	saver.res_len = saver.res_len + 1
@@ -43,14 +34,16 @@ local function poptable(saver)
 end
 
 local function process(saver, x)
-	if trivial(x) then
-		add(saver, trivial(x))
+	if type(x) == "number" then
+		add(saver, tostring(x))
+	elseif type(x) == "string" then
+		add(saver, format("%q", x))
+	elseif type(x) == "boolean" then
+		add(saver, x and "true" or "false")
+	elseif type(x) == "table" then
+		pushtable(saver, x)
 	else
-		if type(x) == "table" then
-			pushtable(saver, x)
-		else
-			error("Attempt to serialize non-trivial type")
-		end
+		return true
 	end
 end
 
@@ -79,19 +72,23 @@ local function save(x)
 				if saver.top.curkey ~= nil then
 					commize(saver)
 					add(saver, "[")
-					process(saver, saver.top.curkey)
+					if process(saver, saver.top.curkey) then
+						return nil, "Attempt to serialize non-trivial data"
+					end
 				else
 					poptable(saver)
 				end
 			else
 				saver.top.next_is_key = true
 				add(saver, "]=")
-				process(saver, saver.top.table[saver.top.curkey])
+				if process(saver, saver.top.table[saver.top.curkey]) then
+					return nil, "Attempt to serialize non-trivial data"
+				end
 			end
 		until saver.stack_depth == 0
 	end
 	
-	return table.concat(saver.res)
+	return concat(saver.res)
 end
 
 return save
