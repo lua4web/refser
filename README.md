@@ -1,3 +1,15 @@
-# TODO
+# safeser - Lua table serialization library
 
-Write somthing here
+## Features
+
+* Serializes strings, numbers, booleans and non-recursive tables. 
+* Serialization is stack-overflow safe: tables of any nesting depth can be serialized. 
+* Serialization output is valid Lua code. 
+* Serialization returns nil plus error message if something goes wrong. 
+
+## Not-implemented-yet features
+
+* Serializes arrays properly. 
+* Raises an error when finds recursive tables. 
+* Errors can be ignored. 
+* Deserialization doesn't use loadsting(), therefore, it is safe to use even for suspicious data. 
