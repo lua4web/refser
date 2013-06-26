@@ -1,6 +1,5 @@
 --[[ TODO: 
-1. Add array support
-2. Catch recursive tables
+1. Catch recursive tables
 ]]
 
 local type = type
@@ -9,6 +8,11 @@ local tostring = tostring
 local format = string.format
 local concat = table.concat
 local huge = math.huge
+local floor = math.floor
+
+local function notint(x)
+	return type(x) ~= "number" or floor(x) ~= x
+end
 
 local function add(saver, s)
 	saver.res_len = saver.res_len + 1
@@ -22,7 +26,9 @@ local function pushtable(saver, t)
 		table = t,
 		comma = false,
 		curkey = nil,
-		next_is_key = true
+		next_is_key = true,
+		indexing = true,
+		i = 1
 	}
 	saver.top = saver.stack[saver.stack_depth]
 end
@@ -75,23 +81,37 @@ local function save(x)
 	
 	if type(x) == "table" then
 		repeat
-			if saver.top.next_is_key then
-				saver.top.next_is_key = false
-				saver.top.curkey = next(saver.top.table, saver.top.curkey)
-				if saver.top.curkey ~= nil then
+			if saver.top.indexing then
+				if saver.top.table[saver.top.i] ~= nil then
+					saver.top.i = saver.top.i + 1
 					commize(saver)
-					add(saver, "[")
-					if process(saver, saver.top.curkey) then
+					if process(saver, saver.top.table[saver.top.i - 1]) then
 						return nil, "Attempt to serialize non-trivial data"
 					end
 				else
-					poptable(saver)
+					saver.top.indexing = false
 				end
 			else
-				saver.top.next_is_key = true
-				add(saver, "]=")
-				if process(saver, saver.top.table[saver.top.curkey]) then
-					return nil, "Attempt to serialize non-trivial data"
+				if saver.top.next_is_key then
+					saver.top.curkey = next(saver.top.table, saver.top.curkey)
+					if saver.top.curkey ~= nil then
+						if notint(saver.top.curkey) or saver.top.curkey < 1 or saver.top.curkey >= saver.top.i then
+							saver.top.next_is_key = false
+							commize(saver)
+							add(saver, "[")
+							if process(saver, saver.top.curkey) then
+								return nil, "Attempt to serialize non-trivial data"
+							end
+						end
+					else
+						poptable(saver)
+					end
+				else
+					saver.top.next_is_key = true
+					add(saver, "]=")
+					if process(saver, saver.top.table[saver.top.curkey]) then
+						return nil, "Attempt to serialize non-trivial data"
+					end
 				end
 			end
 		until saver.stack_depth == 0
