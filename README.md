@@ -2,9 +2,9 @@
 
 ## Features
 
-* Serializes strings, numbers, booleans and non-recursive tables. 
+* Serializes strings, numbers(including math.huge and NaN), booleans and non-recursive tables. 
 * Serialization is stack-overflow safe: tables of any nesting depth can be serialized. 
-* Serialization output is valid Lua code. 
+* Serialization output is valid Lua expression. 
 * Serialization returns nil plus error message if something goes wrong. 
 
 ## Not-implemented-yet features

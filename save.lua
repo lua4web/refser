@@ -8,6 +8,7 @@ local next = next
 local tostring = tostring
 local format = string.format
 local concat = table.concat
+local huge = math.huge
 
 local function add(saver, s)
 	saver.res_len = saver.res_len + 1
@@ -35,7 +36,15 @@ end
 
 local function process(saver, x)
 	if type(x) == "number" then
-		add(saver, tostring(x))
+		if x == huge then
+			add(saver, "1/0")
+		elseif x == -huge then
+			add(saver, "-1/0")
+		elseif x ~= x then
+			add(saver, "0/0")
+		else
+			add(saver, tostring(x))
+		end
 	elseif type(x) == "string" then
 		add(saver, format("%q", x))
 	elseif type(x) == "boolean" then
