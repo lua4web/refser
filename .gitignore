@@ -1,4 +1,6 @@
 bm*
 test*
 *.so
+*.o
 *.sh
+*~
