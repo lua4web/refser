@@ -5,7 +5,7 @@ extern "C" {
 }
 
 #include <stdlib.h>
-#include <iostream>
+#include <math.h>
 
 using namespace std;
 
@@ -22,6 +22,7 @@ using namespace std;
 #define VIEW_MINF 'i'
 #define VIEW_SEP ','
 #define VIEW_EQ '='
+#define VIEW_HASH_SEP '|'
 
 #define INDEX_INF 2
 #define INDEX_MINF 3
@@ -30,8 +31,12 @@ using namespace std;
 #define ERROR_NONTRIVIAL 1
 #define ERROR_STACK_EXHAUSTED 2
 
+#define is_int(x) (fmod(x, 1.0) == 0.0)
+
 struct SaverNode {
 	char next_is_key;
+	char indexing;
+	lua_Number i;
 	SaverNode *next, *prev;
 	
 	SaverNode(SaverNode *last);
@@ -42,6 +47,8 @@ SaverNode::SaverNode(SaverNode *top) {
 	this->next_is_key = 1;
 	this->next = 0;
 	this->prev = top;
+	this->indexing = 1;
+	this->i = 1;
 }
 
 SaverNode::SaverNode() {
@@ -181,24 +188,52 @@ static int save(lua_State *L) {
 		S.process(INDEX_X);
 		
 		while(S.top->prev) {
-			if(S.top->next_is_key) {
-				S.top->next_is_key = 0; 
-				// -1 = v, -2 = k, -3 = t
-				lua_pop(L, 1); 
-				// -1 = k, -2 = t
-				if(lua_next(L, -2)) { // -1 = v, -2 = k, -3 = t
+			if(S.top->indexing) {
+				int i = lua_gettop(L);
+				lua_rawgeti(L, -3, S.top->i);
+				if(!lua_isnil(L, -1)) {
+					S.top->i++;
 					S.add(VIEW_SEP);
-					S.process(-2); // process key
+					S.process(-1);
 				}
-				else { // -1 = t
-					S.popTable(); // ???
+				else {
+					S.top->indexing = 0;
+					S.add(VIEW_HASH_SEP);
 				}
+				lua_remove(L, i);
 			}
 			else {
-				S.top->next_is_key = 1;
-				// -1 = v, -2 = k, -3 = t
-				S.add(VIEW_EQ);
-				S.process(-1);
+				if(S.top->next_is_key) {
+					S.top->next_is_key = 0; 
+					// -1 = v, -2 = k, -3 = t
+					lua_pop(L, 1); 
+					// -1 = k, -2 = t
+					if(lua_next(L, -2)) { // -1 = v, -2 = k, -3 = t
+						if(lua_type(L, -2) == LUA_TNUMBER) {
+							lua_Number x = lua_tonumber(L, -2);
+							if(is_int(x) && x < S.top->i && x > 0) {
+								S.top->next_is_key = 1; 
+							}
+							else { // TODO: clean this up
+								S.add(VIEW_SEP);
+								S.process(-2); // process key
+							}
+						}
+						else {
+							S.add(VIEW_SEP);
+							S.process(-2); // process key
+						}
+					}
+					else { // -1 = t
+						S.popTable(); // ???
+					}
+				}
+				else {
+					S.top->next_is_key = 1;
+					// -1 = v, -2 = k, -3 = t
+					S.add(VIEW_EQ);
+					S.process(-1);
+				}
 			}
 		}
 		
