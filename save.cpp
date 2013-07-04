@@ -23,6 +23,8 @@ using namespace std;
 #define VIEW_SEP ','
 #define VIEW_EQ '='
 #define VIEW_HASH_SEP '|'
+#define VIEW_STRING_DELIM '"'
+#define VIEW_STRING_ESCAPE '\\'
 
 #define INDEX_INF 2
 #define INDEX_MINF 3
@@ -148,7 +150,9 @@ void Saver::process(int index) {
 		case LUA_TSTRING: {
 			size_t len;
 			const char *s = lua_tolstring(this->L, index, &len);
+			this->add(VIEW_STRING_DELIM);
 			this->add(s, len);
+			this->add(VIEW_STRING_DELIM);
 			break;
 		}
 		case LUA_TNUMBER: {
