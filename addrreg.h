@@ -7,6 +7,7 @@ struct AddrRegNode {
 	intptr_t value;
 	unsigned int id;
 	AddrRegNode *next[2];
+	signed char balance;
 	
 	AddrRegNode(intptr_t  value, unsigned int id);
 };
