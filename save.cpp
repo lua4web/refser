@@ -36,6 +36,7 @@ using namespace std;
 struct SaverNode {
 	char next_is_key;
 	char indexing;
+	char comma;
 	lua_Number i;
 	SaverNode *next, *prev;
 	
@@ -47,6 +48,7 @@ SaverNode::SaverNode(SaverNode *top) {
 	this->next_is_key = 1;
 	this->next = 0;
 	this->prev = top;
+	this->comma = 0;
 	this->indexing = 1;
 	this->i = 1;
 }
@@ -68,6 +70,7 @@ class Saver {
 		void add(char c);
 		void add(const char *s);
 		void add(const char *s, size_t l);
+		void sep();
 		void pushTable(int index);
 		void popTable();
 		void process(int index);
@@ -98,6 +101,13 @@ void Saver::add(const char *s) {
 
 void Saver::add(const char* s, size_t l) {
 	luaL_addlstring(this->Buf, s, l);
+}
+
+void Saver::sep() {
+	if(this->top->comma) {
+		this->add(this->top->comma);
+	}
+	this->top->comma = VIEW_SEP;
 }
 
 void Saver::pushTable(int index) {
@@ -182,81 +192,83 @@ void Saver::process(int index) {
 }
 
 static int save(lua_State *L) {
-	Saver S(L);
-	
-	try {		
-		S.process(INDEX_X);
+	Saver *S;
+	try {
+		S = new Saver(L);	
+		S->process(INDEX_X);
 		
-		while(S.top->prev) {
-			if(S.top->indexing) {
+		while(S->top->prev) {
+			if(S->top->indexing) {
 				int i = lua_gettop(L);
-				lua_rawgeti(L, -3, S.top->i);
+				lua_rawgeti(L, -3, S->top->i);
 				if(!lua_isnil(L, -1)) {
-					S.top->i++;
-					S.add(VIEW_SEP);
-					S.process(-1);
+					S->top->i++;
+					S->sep();
+					S->process(-1);
 				}
 				else {
-					S.top->indexing = 0;
-					S.add(VIEW_HASH_SEP);
+					S->top->indexing = 0;
+					S->top->comma = VIEW_HASH_SEP;
 				}
 				lua_remove(L, i);
 			}
 			else {
-				if(S.top->next_is_key) {
-					S.top->next_is_key = 0; 
+				if(S->top->next_is_key) {
+					S->top->next_is_key = 0; 
 					// -1 = v, -2 = k, -3 = t
 					lua_pop(L, 1); 
 					// -1 = k, -2 = t
 					if(lua_next(L, -2)) { // -1 = v, -2 = k, -3 = t
 						if(lua_type(L, -2) == LUA_TNUMBER) {
 							lua_Number x = lua_tonumber(L, -2);
-							if(is_int(x) && x < S.top->i && x > 0) {
-								S.top->next_is_key = 1; 
+							if(is_int(x) && x < S->top->i && x > 0) {
+								S->top->next_is_key = 1; 
 							}
 							else { // TODO: clean this up
-								S.add(VIEW_SEP);
-								S.process(-2); // process key
+								S->sep();
+								S->process(-2); // process key
 							}
 						}
 						else {
-							S.add(VIEW_SEP);
-							S.process(-2); // process key
+							S->sep();
+							S->process(-2); // process key
 						}
 					}
 					else { // -1 = t
-						S.popTable(); // ???
+						S->popTable(); // ???
 					}
 				}
 				else {
-					S.top->next_is_key = 1;
+					S->top->next_is_key = 1;
 					// -1 = v, -2 = k, -3 = t
-					S.add(VIEW_EQ);
-					S.process(-1);
+					S->add(VIEW_EQ);
+					S->process(-1);
 				}
 			}
 		}
 		
-		S.pushResult();
+		S->pushResult();
+		free(S);
 		return 1;
 	}
 	
 	catch(int error) {
-		lua_pushnil(S.L);
+		lua_pushnil(S->L);
 		switch(error) {
 			case ERROR_NONTRIVIAL: {
-				lua_pushstring(S.L, "refser error: attempt to serialize non-trivial data");
+				lua_pushstring(S->L, "refser error: attempt to serialize non-trivial data");
 				break;
 			}
 			case ERROR_STACK_EXHAUSTED: {
-				lua_pushstring(S.L, "refser error: lua stack exhausted");
+				lua_pushstring(S->L, "refser error: lua stack exhausted");
 				break;
 			}
 			default: {
-				lua_pushstring(S.L, "refser error: unknown");
+				lua_pushstring(S->L, "refser error: unknown");
 				break;
 			}
 		}
+		free(S);
 		return 2;
 	};
 }
