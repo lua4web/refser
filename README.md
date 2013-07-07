@@ -1,10 +1,14 @@
 # refser - yet another Lua table serialization library
 
-refser is under construction. 
-
 refser aims to serialize nested tables with references correctly, similar to identity-preserving table serialization by Metalua, but faster and with shorter output. 
 
-refser is written in C++. 
+## Status
+
+refser is under construction. 
+
+Currently only refser.save() function is partially implemented.
+
+## Internals
 
 Output format:
 
@@ -27,3 +31,10 @@ Example:
     -- {1,@1,{"indirect recursion"|@1=@1}|@1=3,{@1,@1}=@3}
 
 Here, @1 is the root table (x), @2 is table x[3] and @3 is y. 
+
+## TODO
+
+* Escape strings in refser.save()
+* Support saving tuples in refser.save()
+* Improve numbers saving in refser.save()
+* Implement refser.load()
