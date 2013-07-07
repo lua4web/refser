@@ -59,10 +59,7 @@ static int process(fixbuf *B, int index, int *count) {
 		case LUA_TSTRING: {
 			size_t len;
 			const char *s = lua_tolstring(B->L, index, &len);
-			fixbuf_addchar(B, '"');
-			// TODO: escape special symbols
-			fixbuf_addlstring(B, s, len);
-			fixbuf_addchar(B, '"');
+			fixbuf_addqstring(B, s, len);
 			break;
 		}
 		case LUA_TTABLE: {

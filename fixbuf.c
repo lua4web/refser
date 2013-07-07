@@ -45,6 +45,48 @@ void fixbuf_addlstring(fixbuf *B, const char *s, size_t len) {
 	B->used +=len;
 }
 
+void fixbuf_addqstring(fixbuf *B, const char *s, size_t len) {
+	fixbuf_addchar(B, '"');
+	size_t i = 0;
+	char esc;
+	while(i < len) {
+		switch(s[i]) {
+			case '\\': {
+				esc = '\\';
+				break;
+			}
+			case '\n': {
+				esc = 'n';
+				break;
+			}
+			case '\r': {
+				esc = 'r';
+				break;
+			}
+			case '"': {
+				esc = '"';
+				break;
+			}
+			case '\0': {
+				esc = 'z';
+				break;
+			}
+			default: {
+				i++;
+				continue;
+			}
+		}
+		fixbuf_addlstring(B, s, i);
+		fixbuf_addchar(B, '\\');
+		fixbuf_addchar(B, esc);
+		s += i + 1;
+		len -= i + 1;
+		i = 0;
+	}
+	fixbuf_addlstring(B, s, len);
+	fixbuf_addchar(B, '"');
+}
+
 void fixbuf_addstring(fixbuf *B, const char *s) {
 	fixbuf_addlstring(B, s, strlen(s));
 }

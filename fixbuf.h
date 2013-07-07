@@ -18,6 +18,7 @@ typedef struct fixbuf {
 void fixbuf_init(lua_State *L, fixbuf *B, int index);
 void fixbuf_addchar(fixbuf *B, char c);
 void fixbuf_addlstring(fixbuf *B, const char *s, size_t len);
+void fixbuf_addqstring(fixbuf *B, const char *s, size_t len);
 void fixbuf_addstring(fixbuf *B, const char *s);
 void fixbuf_addvalue(fixbuf *B);
 void fixbuf_pushresult(fixbuf *B);
