@@ -14,11 +14,8 @@ dependencies = {
 build = {
 	type = "builtin",
 	modules = {
-		csave = {
-			sources = {"save.c", "fixbuf.c"}
-		},
-		cload = {
-			sources = {"load.c"}
+		crefser = {
+			sources = {"crefser.c", "fixbuf.c"}
 		},
 		refser = "refser.lua"
 	}
