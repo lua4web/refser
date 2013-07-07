@@ -102,6 +102,10 @@ void fixbuf_pushresult(fixbuf *B) {
 	lua_pushlstring(B->L, B->buff, B->used);
 }
 
+void fixbuf_reset(fixbuf *B) {
+	B->used = 0;
+}
+
 void fixbuf_remove(fixbuf *B) {
 	lua_remove(B->L, B->index);
 }

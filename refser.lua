@@ -8,7 +8,7 @@ function _M.save(x)
 end
 
 function _M.load(s)
-	return load(s)
+	return load(1/0, -1/0, 0/0, s)
 end
 
 return _M

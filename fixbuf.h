@@ -22,6 +22,7 @@ void fixbuf_addqstring(fixbuf *B, const char *s, size_t len);
 void fixbuf_addstring(fixbuf *B, const char *s);
 void fixbuf_addvalue(fixbuf *B);
 void fixbuf_pushresult(fixbuf *B);
+void fixbuf_reset(fixbuf *B);
 void fixbuf_remove(fixbuf *B);
 
 #endif

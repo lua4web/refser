@@ -19,6 +19,8 @@
 #define not_int(x) (fmod(x, 1.0) != 0.0)
 
 static int process(fixbuf *B, int index, int *count) {
+	lua_Number x;
+	
 	if(!lua_checkstack(B->L, 2)) {
 		return _ERR_TOODEEP;
 	}
@@ -46,8 +48,9 @@ static int process(fixbuf *B, int index, int *count) {
 						fixbuf_addchar(B, 'i');
 					}
 					else {
-						lua_pushvalue(B->L, index);
-						fixbuf_addvalue(B);
+						fixbuf_addchar(B, 'D');
+						x = lua_tonumber(B->L, index);
+						fixbuf_addlstring(B, (const char *)&x, sizeof(lua_Number));
 					}
 				}
 			}
@@ -73,26 +76,18 @@ static int process(fixbuf *B, int index, int *count) {
 				lua_rawset(B->L, _I_REG);
 				
 				int i = 1;
-				lua_Number x;
 				int err;
-				char sep = '\0';
 				
 				fixbuf_addchar(B, '{');
 				
 				for(;;) {
 					lua_rawgeti(B->L, index, i);
 					if(lua_isnil(B->L, -1)) {
-						sep = '|';
+						fixbuf_addchar(B, '|');
 						break;
 					}
 					else {
 						i++;
-						if(sep) {
-							fixbuf_addchar(B, sep);
-						}
-						else {
-							sep = ',';
-						}
 						if(err = process(B, lua_gettop(B->L), count)) {
 							return err;
 						}
@@ -105,14 +100,9 @@ static int process(fixbuf *B, int index, int *count) {
 				for(;;) {
 					if(lua_next(B->L, index)) {
 						if((lua_type(B->L, -2) != LUA_TNUMBER) || (not_int(x = lua_tonumber(B->L, -2))) || (x >= i) || (x <= 0)) {
-							if(sep) {
-								fixbuf_addchar(B, sep);
-							}
-							sep = ',';
 							if(err = process(B, lua_gettop(B->L) - 1, count)) {
 								return err;
 							}
-							fixbuf_addchar(B, '=');
 							if(err = process(B, lua_gettop(B->L), count)) {
 								return err;
 							}
@@ -130,7 +120,9 @@ static int process(fixbuf *B, int index, int *count) {
 			}
 			else {
 				fixbuf_addchar(B, '@');
-				fixbuf_addvalue(B);
+				x = lua_tonumber(B->L, -1);
+				fixbuf_addlstring(B, (const char *)&x, sizeof(lua_Number));
+				lua_pop(B->L, 1);
 			}
 			break;
 		}
