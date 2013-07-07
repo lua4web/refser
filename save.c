@@ -178,7 +178,7 @@ static const struct luaL_reg savelib[] = {
 	{NULL, NULL}
 };
 
-int luaopen_save (lua_State *L) {
-	luaL_register(L, "save", savelib);
+int luaopen_csave (lua_State *L) {
+	luaL_register(L, "csave", savelib);
 	return 1;
 }
