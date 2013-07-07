@@ -1,15 +1,15 @@
 # refser - fast serialization of tables with references
 
 Allows to save primitive Lua types into strings and load them back. 
-refser is similar to identity-preserving table serialization by Metalua([source]), but it is much faster as it is written in C. 
-	[1]: https://github.com/fab13n/metalua/blob/no-dll/src/lib/serialize.lua "source"
+
+refser is similar to identity-preserving table serialization by Metalua([source](https://github.com/fab13n/metalua/blob/no-dll/src/lib/serialize.lua)), but it is much faster as it is written in C. 
 
 ## refser.save(x)
 
 Saves `x` into string and returns it. 
 In case of error returns `nil` plus error message. 
 
-refser.save can save: 
+`refser.save` can save: 
 
 * `nil`
 * `boolean`
@@ -17,7 +17,7 @@ refser.save can save:
 * `string`
 * `table`, including nested tables and tables with references
 
-refser.save can't save:
+`refser.save` can't save:
 
 * `function`
 * `thread`
@@ -27,16 +27,20 @@ refser.save can't save:
 
 refser.save preserves all references between values in table. 
 
-	x = {}
-	x[x] = x
-	s = refser.save(x)
-	y = refser.load(s)
-	assert(y = y[y])
+```lua
+x = {}
+x[x] = x
+s = refser.save(x)
+y = refser.load(s)
+assert(y = y[y]) -- OK
+```
 	
 ## refser.load(s)
 
 Loads data from string `s` and returns it. 
+
 In case of error returns `nil` plus error message. 
+
 Use `refser.assert` to catch errors. 
 
 ## refser.assert(...)
@@ -44,12 +48,14 @@ Use `refser.assert` to catch errors.
 Use this function to catch errors from `refser.load`. 
 Standart `assert` fails when expected data evaluates to false:
 
-	x = false
-	s = refser.save(x)
-	y = assert(refser.load(s)) -- assertation failed
-	
-	y = refser.assert(refser.load(s)) -- OK
-	
+```lua
+x = false
+s = refser.save(x)
+y = assert(refser.load(s)) -- assertation failed
+
+y = refser.assert(refser.load(s)) -- OK
+```
+
 ## License
 
 Copyright © 2013 lua4web <lua4web@gmail.com>
