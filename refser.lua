@@ -10,4 +10,12 @@ function _M.load(s)
 	return crefser.load(1/0, -1/0, 0/0, s)
 end
 
+function _M.assert(result, err)
+	if err then
+		error(err)
+	else
+		return result
+	end
+end
+
 return _M
