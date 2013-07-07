@@ -6,8 +6,7 @@ refser is similar to identity-preserving table serialization by Metalua([source]
 
 ## refser.save(x)
 
-Saves `x` into string and returns it. 
-In case of error returns `nil` plus error message. 
+Saves `x` into string and returns it. In case of error returns `nil` plus error message. 
 
 `refser.save` can save: 
 
@@ -37,16 +36,13 @@ assert(y = y[y]) -- OK
 	
 ## refser.load(s)
 
-Loads data from string `s` and returns it. 
-
-In case of error returns `nil` plus error message. 
+Loads data from string `s` and returns it. In case of error returns `nil` plus error message. 
 
 Use `refser.assert` to catch errors. 
 
 ## refser.assert(...)
 
-Use this function to catch errors from `refser.load`. 
-Standart `assert` fails when expected data evaluates to false:
+Use this function to catch errors from `refser.load`. Standart `assert` fails when expected data evaluates to false:
 
 ```lua
 x = false
