@@ -102,7 +102,7 @@ static int loader_process_table(loader *LO) {
 	ensure(LO->len);
 	
 	while(*LO->s != _FORMAT_ARRAY_HASH_SEP) {
-		if(err = loader_process(LO)) {
+		if(err = loader_process(LO, _LOADER_ROLE_VALUE)) {
 			return err;
 		}
 		lua_rawseti(LO->L, -2, ++i);
@@ -113,10 +113,10 @@ static int loader_process_table(loader *LO) {
 	ensure(LO->len);
 			
 	while(*LO->s != _FORMAT_TABLE_END) {
-		if(err = loader_process(LO)) {
+		if(err = loader_process(LO, _LOADER_ROLE_KEY)) {
 			return err;
 		}
-		if(err = loader_process(LO)) {
+		if(err = loader_process(LO, _LOADER_ROLE_VALUE)) {
 			return err;
 		}
 		lua_rawset(LO->L, -3);
@@ -130,7 +130,7 @@ static int loader_process_table(loader *LO) {
 // reads next value from string
 // puts it on top of lua stack
 // returns 0 or error code
-int loader_process(loader *LO) {
+int loader_process(loader *LO, int role) {
 	ensure(LO->len);
 	if(!lua_checkstack(LO->L, 2)) {
 		return _LOADER_ERR_TOODEEP;
@@ -138,6 +138,7 @@ int loader_process(loader *LO) {
 	eat_byte(LO);
 	switch(LO->s[-1]) {
 		case _FORMAT_NIL: {
+			ensure(role == _LOADER_ROLE_NONE);
 			lua_pushnil(LO->L);
 			break;
 		}
@@ -158,6 +159,7 @@ int loader_process(loader *LO) {
 			break;
 		}
 		case _FORMAT_NAN: {
+			ensure(role != _LOADER_ROLE_KEY);
 			lua_pushvalue(LO->L, _LOADER_I_NAN);
 			break;
 		}

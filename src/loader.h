@@ -16,6 +16,10 @@
 #define _LOADER_ERR_TOODEEP 1
 #define _LOADER_ERR_MAILFORMED 2
 
+#define _LOADER_ROLE_NONE 1
+#define _LOADER_ROLE_KEY 2
+#define _LOADER_ROLE_VALUE 3
+
 typedef struct loader {
 	lua_State *L;
 	fixbuf *B;
@@ -30,6 +34,6 @@ void loader_init(loader *LO, lua_State *L, const char *s, size_t len);
 // reads next value from string
 // puts it on top of lua stack
 // returns 0 or error code
-int loader_process(loader *LO);
+int loader_process(loader *LO, int role);
 
 #endif

@@ -52,7 +52,7 @@ static int load(lua_State *L) {
 	LO = malloc(sizeof *LO);
 	loader_init(LO, L, s, len);
 	
-	if(err = loader_process(LO)) {
+	if(err = loader_process(LO, _LOADER_ROLE_NONE)) {
 		lua_settop(L, 0);
 		lua_pushnil(L);
 		switch(err) {
