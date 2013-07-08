@@ -24,25 +24,26 @@ void loader_init(loader *LO, lua_State *L, const char *s, size_t len) {
 }
 
 static int loader_process_number(loader *LO) {
-	ensure(LO->len);
 	size_t i = 0;
+	lua_Number x;
+	ensure(LO->len);
 	while(LO->s[i] != _FORMAT_NUMBER_DELIM) {
 		i++;
 		ensure(LO->len > i);
 	}
 	lua_pushlstring(LO->L, LO->s, i);
 	eat_bytes(LO, i + 1);
-	lua_Number x = lua_tonumber(LO->L, -1);
+	x = lua_tonumber(LO->L, -1);
 	lua_pop(LO->L, 1);
 	lua_pushnumber(LO->L, x);
 	return 0;
 }
 
 static int loader_process_string(loader *LO) {
-	fixbuf_reset(LO->B);
-	ensure(LO->len);
 	char esc;
 	size_t i = 0;
+	fixbuf_reset(LO->B);
+	ensure(LO->len);
 	while(LO->s[i] != '"') {
 		if(LO->s[i] == '\\') {
 			ensure(LO->len > i + 1);
@@ -92,15 +93,14 @@ static int loader_process_string(loader *LO) {
 }
 
 static int loader_process_table(loader *LO) {
+	int err;
+	int i = 0;
 	lua_newtable(LO->L);
 	lua_pushvalue(LO->L, -1);
 	lua_rawseti(LO->L, _LOADER_I_REG, ++LO->count);
 	
 	ensure(LO->len);
-			
-	int err;
-	int i = 0;
-			
+	
 	while(*LO->s != _FORMAT_ARRAY_HASH_SEP) {
 		if(err = loader_process(LO)) {
 			return err;
@@ -163,10 +163,11 @@ int loader_process(loader *LO) {
 		}
 		case _FORMAT_TABLE_REF: {
 			int err;
+			lua_Number x;
 			if(err = loader_process_number(LO)) {
 				return err;
 			}
-			lua_Number x = lua_tonumber(LO->L, -1);
+			x = lua_tonumber(LO->L, -1);
 			lua_pop(LO->L, 1);
 			ensure(is_int(x) && x <= LO->count && x >= 1);
 			lua_rawgeti(LO->L, _LOADER_I_REG, x);

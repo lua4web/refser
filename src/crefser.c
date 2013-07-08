@@ -7,10 +7,13 @@
 #include "loader.h"
 
 static int save(lua_State *L) {
-	lua_newtable(L);
-	saver *S = malloc(sizeof *S);
-	saver_init(S, L);
+	saver *S;
 	int err;
+	
+	lua_newtable(L);
+	S = malloc(sizeof *S);
+	saver_init(S, L);
+	
 	if(err = saver_process(S, _SAVER_I_X)) {
 		lua_settop(L, 0);
 		lua_pushnil(L);
@@ -35,12 +38,16 @@ static int save(lua_State *L) {
 }
 
 static int load(lua_State *L) {
-	lua_newtable(L);
 	size_t len;
-	const char *s = luaL_checklstring(L, _LOADER_I_X, &len);
-	loader *LO = malloc(sizeof *LO);
-	loader_init(LO, L, s, len);
+	const char *s;
+	loader *LO;
 	int err;
+	
+	lua_newtable(L);
+	s = luaL_checklstring(L, _LOADER_I_X, &len);
+	LO = malloc(sizeof *LO);
+	loader_init(LO, L, s, len);
+	
 	if(err = loader_process(LO)) {
 		lua_settop(L, 0);
 		lua_pushnil(L);

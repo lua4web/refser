@@ -31,13 +31,12 @@ static int saver_process_table(saver *S, int index) {
 	lua_pushvalue(S->L, index);
 	lua_rawget(S->L, _SAVER_I_REG);
 	if(lua_isnil(S->L, -1)) {
+		int i = 1;
 		lua_pop(S->L, 1);
 				
 		lua_pushvalue(S->L, index);
 		lua_pushnumber(S->L, ++S->count);
 		lua_rawset(S->L, _SAVER_I_REG);
-				
-		int i = 1;
 				
 		fixbuf_addchar(S->B, _FORMAT_TABLE_START);
 				
@@ -90,7 +89,8 @@ static int saver_process_table(saver *S, int index) {
 }
 
 // adds value at index to buffer
-// Stack-balanced
+// stack-balanced
+// returns 0 or error code
 int saver_process(saver *S, int index) {
 	if(!lua_checkstack(S->L, 2)) {
 		return _SAVER_ERR_TOODEEP;

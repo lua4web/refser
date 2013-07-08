@@ -4,6 +4,7 @@
 
 static char *fixbuf_prepare(fixbuf *B, size_t size) {
 	if(B->size - B->used < size) { // not enough space
+		char *newbuff;
 		size_t newsize = B->size * 2; // double buffer size
 		if(newsize - B->used < size) { // not big enough?
 			newsize = B->used + size;
@@ -11,7 +12,7 @@ static char *fixbuf_prepare(fixbuf *B, size_t size) {
 		if(newsize < B->used || newsize - B->used < size) {
 			luaL_error(B->L, "fixbuf error: buffer is too large");
 		}
-		char *newbuff = lua_newuserdata(B->L, newsize);
+		newbuff = lua_newuserdata(B->L, newsize);
 		memcpy(newbuff, B->buff, B->used);
 		if(lua_gettop(B->L) != B->index) {
 			lua_replace(B->L, B->index);
@@ -46,9 +47,9 @@ void fixbuf_addlstring(fixbuf *B, const char *s, size_t len) {
 }
 
 void fixbuf_addqstring(fixbuf *B, const char *s, size_t len) {
-	fixbuf_addchar(B, '"');
 	size_t i = 0;
 	char esc;
+	fixbuf_addchar(B, '"');
 	while(i < len) {
 		switch(s[i]) {
 			case '\\': {
