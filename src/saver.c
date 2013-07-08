@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include "format.h"
 
-#ifndef lua_equal
-#define lua_equal(L, i1, i2) lua_compare(L, i1, i2, LUA_OPEQ) // lua 5.1 compatability
+#ifdef LUA_OPEQ
+#define lua_equal(L, i1, i2) lua_compare(L, i1, i2, LUA_OPEQ) // lua 5.2 compatability
 #endif
 
 // initializes saver

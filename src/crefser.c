@@ -6,8 +6,8 @@
 #include "saver.h"
 #include "loader.h"
 
-#ifndef luaL_register
-#define luaL_register(L, name, lib) (luaL_openlib(L, name, lib, 0)) // lua 5.1 compatability
+#ifdef LUA_OPEQ
+#define luaL_register(L, name, lib) (luaL_openlib(L, name, lib, 0)) // lua 5.2 compatability
 #endif
 
 static int save(lua_State *L) {
