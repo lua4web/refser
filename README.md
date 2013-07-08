@@ -8,11 +8,11 @@ refser is similar to identity-preserving table serialization by Metalua([source]
 
 Saves `x` into string and returns it. In case of error returns `nil` plus error message. 
 
-Output is binary safe. It is guaranteed not to contain embedded zeros and newlines. 
+Output is binary safe, it can not contain newlines and embedded zeros. 
 
 ```lua
 print(refser.save([[Newlines
-and embedded\0zeros]]))
+and embedded]].."\0zeros"))
 -- "Newlines\nand embedded\zzeros"
 ```
 
@@ -39,7 +39,7 @@ x = {}
 x[x] = x
 s = refser.save(x)
 y = refser.load(s)
-assert(y = y[y]) -- OK
+assert(y == y[y]) -- OK
 ```
 	
 ## refser.load(s)
