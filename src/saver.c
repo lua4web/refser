@@ -41,7 +41,7 @@ static int saver_process_table(saver *S, int index) {
 		lua_pushvalue(S->L, index);
 		lua_pushnumber(S->L, ++S->count);
 		lua_rawset(S->L, _SAVER_I_REG);
-				
+		
 		fixbuf_addchar(S->B, _FORMAT_TABLE_START);
 				
 		for(;;) {
@@ -55,12 +55,10 @@ static int saver_process_table(saver *S, int index) {
 				if(err = saver_process(S, lua_gettop(S->L))) {
 					return err;
 				}
+				lua_pop(S->L, 1);
 			}
-			lua_pop(S->L, 1);
 		}
-				
-		lua_pushnil(S->L);
-				
+		
 		for(;;) {
 			if(lua_next(S->L, index)) {
 				if((lua_type(S->L, -2) != LUA_TNUMBER) || (!is_int(x = lua_tonumber(S->L, -2))) || (x >= i) || (x <= 0)) {
@@ -77,8 +75,6 @@ static int saver_process_table(saver *S, int index) {
 				break;
 			}
 		}
-				
-		lua_pop(S->L, 1);
 				
 		fixbuf_addchar(S->B, _FORMAT_TABLE_END);
 	}
