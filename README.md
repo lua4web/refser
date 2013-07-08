@@ -57,7 +57,7 @@ Use this function to catch errors from `refser.load`. Standart `assert` fails wh
 ```lua
 x = false
 s = refser.save(x)
-y = assert(refser.load(s)) -- assertation failed
+y = assert(refser.load(s)) -- assertion failed
 
 y = refser.assert(refser.load(s)) -- OK
 ```
