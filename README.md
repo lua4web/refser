@@ -62,6 +62,69 @@ y = assert(refser.load(s)) -- assertion failed
 y = refser.assert(refser.load(s)) -- OK
 ```
 
+## Output format
+
+Output format is developed to be easily read by computer, not human, but it still can be used for debugging reasons, if necessary. 
+
+* `nil` is saved as `n`. 
+* `true` and `false` are saved as `T` and `F`, respectively. 
+* `math.huge` and `-math.huge` are saved as `I` and `i`, respectively. 
+* `NaN` is saved as `N`. 
+* numbers are saved using `tostring`, with additional `D` in the beginning and `#` in the end. 
+* strings are saved using `string.format("%q")`. 
+* tables' contents are saved between curly braces, with array part separated from hash part by `|`. There are no separators between values in array part, or between key and values in hash part, or between key-value pairs. 
+* references are saved as `@` plus ID of corresponding table(without `D` in the beginning). Tables receive their IDs in the order `refser.save` meets them. 
+
+### Examples:
+
+An empty table. No array part, no hash part. 
+
+```lua
+x = {}
+print(refser.save(x)) -- {|}
+```
+
+An array with 3 numbers. 
+
+```lua
+x = {1, 2, 3}
+print(refser.save(x)) -- {D1#D2#D3#|}
+```
+
+One string in array part and a key-value pair. 
+
+```lua
+x = {"foo", bar = "baz"}
+print(refser.save(x)) -- {"foo"|"bar""baz"}
+```
+
+Nested tables. 
+
+```lua
+x = {{}, [{}] = {}}
+print(refser.save(x)) -- {{|}|{|}{|}}
+```
+
+A table with self-references. 
+
+```lua
+x = {}
+x[x] = x
+print(refser.save(x)) -- {|@1#@1#}
+```
+
+A more complicated example of cross-references. 
+
+```lua
+x = {}
+y = {}
+y[y] = y
+x[x] = y
+print(refser.save(x)) -- {|@1#{|@2#@2#}}
+```
+
+In the above example `@1#` is `x` and `@2#` is `y`. 
+
 ## License
 
 Copyright © 2013 lua4web <lua4web@gmail.com>
