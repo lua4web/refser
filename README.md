@@ -4,7 +4,9 @@ Allows to save primitive Lua types into strings and load them back.
 
 refser is similar to identity-preserving table serialization by Metalua([source](https://github.com/fab13n/metalua/blob/no-dll/src/lib/serialize.lua)), but it is much faster as it is written in C. 
 
-## refser.save(x)
+## Reference
+
+### refser.save(x)
 
 Saves `x` into string and returns it. In case of error returns `nil` plus error message. 
 
@@ -30,9 +32,9 @@ and embedded]].."\0zeros"))
 * `thread`
 * `userdata`
 
-### Identity-preserving table serialization
+#### Identity-preserving table serialization
 
-refser.save preserves all references between values in table. 
+refser.save preserves all references in table. 
 
 ```lua
 x = {}
@@ -41,14 +43,14 @@ s = refser.save(x)
 y = refser.load(s)
 assert(y == y[y]) -- OK
 ```
-	
-## refser.load(s)
+
+### refser.load(s)
 
 Loads data from string `s` and returns it. In case of error returns `nil` plus error message. 
 
 Use `refser.assert` to catch errors. 
 
-## refser.assert(...)
+### refser.assert(...)
 
 Use this function to catch errors from `refser.load`. Standart `assert` fails when expected data evaluates to false:
 
