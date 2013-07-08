@@ -1,5 +1,5 @@
 package = "refser"
-version = "0.1-3"
+version = "0.1-4"
 source = {
 	url = "git://github.com/lua4web/refser.git"
 }
@@ -15,7 +15,7 @@ build = {
 	type = "builtin",
 	modules = {
 		crefser = {
-			sources = {"crefser.c", "fixbuf.c"}
+			sources = {"crefser.c", "saver.c", "loader.c", "fixbuf.c"}
 		},
 		refser = "refser.lua"
 	}
