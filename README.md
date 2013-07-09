@@ -4,6 +4,38 @@ Allows to save primitive Lua types into strings and load them back.
 
 refser is similar to identity-preserving table serialization by Metalua([source](https://github.com/fab13n/metalua/blob/no-dll/src/lib/serialize.lua)), but it is much faster as it is written in C. 
 
+## Usage
+
+1. Include refser:
+
+```lua
+local refser = require "refser"
+```
+
+Note: plain `require "refser"` doesn't work. 
+
+2. Save data and check for errors:
+
+```lua
+local output, err = refser.save(data)
+if err then
+	-- error handling
+else
+	-- ...
+end
+```
+
+2. Load data and check for errors:
+
+```lua
+local data, err = refser.save(input)
+if err then
+	-- error handling
+else
+	-- ...
+end
+```
+
 ## Reference
 
 ### refser.save(x)
@@ -48,7 +80,7 @@ assert(y == y[y]) -- OK
 
 ### refser.maxnesting
 
-This variable sets max nesting level for saved and loaded tables. It can be changed at run-time to suit user's needs. 
+This variable sets max nesting level for saved and loaded tables. Default value is `250`. It can be changed at run-time to suit user's needs. 
 
 ```lua
 x = {{{}}}
@@ -62,11 +94,11 @@ refser.assert(refser.save(x)) -- OK
 
 Loads data from string `s` and returns it. In case of error returns `nil` plus error message. 
 
-Use `refser.assert` to catch errors. 
+### refser.assert(data, err)
 
-### refser.assert(...)
+Calls `error(err)` if `err` is present, otherwise returns `data`. 
 
-Use this function to catch errors from `refser.load`. Standart `assert` fails when expected data evaluates to false:
+Use this function to catch errors from `refser.load`. Standard `assert` fails when expected data evaluates to false:
 
 ```lua
 x = false
