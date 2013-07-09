@@ -13,8 +13,10 @@ void saver_init(saver *S, lua_State *L, int maxnesting) {
 }
 
 static int saver_process_number(saver *S, int index) {
-	lua_pushvalue(S->L, index);
-	fixbuf_addvalue(S->B);
+	int len;
+	lua_Number x = lua_tonumber(S->L, index);
+	len = sprintf(fixbuf_prepare(S->B, 17), "%.17g", x);
+	S->B->used += len;
 	fixbuf_addchar(S->B, _FORMAT_NUMBER_DELIM);
 	return 0;
 }

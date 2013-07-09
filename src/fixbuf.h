@@ -15,6 +15,7 @@ typedef struct fixbuf {
 	lua_State *L;
 } fixbuf;
 
+char *fixbuf_prepare(fixbuf *B, size_t size);
 void fixbuf_init(lua_State *L, fixbuf *B, int index);
 void fixbuf_addchar(fixbuf *B, char c);
 void fixbuf_addlstring(fixbuf *B, const char *s, size_t len);

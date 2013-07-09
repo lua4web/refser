@@ -2,7 +2,7 @@
 
 #include <string.h>
 
-static char *fixbuf_prepare(fixbuf *B, size_t size) {
+char *fixbuf_prepare(fixbuf *B, size_t size) {
 	if(B->size - B->used < size) { // not enough space
 		char *newbuff;
 		size_t newsize = B->size * 2; // double buffer size
