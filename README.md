@@ -18,7 +18,7 @@ and embedded]].."\0zeros"))
 -- "Newlines\nand embedded\zzeros"
 ```
 
-`refser.save` can save: 
+refser can save: 
 
 * `nil`
 * `boolean`
@@ -26,11 +26,13 @@ and embedded]].."\0zeros"))
 * `string`
 * `table`, including nested tables and tables with references
 
-`refser.save` can't save:
+refser can't save:
 
 * `function`
 * `thread`
 * `userdata`
+
+refser doesn't save metatables and tables with nesting level larger than `refser.maxnesting`. 
 
 #### Identity-preserving table serialization
 
@@ -42,6 +44,18 @@ x[x] = x
 s = refser.save(x)
 y = refser.load(s)
 assert(y == y[y]) -- OK
+```
+
+### refser.maxnesting
+
+This variable sets max nesting level for saved and loaded tables. It can be changed at run-time to suit user's needs. 
+
+```lua
+x = {{{}}}
+refser.maxnesting = 2
+refser.assert(refser.save(x)) -- refser.save error: table is too deep
+refser.maxnesting = 3
+refser.assert(refser.save(x)) -- OK
 ```
 
 ### refser.load(s)
@@ -64,7 +78,7 @@ y = refser.assert(refser.load(s)) -- OK
 
 ## Output format
 
-Output format is developed to be easily read by computer, not human, but it still can be used for debugging reasons, if necessary. 
+Output format is developed to be easily read by computer, not human, but it still can be used for debugging purposes, if necessary. 
 
 * `nil` is saved as `n`. 
 * `true` and `false` are saved as `T` and `F`, respectively. 
@@ -75,7 +89,7 @@ Output format is developed to be easily read by computer, not human, but it stil
 * tables' contents are saved between curly braces, with array part separated from hash part by `|`. There are no separators between values in array part, or between key and values in hash part, or between key-value pairs. 
 * references are saved as `@` plus ID of corresponding table(without `D` in the beginning). Tables receive their IDs in the order `refser.save` meets them. 
 
-### Examples:
+### Examples
 
 An empty table. No array part, no hash part. 
 

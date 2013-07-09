@@ -1,32 +1,32 @@
 Starting benchmark booleans
-refser.save: 0.83
-refser.load: 0.54
+refser.save: 0.84
+refser.load: 0.49
 Benchmark completed
-lua: deep.lua:7: attempt to index global 'refser' (a nil value)
-stack traceback:
-	deep.lua:7: in main chunk
-	[C]: in ?
+Starting benchmark deep
+refser.save: 0
+refser.load: 0
+Benchmark completed
 Starting benchmark infs
 refser.save: 0.11
 refser.load: 0.05
 Benchmark completed
 Starting benchmark integers
-refser.save: 1.14
-refser.load: 0.53
+refser.save: 1.15
+refser.load: 0.54
 Benchmark completed
 Starting benchmark nan
-refser.save: 1.84
-refser.load: 0.4
+refser.save: 1.8
+refser.load: 0.41
 Benchmark completed
 Starting benchmark nested
-refser.save: 0.67
+refser.save: 0.69
 refser.load: 0.29
 Benchmark completed
 Starting benchmark numbers
-refser.save: 1.33
-refser.load: 0.74
+refser.save: 1.36
+refser.load: 0.77
 Benchmark completed
 Starting benchmark strings
-refser.save: 0.45
-refser.load: 0.34
+refser.save: 0.43
+refser.load: 0.35
 Benchmark completed
