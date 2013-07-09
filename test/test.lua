@@ -102,6 +102,16 @@ function test_number()
 	assert_equal(x, y)
 end
 
+function test_long()
+	local x = -1234567898765432123456789
+	x = x * 10 ^ (-120)
+	local s = refser.save(x)
+	assert_string(s)
+	assert_equal("D"..string.format("%.17g", x).."#", s)
+	local y = refser.load(s)
+	assert_equal(x, y)
+end
+
 function test_string()
 	local x = random_string()
 	local s = refser.save(x)

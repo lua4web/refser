@@ -1,16 +1,7 @@
-Loaded testsuite with 28 tests in 5 testcases.
+Loaded testsuite with 29 tests in 5 testcases.
 
-    .........F.....F..F.........
+    .............................
 
-69 Assertions checked.
+75 Assertions checked.
 
-  1) Failure (mailformed.test_strange_ref):
-test.lua:285: nil expected but was [table: 0x827b5b0]
-
-  2) Failure (mailformed.test_number_corrupted):
-test.lua:264: nil expected but was 0
-
-  3) Failure (mailformed.test_number_long):
-test.lua:271: nil expected but was 1.1111111111111e+61
-
-Testsuite finished (25 passed, 3 failed, 0 errors).
+Testsuite finished (29 passed, 0 failed, 0 errors).

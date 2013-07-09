@@ -17,6 +17,9 @@
 #define _FORMAT_ARRAY_HASH_SEP '|'
 #define _FORMAT_TABLE_REF '@'
 
+#define _FORMAT_NUMBER_LEN 17
+#define _FORMAT_NUMBER_MAX 25
+
 #define is_int(x) (fmod(x, 1.0) == 0.0)
 
 #endif

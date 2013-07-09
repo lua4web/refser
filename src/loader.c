@@ -32,9 +32,11 @@ static int loader_process_number(loader *LO) {
 		i++;
 		ensure(LO->len > i);
 	}
+	ensure(i <= _FORMAT_NUMBER_MAX);
 	lua_pushlstring(LO->L, LO->s, i);
-	eat_bytes(LO, i + 1);
 	x = lua_tonumber(LO->L, -1);
+	ensure(x || (i == 1 && LO->s[0] == '0'));
+	eat_bytes(LO, i + 1);
 	lua_pop(LO->L, 1);
 	lua_pushnumber(LO->L, x);
 	return 0;
