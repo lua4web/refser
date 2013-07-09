@@ -8,33 +8,33 @@ refser is similar to identity-preserving table serialization by Metalua([source]
 
 1. Include refser:
 
-```lua
-local refser = require "refser"
-```
+	```lua
+	local refser = require "refser"
+	```
 
-Note: plain `require "refser"` doesn't work. 
+	Note: plain `require "refser"` doesn't work. 
 
 2. Save data and check for errors:
 
-```lua
-local output, err = refser.save(data)
-if err then
-	-- error handling
-else
-	-- ...
-end
-```
+	```lua
+	local output, err = refser.save(data)
+	if err then
+		-- error handling
+	else
+		-- ...
+	end
+	```
 
-2. Load data and check for errors:
+3. Load data and check for errors:
 
-```lua
-local data, err = refser.save(input)
-if err then
-	-- error handling
-else
-	-- ...
-end
-```
+	```lua
+	local data, err = refser.save(input)
+	if err then
+		-- error handling
+	else
+		-- ...
+	end
+	```
 
 ## Reference
 
