@@ -6,10 +6,6 @@
 #include "saver.h"
 #include "loader.h"
 
-#ifdef LUA_OPEQ
-#define luaL_register(L, name, lib) (luaL_openlib(L, name, lib, 0)) // lua 5.2 compatability
-#endif
-
 static int save(lua_State *L) {
 	saver *S;
 	int err;
@@ -81,13 +77,13 @@ static int load(lua_State *L) {
 	return 1;
 }
 
-static const struct luaL_Reg crefserlib[] = {
-	{"save", save},
-	{"load", load},
-	{NULL, NULL}
-};
-
 int luaopen_crefser (lua_State *L) {
-	luaL_register(L, "crefser", crefserlib);
+	lua_newtable(L);
+	lua_pushstring(L, "save");
+	lua_pushcfunction(L, save);
+	lua_rawset(L, -3);
+	lua_pushstring(L, "load");
+	lua_pushcfunction(L, load);
+	lua_rawset(L, -3);
 	return 1;
 }

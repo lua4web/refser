@@ -3,10 +3,6 @@
 #include <stdlib.h>
 #include "format.h"
 
-#ifdef LUA_OPEQ
-#define lua_equal(L, i1, i2) lua_compare(L, i1, i2, LUA_OPEQ) // lua 5.2 compatability
-#endif
-
 // initializes saver
 void saver_init(saver *S, lua_State *L, int maxnesting) {
 	S->L = L;
@@ -116,12 +112,12 @@ int saver_process(saver *S, int index, int nesting) {
 			break;
 		}
 		case LUA_TNUMBER: {
-			if(lua_equal(S->L, index, index)) {
-				if(lua_equal(S->L, index, _SAVER_I_INF)) {
+			if(lua_rawequal(S->L, index, index)) {
+				if(lua_rawequal(S->L, index, _SAVER_I_INF)) {
 					fixbuf_addchar(S->B, _FORMAT_INF);
 				}
 				else {
-					if(lua_equal(S->L, index, _SAVER_I_MINF)) {
+					if(lua_rawequal(S->L, index, _SAVER_I_MINF)) {
 						fixbuf_addchar(S->B, _FORMAT_MINF);
 					}
 					else {
