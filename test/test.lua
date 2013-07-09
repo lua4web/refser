@@ -104,7 +104,7 @@ end
 
 function test_long()
 	local x = -1234567898765432123456789
-	x = x * 10 ^ (-120)
+	x = x * 10 ^ (-130)
 	local s = refser.save(x)
 	assert_string(s)
 	assert_equal("D"..string.format("%.17g", x).."#", s)

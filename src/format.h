@@ -18,7 +18,7 @@
 #define _FORMAT_TABLE_REF '@'
 
 #define _FORMAT_NUMBER_LEN 17
-#define _FORMAT_NUMBER_MAX 25
+#define _FORMAT_NUMBER_MAX 24
 
 #define is_int(x) (fmod(x, 1.0) == 0.0)
 
