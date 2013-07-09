@@ -13,12 +13,13 @@
 static int save(lua_State *L) {
 	saver *S;
 	int err;
+	lua_Number maxnesting = lua_tonumber(L, _SAVER_I_MAXNESTING);
 	
 	lua_newtable(L);
 	S = malloc(sizeof *S);
-	saver_init(S, L);
+	saver_init(S, L, maxnesting);
 	
-	if(err = saver_process(S, _SAVER_I_X)) {
+	if(err = saver_process(S, _SAVER_I_X, 0)) {
 		lua_settop(L, 0);
 		lua_pushnil(L);
 		switch(err) {
@@ -46,13 +47,14 @@ static int load(lua_State *L) {
 	const char *s;
 	loader *LO;
 	int err;
+	lua_Number maxnesting = lua_tonumber(L, _LOADER_I_MAXNESTING);
 	
 	lua_newtable(L);
 	s = luaL_checklstring(L, _LOADER_I_X, &len);
 	LO = malloc(sizeof *LO);
-	loader_init(LO, L, s, len);
+	loader_init(LO, L, s, len, maxnesting);
 	
-	if(err = loader_process(LO, _LOADER_ROLE_NONE)) {
+	if(err = loader_process(LO, _LOADER_ROLE_NONE, 0)) {
 		lua_settop(L, 0);
 		lua_pushnil(L);
 		switch(err) {

@@ -8,11 +8,12 @@
 #endif
 
 // initializes saver
-void saver_init(saver *S, lua_State *L) {
+void saver_init(saver *S, lua_State *L, int maxnesting) {
 	S->L = L;
 	S->B = malloc(sizeof *S->B);
 	fixbuf_init(L, S->B, _SAVER_I_BUFF);
 	S->count = 0;
+	S->maxnesting = maxnesting;
 }
 
 static int saver_process_number(saver *S, int index) {
@@ -29,9 +30,14 @@ static int saver_process_string(saver *S, int index) {
 	return 0;
 }
 
-static int saver_process_table(saver *S, int index) {
+static int saver_process_table(saver *S, int index, int nesting) {
 	int err;
 	lua_Number x;
+	
+	if(nesting > S->maxnesting) {
+		return _SAVER_ERR_TOODEEP;
+	}
+	
 	lua_pushvalue(S->L, index);
 	lua_rawget(S->L, _SAVER_I_REG);
 	if(lua_isnil(S->L, -1)) {
@@ -52,7 +58,7 @@ static int saver_process_table(saver *S, int index) {
 			}
 			else {
 				i++;
-				if(err = saver_process(S, lua_gettop(S->L))) {
+				if(err = saver_process(S, lua_gettop(S->L), nesting)) {
 					return err;
 				}
 				lua_pop(S->L, 1);
@@ -62,10 +68,10 @@ static int saver_process_table(saver *S, int index) {
 		for(;;) {
 			if(lua_next(S->L, index)) {
 				if((lua_type(S->L, -2) != LUA_TNUMBER) || (!is_int(x = lua_tonumber(S->L, -2))) || (x >= i) || (x <= 0)) {
-					if(err = saver_process(S, lua_gettop(S->L) - 1)) {
+					if(err = saver_process(S, lua_gettop(S->L) - 1, nesting)) {
 						return err;
 					}
-					if(err = saver_process(S, lua_gettop(S->L))) {
+					if(err = saver_process(S, lua_gettop(S->L), nesting)) {
 						return err;
 					}
 				}
@@ -91,7 +97,7 @@ static int saver_process_table(saver *S, int index) {
 // adds value at index to buffer
 // stack-balanced
 // returns 0 or error code
-int saver_process(saver *S, int index) {
+int saver_process(saver *S, int index, int nesting) {
 	if(!lua_checkstack(S->L, 2)) {
 		return _SAVER_ERR_TOODEEP;
 	}
@@ -134,7 +140,7 @@ int saver_process(saver *S, int index) {
 			break;
 		}
 		case LUA_TTABLE: {
-			return saver_process_table(S, index);
+			return saver_process_table(S, index, nesting + 1);
 			break;
 		}
 		default: {

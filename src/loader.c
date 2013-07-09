@@ -14,13 +14,14 @@ LO->len--;
 LO->len -= count;
 
 // initializes loader
-void loader_init(loader *LO, lua_State *L, const char *s, size_t len) {
+void loader_init(loader *LO, lua_State *L, const char *s, size_t len, int maxnesting) {
 	LO->L = L;
 	LO->B = malloc(sizeof *LO->B);
 	fixbuf_init(L, LO->B, _LOADER_I_BUFF);
 	LO->count = 0;
 	LO->s = s;
 	LO->len = len;
+	LO->maxnesting = maxnesting;
 }
 
 static int loader_process_number(loader *LO) {
@@ -92,9 +93,14 @@ static int loader_process_string(loader *LO) {
 	return 0;
 }
 
-static int loader_process_table(loader *LO) {
+static int loader_process_table(loader *LO, int nesting) {
 	int err;
 	int i = 0;
+	
+	if(nesting > LO->maxnesting) {
+		return _LOADER_ERR_TOODEEP;
+	}
+	
 	lua_newtable(LO->L);
 	lua_pushvalue(LO->L, -1);
 	lua_rawseti(LO->L, _LOADER_I_REG, ++LO->count);
@@ -102,7 +108,7 @@ static int loader_process_table(loader *LO) {
 	ensure(LO->len);
 	
 	while(*LO->s != _FORMAT_ARRAY_HASH_SEP) {
-		if(err = loader_process(LO, _LOADER_ROLE_VALUE)) {
+		if(err = loader_process(LO, _LOADER_ROLE_VALUE, nesting)) {
 			return err;
 		}
 		lua_rawseti(LO->L, -2, ++i);
@@ -113,10 +119,10 @@ static int loader_process_table(loader *LO) {
 	ensure(LO->len);
 			
 	while(*LO->s != _FORMAT_TABLE_END) {
-		if(err = loader_process(LO, _LOADER_ROLE_KEY)) {
+		if(err = loader_process(LO, _LOADER_ROLE_KEY, nesting)) {
 			return err;
 		}
-		if(err = loader_process(LO, _LOADER_ROLE_VALUE)) {
+		if(err = loader_process(LO, _LOADER_ROLE_VALUE, nesting)) {
 			return err;
 		}
 		lua_rawset(LO->L, -3);
@@ -130,7 +136,7 @@ static int loader_process_table(loader *LO) {
 // reads next value from string
 // puts it on top of lua stack
 // returns 0 or error code
-int loader_process(loader *LO, int role) {
+int loader_process(loader *LO, int role, int nesting) {
 	ensure(LO->len);
 	if(!lua_checkstack(LO->L, 2)) {
 		return _LOADER_ERR_TOODEEP;
@@ -176,7 +182,7 @@ int loader_process(loader *LO, int role) {
 			break;
 		}
 		case _FORMAT_TABLE_START: {
-			return loader_process_table(LO);
+			return loader_process_table(LO, nesting + 1);
 			break;
 		}
 		case _FORMAT_NUMBER: {
