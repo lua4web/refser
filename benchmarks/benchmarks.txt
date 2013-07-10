@@ -7,26 +7,26 @@ refser.save: 0
 refser.load: 0
 Benchmark completed
 Starting benchmark infs
-refser.save: 0.1
+refser.save: 0.11
 refser.load: 0.04
 Benchmark completed
 Starting benchmark integers
-refser.save: 0.72
-refser.load: 0.44
+refser.save: 0.73
+refser.load: 0.14
 Benchmark completed
 Starting benchmark nan
-refser.save: 1.83
-refser.load: 0.39
+refser.save: 1.86
+refser.load: 0.43
 Benchmark completed
 Starting benchmark nested
 refser.save: 0.68
-refser.load: 0.3
+refser.load: 0.28
 Benchmark completed
 Starting benchmark numbers
-refser.save: 0.85
-refser.load: 0.73
+refser.save: 0.81
+refser.load: 0.33
 Benchmark completed
 Starting benchmark strings
-refser.save: 0.45
-refser.load: 0.37
+refser.save: 0.44
+refser.load: 0.35
 Benchmark completed

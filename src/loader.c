@@ -39,15 +39,9 @@ static int loader_process_number(loader *LO) {
 		ensure(LO->len > i);
 	}
 	ensure(i <= _FORMAT_NUMBER_MAX);
-	
-	// performance is hit here due to unnececarry lua string creation
-	// however, plain strtod may result in segfault on short input
-	
-	lua_pushlstring(LO->L, LO->s, i);
-	x = lua_tonumber(LO->L, -1);
+	x = strtod(LO->s, NULL);
 	ensure(x || (i == 1 && LO->s[0] == '0'));
 	eat_bytes(LO, i + 1);
-	lua_pop(LO->L, 1);
 	lua_pushnumber(LO->L, x);
 	return 0;
 }
