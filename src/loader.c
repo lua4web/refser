@@ -3,15 +3,21 @@
 #include <stdlib.h>
 #include "format.h"
 
-#define ensure(cond) if(!(cond)) { \
-	return _LOADER_ERR_MAILFORMED; \
+#define ensure(cond) { \
+	if(!(cond)) { \
+		return _LOADER_ERR_MAILFORMED; \
+	} \
 }
 
-#define eat_byte(LO) LO->s++; \
-LO->len--;
+#define eat_byte(LO) { \
+	LO->s++; \
+	LO->len--; \
+}
 
-#define eat_bytes(LO, count) LO->s += count; \
-LO->len -= count;
+#define eat_bytes(LO, count) { \
+	LO->s += count; \
+	LO->len -= count; \
+}
 
 // initializes loader
 void loader_init(loader *LO, lua_State *L, const char *s, size_t len, int maxnesting) {
@@ -33,6 +39,10 @@ static int loader_process_number(loader *LO) {
 		ensure(LO->len > i);
 	}
 	ensure(i <= _FORMAT_NUMBER_MAX);
+	
+	// performance is hit here due to unnececarry lua string creation
+	// however, plain strtod may result in segfault on short input
+	
 	lua_pushlstring(LO->L, LO->s, i);
 	x = lua_tonumber(LO->L, -1);
 	ensure(x || (i == 1 && LO->s[0] == '0'));
