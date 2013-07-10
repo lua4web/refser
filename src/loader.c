@@ -97,7 +97,7 @@ static int loader_process_string(loader *LO) {
 
 static int loader_process_table(loader *LO, int nesting) {
 	int err;
-	int i = 0;
+	int i = 1;
 	
 	if(nesting > LO->maxnesting) {
 		return _LOADER_ERR_TOODEEP;
@@ -113,7 +113,7 @@ static int loader_process_table(loader *LO, int nesting) {
 		if(err = loader_process(LO, _LOADER_ROLE_VALUE, nesting)) {
 			return err;
 		}
-		lua_rawseti(LO->L, -2, ++i);
+		lua_rawseti(LO->L, -2, i++);
 		ensure(LO->len);
 	}
 			

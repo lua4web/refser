@@ -12,6 +12,11 @@ void saver_init(saver *S, lua_State *L, int maxnesting) {
 	S->maxnesting = maxnesting;
 }
 
+static int luaB_rawgeti(lua_State *L, int index, int i) {
+	lua_rawgeti(L, index, i);
+	return !lua_isnil(L, -1);
+}
+
 static int saver_process_number(saver *S, int index) {
 	int len;
 	lua_Number x = lua_tonumber(S->L, index);
@@ -43,36 +48,25 @@ static int saver_process_table(saver *S, int index, int nesting) {
 		
 	fixbuf_addchar(S->B, _FORMAT_TABLE_START);
 				
-	for(;;) {
-		lua_rawgeti(S->L, index, i);
-		if(lua_isnil(S->L, -1)) {
-			fixbuf_addchar(S->B, _FORMAT_ARRAY_HASH_SEP);
-			break;
+	while(luaB_rawgeti(S->L, index, i++)) {
+		if(err = saver_process(S, lua_gettop(S->L), nesting)) {
+			return err;
 		}
-		else {
-			i++;
+		lua_pop(S->L, 1);
+	}
+	
+	fixbuf_addchar(S->B, _FORMAT_ARRAY_HASH_SEP);
+	
+	while(lua_next(S->L, index)) {
+		if((lua_type(S->L, -2) != LUA_TNUMBER) || (!is_int(x = lua_tonumber(S->L, -2))) || (x >= i) || (x <= 0)) {
+			if(err = saver_process(S, lua_gettop(S->L) - 1, nesting)) {
+				return err;
+			}
 			if(err = saver_process(S, lua_gettop(S->L), nesting)) {
 				return err;
 			}
-			lua_pop(S->L, 1);
 		}
-	}
-	
-	for(;;) {
-		if(lua_next(S->L, index)) {
-			if((lua_type(S->L, -2) != LUA_TNUMBER) || (!is_int(x = lua_tonumber(S->L, -2))) || (x >= i) || (x <= 0)) {
-				if(err = saver_process(S, lua_gettop(S->L) - 1, nesting)) {
-					return err;
-				}
-				if(err = saver_process(S, lua_gettop(S->L), nesting)) {
-					return err;
-				}
-			}
-			lua_pop(S->L, 1);
-		}
-		else {
-			break;
-		}
+		lua_pop(S->L, 1);
 	}
 				
 	fixbuf_addchar(S->B, _FORMAT_TABLE_END);
