@@ -215,6 +215,18 @@ function test_toodeep()
 	assert_equal("refser.load error: table is too deep", err)
 end
 
+function test_refs_are_not_deep()
+	local x = {}
+	x[x] = x
+	refser.maxnesting = 1
+	local s, err = refser.save(x)
+	assert_string(s)
+	local y = refser.load(s)
+	assert_table(y)
+	assert_equal(y, y[y])
+	refser.maxnesting = 250
+end
+
 module("nontrivial", lunit.testcase, package.seeall)
 
 function test_function()

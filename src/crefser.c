@@ -10,6 +10,7 @@ static int save(lua_State *L) {
 	saver *S;
 	int err;
 	lua_Number maxnesting = lua_tonumber(L, _SAVER_I_MAXNESTING);
+	lua_remove(L, _SAVER_I_MAXNESTING);
 	
 	lua_newtable(L);
 	S = malloc(sizeof *S);
@@ -27,8 +28,8 @@ static int save(lua_State *L) {
 				lua_pushstring(L, "refser.save error: table is too deep");
 				break;
 			}
-			default: {
-				lua_pushstring(L, "refser.save error: unknown error");
+			case _SAVER_ERR_STACK: {
+				lua_pushstring(L, "refser.save error: lua stack exhausted");
 				break;
 			}
 		}
@@ -44,6 +45,7 @@ static int load(lua_State *L) {
 	loader *LO;
 	int err;
 	lua_Number maxnesting = lua_tonumber(L, _LOADER_I_MAXNESTING);
+	lua_remove(L, _LOADER_I_MAXNESTING);
 	
 	lua_newtable(L);
 	s = luaL_checklstring(L, _LOADER_I_X, &len);
@@ -60,6 +62,10 @@ static int load(lua_State *L) {
 			}
 			case _LOADER_ERR_TOODEEP: {
 				lua_pushstring(L, "refser.load error: table is too deep");
+				break;
+			}
+			case _LOADER_ERR_STACK: {
+				lua_pushstring(L, "refser.load error: lua stack exhausted");
 				break;
 			}
 			default: {

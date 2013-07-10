@@ -141,7 +141,7 @@ static int loader_process_table(loader *LO, int nesting) {
 int loader_process(loader *LO, int role, int nesting) {
 	ensure(LO->len);
 	if(!lua_checkstack(LO->L, 2)) {
-		return _LOADER_ERR_TOODEEP;
+		return _LOADER_ERR_STACK;
 	}
 	eat_byte(LO);
 	switch(LO->s[-1]) {

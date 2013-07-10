@@ -31,64 +31,51 @@ static int saver_process_string(saver *S, int index) {
 static int saver_process_table(saver *S, int index, int nesting) {
 	int err;
 	lua_Number x;
+	int i = 1;
 	
 	if(nesting > S->maxnesting) {
 		return _SAVER_ERR_TOODEEP;
 	}
-	
+				
 	lua_pushvalue(S->L, index);
-	lua_rawget(S->L, _SAVER_I_REG);
-	if(lua_isnil(S->L, -1)) {
-		int i = 1;
-		lua_pop(S->L, 1);
-				
-		lua_pushvalue(S->L, index);
-		lua_pushnumber(S->L, ++S->count);
-		lua_rawset(S->L, _SAVER_I_REG);
+	lua_pushnumber(S->L, ++S->count);
+	lua_rawset(S->L, _SAVER_I_REG);
 		
-		fixbuf_addchar(S->B, _FORMAT_TABLE_START);
+	fixbuf_addchar(S->B, _FORMAT_TABLE_START);
 				
-		for(;;) {
-			lua_rawgeti(S->L, index, i);
-			if(lua_isnil(S->L, -1)) {
-				fixbuf_addchar(S->B, _FORMAT_ARRAY_HASH_SEP);
-				break;
+	for(;;) {
+		lua_rawgeti(S->L, index, i);
+		if(lua_isnil(S->L, -1)) {
+			fixbuf_addchar(S->B, _FORMAT_ARRAY_HASH_SEP);
+			break;
+		}
+		else {
+			i++;
+			if(err = saver_process(S, lua_gettop(S->L), nesting)) {
+				return err;
 			}
-			else {
-				i++;
+			lua_pop(S->L, 1);
+		}
+	}
+	
+	for(;;) {
+		if(lua_next(S->L, index)) {
+			if((lua_type(S->L, -2) != LUA_TNUMBER) || (!is_int(x = lua_tonumber(S->L, -2))) || (x >= i) || (x <= 0)) {
+				if(err = saver_process(S, lua_gettop(S->L) - 1, nesting)) {
+					return err;
+				}
 				if(err = saver_process(S, lua_gettop(S->L), nesting)) {
 					return err;
 				}
-				lua_pop(S->L, 1);
 			}
+			lua_pop(S->L, 1);
 		}
-		
-		for(;;) {
-			if(lua_next(S->L, index)) {
-				if((lua_type(S->L, -2) != LUA_TNUMBER) || (!is_int(x = lua_tonumber(S->L, -2))) || (x >= i) || (x <= 0)) {
-					if(err = saver_process(S, lua_gettop(S->L) - 1, nesting)) {
-						return err;
-					}
-					if(err = saver_process(S, lua_gettop(S->L), nesting)) {
-						return err;
-					}
-				}
-				lua_pop(S->L, 1);
-			}
-			else {
-				break;
-			}
+		else {
+			break;
 		}
+	}
 				
-		fixbuf_addchar(S->B, _FORMAT_TABLE_END);
-	}
-	else {
-		fixbuf_addchar(S->B, _FORMAT_TABLE_REF);
-		if (err = saver_process_number(S, lua_gettop(S->L))) {
-			return err;
-		}
-		lua_pop(S->L, 1);
-	}
+	fixbuf_addchar(S->B, _FORMAT_TABLE_END);
 	return 0;
 }
 
@@ -97,7 +84,7 @@ static int saver_process_table(saver *S, int index, int nesting) {
 // returns 0 or error code
 int saver_process(saver *S, int index, int nesting) {
 	if(!lua_checkstack(S->L, 2)) {
-		return _SAVER_ERR_TOODEEP;
+		return _SAVER_ERR_STACK;
 	}
 	switch(lua_type(S->L, index)) {
 		case LUA_TNIL: {
@@ -138,7 +125,20 @@ int saver_process(saver *S, int index, int nesting) {
 			break;
 		}
 		case LUA_TTABLE: {
-			return saver_process_table(S, index, nesting + 1);
+			lua_pushvalue(S->L, index);
+			lua_rawget(S->L, _SAVER_I_REG);
+			if(lua_isnil(S->L, -1)) {
+				lua_pop(S->L, 1);
+				return saver_process_table(S, index, nesting + 1);
+			}
+			else {
+				int err;
+				fixbuf_addchar(S->B, _FORMAT_TABLE_REF);
+				if (err = saver_process_number(S, lua_gettop(S->L))) {
+					return err;
+				}
+				lua_pop(S->L, 1);
+			}
 			break;
 		}
 		default: {

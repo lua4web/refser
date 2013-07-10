@@ -9,12 +9,13 @@
 #define _SAVER_I_INF 1
 #define _SAVER_I_MINF 2
 #define _SAVER_I_MAXNESTING 3
-#define _SAVER_I_X 4
-#define _SAVER_I_REG 5
-#define _SAVER_I_BUFF 6
+#define _SAVER_I_X 3
+#define _SAVER_I_REG 4
+#define _SAVER_I_BUFF 5
 
 #define _SAVER_ERR_TOODEEP 1
 #define _SAVER_ERR_NONTRIVIAL 2
+#define _SAVER_ERR_STACK 3
 
 typedef struct saver {
 	lua_State *L;
