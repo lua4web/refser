@@ -56,6 +56,8 @@ static int save(lua_State *L) {
 		}
 	}
 	fixbuf_pushresult(S->B);
+	saver_free(S);
+	free(S);
 	return 1;
 }
 
@@ -109,6 +111,8 @@ static int load(lua_State *L) {
 	}
 	lua_pushnumber(L, tuplesize);
 	lua_replace(L, _LOADER_I_X);
+	loader_free(LO);
+	free(LO);
 	return tuplesize + 1;
 }
 

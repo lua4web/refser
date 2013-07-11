@@ -206,3 +206,8 @@ int loader_process(loader *LO, int role, int nesting) {
 	}
 	return 0;
 }
+
+// prepares loader for freeing
+void loader_free(loader *LO) {
+	free(LO->B);
+}

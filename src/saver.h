@@ -37,4 +37,7 @@ void saver_init(saver *S, lua_State *L, int maxnesting);
 // returns 0 or error code
 int saver_process(saver *S, int index, int nesting);
 
+// prepares saver for freeing
+void saver_free(saver *S);
+
 #endif

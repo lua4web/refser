@@ -40,4 +40,7 @@ void loader_init(loader *LO, lua_State *L, const char *s, size_t len, int maxnes
 // returns 0 or error code
 int loader_process(loader *LO, int role, int nesting);
 
+// prepares loader for freeing
+void loader_free(loader *LO);
+
 #endif

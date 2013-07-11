@@ -158,3 +158,8 @@ int saver_process(saver *S, int index, int nesting) {
 	}
 	return 0;
 }
+
+// prepares saver for freeing
+void saver_free(saver *S) {
+	free(S->B);
+}
