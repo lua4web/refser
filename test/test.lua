@@ -35,7 +35,7 @@ function test_nil()
 	local s = refser.save(x)
 	assert_string(s)
 	assert_equal("n", s)
-	local y = refser.load(s)
+	local count, y = refser.load(s)
 	assert_equal(x, y)
 end
 
@@ -44,7 +44,7 @@ function test_true()
 	local s = refser.save(x)
 	assert_string(s)
 	assert_equal("T", s)
-	local y = refser.load(s)
+	local count, y = refser.load(s)
 	assert_equal(x, y)
 end
 
@@ -53,7 +53,7 @@ function test_false()
 	local s = refser.save(x)
 	assert_string(s)
 	assert_equal("F", s)
-	local y = refser.load(s)
+	local count, y = refser.load(s)
 	assert_equal(x, y)
 end
 
@@ -62,7 +62,7 @@ function test_inf()
 	local s = refser.save(x)
 	assert_string(s)
 	assert_equal("I", s)
-	local y = refser.load(s)
+	local count, y = refser.load(s)
 	assert_equal(x, y)
 end
 
@@ -71,7 +71,7 @@ function test_minf()
 	local s = refser.save(x)
 	assert_string(s)
 	assert_equal("i", s)
-	local y = refser.load(s)
+	local count, y = refser.load(s)
 	assert_equal(x, y)
 end
 
@@ -80,7 +80,7 @@ function test_nan()
 	local s = refser.save(x)
 	assert_string(s)
 	assert_equal("N", s)
-	local y = refser.load(s)
+	local count, y = refser.load(s)
 	assert_not_equal(y, y)
 end
 
@@ -89,7 +89,7 @@ function test_integer()
 	local s = refser.save(x)
 	assert_string(s)
 	assert_equal("D"..tostring(x).."#", s)
-	local y = refser.load(s)
+	local count, y = refser.load(s)
 	assert_equal(x, y)
 end
 
@@ -98,7 +98,7 @@ function test_number()
 	local s = refser.save(x)
 	assert_string(s)
 	assert_equal("D"..string.format("%.17g", x).."#", s)
-	local y = refser.load(s)
+	local count, y = refser.load(s)
 	assert_equal(x, y)
 end
 
@@ -108,7 +108,7 @@ function test_long()
 	local s = refser.save(x)
 	assert_string(s)
 	assert_equal("D"..string.format("%.17g", x).."#", s)
-	local y = refser.load(s)
+	local count, y = refser.load(s)
 	assert_equal(x, y)
 end
 
@@ -117,7 +117,7 @@ function test_string()
 	local s = refser.save(x)
 	assert_string(s)
 	assert_equal(string.format("%q", x), s)
-	local y = refser.load(s)
+	local count, y = refser.load(s)
 	assert_equal(x, y)
 end
 
@@ -128,7 +128,7 @@ function test_empty()
 	local s = refser.save(x)
 	assert_string(s)
 	assert_equal("{|}", s)
-	local y = refser.load(s)
+	local count, y = refser.load(s)
 	assert_nil(next(y))
 end
 
@@ -139,7 +139,7 @@ function test_array()
 	end
 	local s = refser.save(x)
 	assert_string(s)
-	y = refser.load(s)
+	local count, y = refser.load(s)
 	assert_table(y)
 end
 
@@ -154,7 +154,7 @@ function test_table()
 	end
 	local s = refser.save(x)
 	assert_string(s)
-	y = refser.load(s)
+	local count, y = refser.load(s)
 	assert_table(y)
 end
 
@@ -164,7 +164,7 @@ function test_recursive()
 	local s = refser.save(x)
 	assert_string(s)
 	assert_equal("{|@1#@1#}", s)
-	local y = refser.load(s)
+	local count, y = refser.load(s)
 	assert_table(y)
 	assert_equal(y, y[y])
 end
@@ -180,7 +180,7 @@ function test_depth()
 	end
 	local s = refser.save(x)
 	assert_string(s)
-	local y = refser.load(s)
+	local count, y = refser.load(s)
 	assert_table(y)
 end
 
@@ -205,7 +205,7 @@ function test_toodeep()
 	s = refser.save(x)
 	assert_string(s)
 	
-	local y = refser.load(s)
+	local count, y = refser.load(s)
 	assert_table(y)
 	
 	refser.maxnesting = 250
@@ -221,7 +221,7 @@ function test_refs_are_not_deep()
 	refser.maxnesting = 1
 	local s, err = refser.save(x)
 	assert_string(s)
-	local y = refser.load(s)
+	local count, y = refser.load(s)
 	assert_table(y)
 	assert_equal(y, y[y])
 	refser.maxnesting = 250
@@ -233,31 +233,24 @@ function test_function()
 	local x = function() end
 	local s, err = refser.save(x)
 	assert_nil(s)
-	assert_equal("refser.save error: attempt to save non-trivial data", err)
+	assert_equal("refser.save error: attempt to save function", err)
 end
 
 function test_userdata()
 	local x = io.open("test.lua", "r")
 	local s, err = refser.save(x)
 	assert_nil(s)
-	assert_equal("refser.save error: attempt to save non-trivial data", err)
+	assert_equal("refser.save error: attempt to save userdata", err)
 end
 
 function test_thread()
 	local x = coroutine.create(function() end)
 	local s, err = refser.save(x)
 	assert_nil(s)
-	assert_equal("refser.save error: attempt to save non-trivial data", err)
+	assert_equal("refser.save error: attempt to save thread", err)
 end
 
 module("mailformed", lunit.testcase, package.seeall)
-
-function test_empty()
-	local s = ""
-	local data, err = refser.load(s)
-	assert_nil(data)
-	assert_equal("refser.load error: mailformed input", err)
-end
 
 function test_empty_table()
 	local s = "{}"
@@ -320,4 +313,104 @@ function test_nan_key()
 	local data, err = refser.load(s)
 	assert_nil(data)
 	assert_equal("refser.load error: mailformed input", err)
+end
+
+module("tuples", lunit.testcase, package.seeall)
+
+function test_empty()
+	local s = refser.save()
+	assert_string(s)
+	assert_equal("", s)
+	local count, data = refser.load(s)
+	assert_nil(data)
+	assert_equal(count, 0)
+end
+
+function test_several()
+	local s = refser.save("foo", 12345, {}, true, nil)
+	assert_string(s)
+	assert_equal([["foo"D12345#{|}Tn]], s)
+	local count, a, b, c, d, e = refser.load(s)
+	assert_equal(count, 5)
+	assert_equal("foo", a)
+	assert_equal(12345, b)
+	assert_nil(next(c))
+	assert_true(d)
+	assert_nil(e)
+end
+
+function test_tuple_refs()
+	local x = {}
+	local s = refser.save(x, nil, x, nil, {[x] = x}, nil)
+	assert_string(s)
+	assert_equal([[{|}n@1#n{|@1#@1#}n]], s)
+	local count, a, b, c, d, e, f = refser.load(s)
+	assert_equal(6, count)
+	assert_nil(b)
+	assert_nil(d)
+	assert_nil(f)
+	assert_equal(a, c)
+	assert_equal(a, e[c])
+end
+
+module("maxtuple", lunit.testcase, package.seeall)
+
+function test_long_tuple()
+	local x = {}
+	for i = 1, 21 do
+		x[i] = i
+	end
+	local s, err = refser.save(table.unpack(x))
+	assert_nil(s)
+	assert_equal("refser.save error: tuple is too long", err)
+	
+	refser.maxtuple = 21
+	
+	local s, err = refser.save(table.unpack(x))
+	assert_string(s)
+	
+	local function pack(count, ...)
+		return count, table.pack(...)
+	end
+	
+	local count, packed = pack(refser.load(s))
+	assert_equal(21, count)
+	for i = 1, 21 do
+		assert_equal(i, packed[i])
+	end
+	
+	refser.maxtuple = 20
+end
+
+function test_load_long_tuple()
+	local s = string.rep("n", 100)
+	local count, err = refser.load(s)
+	assert_nil(count)
+	assert_equal("refser.load error: tuple is too long", err)
+end
+
+function test_restricted()
+	local username, password = "foobar", "qwerty"
+	
+	refser.maxtuple = 2
+	refser.maxnesting = 0
+	
+	local s = refser.save(username, password)
+	assert_string(s)
+	assert_equal([["foobar""qwerty"]], s)
+	
+	local ok, username2, password2 = refser.load(s)
+	
+	assert_equal(2, ok)
+	assert_equal(username, username2)
+	assert_equal(password, password2)
+	
+	local attack1 = "{D12345#|TF}"
+	local attack2 = [["foobar""qwerty""extra"]]
+	
+	assert_nil(refser.load(attack1))
+	assert_nil(refser.load(attack2))
+	
+	refser.maxtuple = 20
+	refser.maxnesting = 250
 end

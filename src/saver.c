@@ -135,8 +135,24 @@ int saver_process(saver *S, int index, int nesting) {
 			}
 			break;
 		}
+		case LUA_TFUNCTION: {
+			return _SAVER_ERR_FUNCTION;
+			break;
+		}
+		case LUA_TUSERDATA: {
+			return _SAVER_ERR_USERDATA;
+			break;
+		}
+		case LUA_TLIGHTUSERDATA: {
+			return _SAVER_ERR_USERDATA;
+			break;
+		}
+		case LUA_TTHREAD: {
+			return _SAVER_ERR_THREAD;
+			break;
+		}
 		default: {
-			return _SAVER_ERR_NONTRIVIAL;
+			return _SAVER_ERR_UNKNOWN;
 			break;
 		}
 	}

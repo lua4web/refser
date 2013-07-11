@@ -1,6 +1,6 @@
 # refser - fast serialization of tables with references
 
-Allows to save primitive Lua types into strings and load them back. 
+Allows to save tuples of primitive Lua types into strings and load them back. 
 
 refser is similar to identity-preserving table serialization by Metalua([source](https://github.com/fab13n/metalua/blob/no-dll/src/lib/serialize.lua)), but it is much faster as it is written in C. 
 
@@ -28,8 +28,8 @@ refser is similar to identity-preserving table serialization by Metalua([source]
 3. Load data and check for errors:
 
 	```lua
-	local data, err = refser.save(input)
-	if err then
+	local ok, ... = refser.save(...)
+	if not ok then
 		-- error handling
 	else
 		-- ...
@@ -38,9 +38,9 @@ refser is similar to identity-preserving table serialization by Metalua([source]
 
 ## Reference
 
-### refser.save(x)
+### refser.save(...)
 
-Saves `x` into string and returns it. In case of error returns `nil` plus error message. 
+Saves tuple of Lua values into string and returns it. In case of error returns `nil` plus error message. 
 
 Output is binary safe, it can not contain newlines and embedded zeros. 
 
@@ -66,6 +66,8 @@ refser can't save:
 
 refser doesn't save metatables and tables with nesting level larger than `refser.maxnesting`. 
 
+refser refuses to save tuples longer than `refser.maxtuple`. 
+
 #### Identity-preserving table serialization
 
 refser.save preserves all references in table. 
@@ -74,7 +76,7 @@ refser.save preserves all references in table.
 x = {}
 x[x] = x
 s = refser.save(x)
-y = refser.load(s)
+ok, y = refser.load(s)
 assert(y == y[y]) -- OK
 ```
 
@@ -85,28 +87,26 @@ This variable sets max nesting level for saved and loaded tables. Default value 
 ```lua
 x = {{{}}}
 refser.maxnesting = 2
-refser.assert(refser.save(x)) -- refser.save error: table is too deep
+assert(refser.save(x)) -- refser.save error: table is too deep
 refser.maxnesting = 3
-refser.assert(refser.save(x)) -- OK
+assert(refser.save(x)) -- OK
+```
+
+### refser.maxtuple
+
+This variable sets max tuple length for saved and loaded tuples. Default value is `20`. It can be changed at run-time to suit user's needs. 
+
+```lua
+a, b, c = "foo", "bar", "baz"
+refser.maxtuple = 2
+assert(refser.save(a, b, c)) -- refser.save error: tuple is too long
+refser.maxtuple = 3
+assert(refser.save(a, b, c)) -- OK
 ```
 
 ### refser.load(s)
 
-Loads data from string `s` and returns it. In case of error returns `nil` plus error message. 
-
-### refser.assert(data, err)
-
-Calls `error(err)` if `err` is present, otherwise returns `data`. 
-
-Use this function to catch errors from `refser.load`. Standard `assert` fails when expected data evaluates to false:
-
-```lua
-x = false
-s = refser.save(x)
-y = assert(refser.load(s)) -- assertion failed
-
-y = refser.assert(refser.load(s)) -- OK
-```
+Loads tuple from string `s`. Returns length of loaded tuple and tuple itself. In case of error returns `nil` plus error message. 
 
 ## Output format
 
@@ -120,56 +120,83 @@ Output format is developed to be easily read by computer, not human, but it stil
 * strings are saved using `string.format("%q")`. 
 * tables' contents are saved between curly braces, with array part separated from hash part by `|`. There are no separators between values in array part, or between key and values in hash part, or between key-value pairs. 
 * references are saved as `@` plus ID of corresponding table(without `D` in the beginning). Tables receive their IDs in the order `refser.save` meets them. 
+* tuples are saved as sequence of values.  
 
 ### Examples
 
-An empty table. No array part, no hash part. 
+* An empty tuple. 
 
-```lua
-x = {}
-print(refser.save(x)) -- {|}
-```
+	```lua
+	print(refser.save()) -- prints nothing
+	print(string.len(refser.save())) -- 0
+	```
 
-An array with 3 numbers. 
+* A single value. 
 
-```lua
-x = {1, 2, 3}
-print(refser.save(x)) -- {D1#D2#D3#|}
-```
+	```lua
+	print(refser.save("foo")) -- "foo"
+	```
 
-One string in array part and a key-value pair. 
+* Three values. 
 
-```lua
-x = {"foo", bar = "baz"}
-print(refser.save(x)) -- {"foo"|"bar""baz"}
-```
+	```lua
+	print(refser.save("foo", "bar", "baz")) -- "foo""bar""baz"
+	```
 
-Nested tables. 
+* An empty table. No array part, no hash part. 
 
-```lua
-x = {{}, [{}] = {}}
-print(refser.save(x)) -- {{|}|{|}{|}}
-```
+	```lua
+	x = {}
+	print(refser.save(x)) -- {|}
+	```
 
-A table with self-references. 
+* An array with 3 numbers. 
 
-```lua
-x = {}
-x[x] = x
-print(refser.save(x)) -- {|@1#@1#}
-```
+	```lua
+	x = {1, 2, 3}
+	print(refser.save(x)) -- {D1#D2#D3#|}
+	```
 
-A more complicated example of cross-references. 
+* One string in array part and a key-value pair. 
 
-```lua
-x = {}
-y = {}
-y[y] = y
-x[x] = y
-print(refser.save(x)) -- {|@1#{|@2#@2#}}
-```
+	```lua
+	x = {"foo", bar = "baz"}
+	print(refser.save(x)) -- {"foo"|"bar""baz"}
+	```
 
-In the above example `@1#` is `x` and `@2#` is `y`. 
+* Nested tables. 
+
+	```lua
+	x = {{}, [{}] = {}}
+	print(refser.save(x)) -- {{|}|{|}{|}}
+	```
+
+* A table with self-references. 
+
+	```lua
+	x = {}
+	x[x] = x
+	print(refser.save(x)) -- {|@1#@1#}
+	```
+
+* A more complicated example of cross-references. 
+
+	```lua
+	x = {}
+	y = {}
+	y[y] = y
+	x[x] = y
+	print(refser.save(x)) -- {|@1#{|@2#@2#}}
+	```
+
+	`@1#` is `x` and `@2#` is `y`. 
+
+* A tuple with cross-references. 
+
+	```lua
+	x = {}
+	print(refser.save(x, x, {x})) -- {|}@1#{@1#|}
+	```
 
 ## License
 

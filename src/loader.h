@@ -10,9 +10,10 @@
 #define _LOADER_I_MINF 2
 #define _LOADER_I_NAN 3
 #define _LOADER_I_MAXNESTING 4
-#define _LOADER_I_X 4
-#define _LOADER_I_REG 5
-#define _LOADER_I_BUFF 6
+#define _LOADER_I_MAXTUPLE 5
+#define _LOADER_I_REG 4
+#define _LOADER_I_BUFF 5
+#define _LOADER_I_X 6
 
 #define _LOADER_ERR_TOODEEP 1
 #define _LOADER_ERR_MAILFORMED 2
