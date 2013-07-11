@@ -10,13 +10,13 @@
 }
 
 #define eat_byte(LO) { \
-	LO->s++; \
-	LO->len--; \
+	(LO)->s++; \
+	(LO)->len--; \
 }
 
 #define eat_bytes(LO, count) { \
-	LO->s += count; \
-	LO->len -= count; \
+	(LO)->s += (count); \
+	LO->len -= (count); \
 }
 
 // initializes loader
