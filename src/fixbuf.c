@@ -35,14 +35,12 @@ void fixbuf_init(lua_State *L, fixbuf *B, int index) {
 }
 
 void fixbuf_addchar(fixbuf *B, char c) {
-	char *buff = fixbuf_prepare(B, 1);
-	memcpy(buff, &c, 1);
+	*fixbuf_prepare(B, 1) = c;
 	B->used++;
 }
 
 void fixbuf_addlstring(fixbuf *B, const char *s, size_t len) {
-	char *buff = fixbuf_prepare(B, len);
-	memcpy(buff, s, len);
+	memcpy(fixbuf_prepare(B, len), s, len);
 	B->used +=len;
 }
 

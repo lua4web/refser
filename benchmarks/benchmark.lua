@@ -7,14 +7,14 @@ local function benchmark(x, title)
 	
 	io.write "refser.save: "
 	local start = os.clock()
-	local s = refser.assert(refser.save(x))
+	local s = assert(refser.save(x))
 	print(os.clock() - start)
 	
 	collectgarbage()
 	
 	io.write "refser.load: "
 	start = os.clock()
-	local y = refser.assert(refser.load(s))
+	local y = assert(refser.load(s))
 	print(os.clock() - start)
 	
 	print "Benchmark completed"
