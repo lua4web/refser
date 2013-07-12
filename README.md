@@ -12,6 +12,8 @@ Install refser using [luarocks](http://luarocks.org):
 luarocks install refser
 ```
 
+Note: currently only 0.1 version is uploaded to luarocks. 
+
 ## Usage
 
 1. Include refser:
