@@ -8,21 +8,25 @@
 static int save(lua_State *L) {
 	saver *S;
 	int err;
-	int maxnesting, maxtuple;
+	int maxnesting, maxtuple, maxitems;
 	int i;
-	int tuplesize = lua_gettop(L) - _SAVER_I_MAXTUPLE;
+	int tuplesize = lua_gettop(L) - _SAVER_I_MAXITEMS;
 	lua_newtable(L);
 	maxnesting = lua_tonumber(L, _SAVER_I_MAXNESTING);
 	lua_replace(L, _SAVER_I_REG);
 	maxtuple = lua_tonumber(L, _SAVER_I_MAXTUPLE);
 	if(tuplesize > maxtuple) {
+		lua_settop(L, 0);
 		lua_pushnil(L);
 		lua_pushstring(L, "refser.save error: tuple is too long");
 		return 2;
 	}
 	
+	maxitems = lua_tonumber(L, _SAVER_I_MAXITEMS);
+	lua_remove(L, _SAVER_I_MAXITEMS);
+	
 	S = malloc(sizeof *S);
-	saver_init(S, L, maxnesting);
+	saver_init(S, L, maxnesting, maxitems);
 	
 	for(i = 0; i < tuplesize; i++) {
 		if(err = saver_process(S, _SAVER_I_X + i, 0)) {
@@ -49,6 +53,10 @@ static int save(lua_State *L) {
 					lua_pushstring(L, "refser.save error: attempt to save thread");
 					break;
 				}
+				case _SAVER_ERR_ITEMS: {
+					lua_pushstring(L, "refser.save error: too many items");
+					break;
+				}
 			}
 			return 2;
 		}
@@ -65,15 +73,18 @@ static int load(lua_State *L) {
 	loader *LO;
 	int err;
 	int tuplesize;
-	int maxnesting, maxtuple;
+	int maxnesting, maxtuple, maxitems;
 	maxnesting = lua_tonumber(L, _LOADER_I_MAXNESTING);
 	lua_newtable(L);
 	lua_replace(L, _LOADER_I_REG);
 	maxtuple = lua_tonumber(L, _LOADER_I_MAXTUPLE);
+	
+	maxitems = lua_tonumber(L, _LOADER_I_MAXITEMS);
+	lua_remove(L, _LOADER_I_MAXITEMS);
 
 	s = luaL_checklstring(L, _LOADER_I_X, &len);
 	LO = malloc(sizeof *LO);
-	loader_init(LO, L, s, len, maxnesting);
+	loader_init(LO, L, s, len, maxnesting, maxitems);
 	
 	tuplesize = 0;
 	while(LO->len && tuplesize < maxtuple) {
@@ -91,6 +102,10 @@ static int load(lua_State *L) {
 				}
 				case _LOADER_ERR_STACK: {
 					lua_pushstring(L, "refser.load error: lua stack exhausted");
+					break;
+				}
+				case _LOADER_ERR_ITEMS: {
+					lua_pushstring(L, "refser.load error: too many items");
 					break;
 				}
 				default: {

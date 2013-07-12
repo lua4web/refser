@@ -10,6 +10,7 @@
 #define _LOADER_I_NAN 3
 #define _LOADER_I_MAXNESTING 4
 #define _LOADER_I_MAXTUPLE 5
+#define _LOADER_I_MAXITEMS 6
 #define _LOADER_I_REG 4
 #define _LOADER_I_BUFF 5
 #define _LOADER_I_X 6
@@ -17,6 +18,7 @@
 #define _LOADER_ERR_TOODEEP 1
 #define _LOADER_ERR_MAILFORMED 2
 #define _LOADER_ERR_STACK 3
+#define _LOADER_ERR_ITEMS 4
 
 #define _LOADER_ROLE_NONE 1
 #define _LOADER_ROLE_KEY 2
@@ -29,10 +31,12 @@ typedef struct loader {
 	size_t len;
 	int count;
 	int maxnesting;
+	int items;
+	int maxitems;
 } loader;
 
 // initializes loader
-void loader_init(loader *LO, lua_State *L, const char *s, size_t len, int maxnesting);
+void loader_init(loader *LO, lua_State *L, const char *s, size_t len, int maxnesting, int maxitems);
 
 // reads next value from string
 // puts it on top of lua stack

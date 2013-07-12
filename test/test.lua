@@ -414,3 +414,58 @@ function test_restricted()
 	refser.maxtuple = 20
 	refser.maxnesting = 250
 end
+
+module("maxitems", lunit.testcase, package.seeall)
+
+function test_many_items()
+	local x = {}
+	for i = 1, 1000 do
+		x[i] = {}
+		for j = 1, 1000 do
+			x[i][j] = 0
+		end
+	end
+	
+	local s, err = refser.save(x)
+	assert_nil(s)
+	assert_equal("refser.save error: too many items", err)
+	
+	refser.maxitems = 1 + 1000 + 1000 * 1000
+	
+	s, err = refser.save(x)
+	assert_string(s)
+	
+	refser.maxitems = 10 ^ 6
+end
+
+function test_combo()
+	local a = {} -- 1
+	a[a] = a -- 2, 3
+	b = "foo" -- 4
+	c = {a} -- 5, 6
+	
+	refser.maxitems = 5
+	
+	local s, err = refser.save(a, b, c)
+	assert_nil(s)
+	assert_equal("refser.save error: too many items", err)
+	
+	refser.maxitems = 6
+	
+	s, err = refser.save(a, b, c)
+	assert_string(s)
+	
+	count, a2, b2, c2 = refser.load(s)
+	assert_equal(3, count)
+	assert_equal(a2, a2[a2])
+	assert_equal(b, b2)
+	assert_equal(a2, c2[1])
+	
+	refser.maxitems = 5
+	
+	ok, err = refser.load(s)
+	assert_nil(ok)
+	assert_equal("refser.load error: too many items", err)
+	
+	refser.maxitems = 10 ^ 6
+end

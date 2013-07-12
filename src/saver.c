@@ -4,12 +4,14 @@
 #include "format.h"
 
 // initializes saver
-void saver_init(saver *S, lua_State *L, int maxnesting) {
+void saver_init(saver *S, lua_State *L, int maxnesting, int maxitems) {
 	S->L = L;
 	S->B = malloc(sizeof *S->B);
 	fixbuf_init(L, S->B, _SAVER_I_BUFF);
 	S->count = 0;
 	S->maxnesting = maxnesting;
+	S->items = 0;
+	S->maxitems = maxitems;
 }
 
 static int luaB_rawgeti(lua_State *L, int index, int i) {
@@ -77,6 +79,9 @@ static int saver_process_table(saver *S, int index, int nesting) {
 // stack-balanced
 // returns 0 or error code
 int saver_process(saver *S, int index, int nesting) {
+	if(++S->items > S->maxitems) {
+		return _SAVER_ERR_ITEMS;
+	}
 	if(!lua_checkstack(S->L, 2)) {
 		return _SAVER_ERR_STACK;
 	}

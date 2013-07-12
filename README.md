@@ -44,6 +44,14 @@ luarocks install refser
 	end
 	```
 
+## Restriction
+
+refser provides several methods to restrict saved and loaded data. 
+
+* Nesting level of tables can't be larger than [refser.maxnesting](#refsermaxnesting). 
+* Tuple length can't be larger than [refser.maxtuple](#refsermaxtuple). 
+* Number of items can't be larger than [refser.maxitems](#refsermaxitems). 
+
 ## Reference
 
 ### refser.save(...)
@@ -72,10 +80,6 @@ refser can't save:
 * `thread`
 * `userdata`
 
-refser doesn't save metatables and tables with nesting level larger than `refser.maxnesting`. 
-
-refser refuses to save tuples longer than `refser.maxtuple`. 
-
 #### Identity-preserving table serialization
 
 refser.save preserves all references in table. 
@@ -90,7 +94,7 @@ assert(y == y[y]) -- OK
 
 ### refser.maxnesting
 
-This variable sets max nesting level for saved and loaded tables. Default value is `250`. It can be changed at run-time to suit user's needs. 
+This variable sets maximum nesting level for saved and loaded tables. Default value is `250`. It can be changed at run-time to suit user's needs. 
 
 ```lua
 x = {{{}}}
@@ -102,13 +106,29 @@ assert(refser.save(x)) -- OK
 
 ### refser.maxtuple
 
-This variable sets max tuple length for saved and loaded tuples. Default value is `20`. It can be changed at run-time to suit user's needs. 
+This variable sets maximum tuple length for saved and loaded tuples. Default value is `20`. It can be changed at run-time to suit user's needs. 
 
 ```lua
 a, b, c = "foo", "bar", "baz"
 refser.maxtuple = 2
 assert(refser.save(a, b, c)) -- refser.save error: tuple is too long
 refser.maxtuple = 3
+assert(refser.save(a, b, c)) -- OK
+```
+
+### refser.maxitems
+
+This variable sets maximum number of items for saved and loaded tuples. Default value is `1000000`. It can be changed at run-time to suit user's needs. All values are considered items. 
+
+```lua
+a = {} -- 1 item
+a[a] = a -- +2 items; both keys and values count
+b = "foo" -- +1 item
+c = {a} -- +2 items; in array part of table only values count
+-- Total items: 6
+refser.maxitems = 5
+assert(refser.save(a, b, c)) -- refser.save error: too many items
+refser.maxitems = 6
 assert(refser.save(a, b, c)) -- OK
 ```
 
@@ -128,7 +148,7 @@ Output format is developed to be easily read by computer, not human, but it stil
 * strings are saved using `string.format("%q")`. 
 * tables' contents are saved between curly braces, with array part separated from hash part by `|`. There are no separators between values in array part, or between key and values in hash part, or between key-value pairs. 
 * references are saved as `@` plus ID of corresponding table(without `D` in the beginning). Tables receive their IDs in the order `refser.save` meets them. 
-* tuples are saved as sequence of values.  
+* tuples are saved as sequence of values. 
 
 ### Examples
 

@@ -1,7 +1,7 @@
-Loaded testsuite with 35 tests in 7 testcases.
+Loaded testsuite with 37 tests in 8 testcases.
 
-    ...................................
+    .....................................
 
-130 Assertions checked.
+142 Assertions checked.
 
-Testsuite finished (35 passed, 0 failed, 0 errors).
+Testsuite finished (37 passed, 0 failed, 0 errors).

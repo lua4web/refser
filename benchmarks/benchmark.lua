@@ -1,5 +1,7 @@
 local refser = require "refser"
 
+refser.maxitems = 10 ^ 9
+
 local function benchmark(x, title)
 	print("Starting benchmark "..title)
 	

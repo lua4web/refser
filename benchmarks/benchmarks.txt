@@ -1,17 +1,17 @@
 Starting benchmark booleans
-refser.save: 0.88
-refser.load: 0.48
+refser.save: 0.92
+refser.load: 0.46
 Benchmark completed
 Starting benchmark infs
-refser.save: 0.11
-refser.load: 0.05
+refser.save: 0.12
+refser.load: 0.04
 Benchmark completed
 Starting benchmark integers
-refser.save: 0.71
-refser.load: 0.13
+refser.save: 0.72
+refser.load: 0.14
 Benchmark completed
 Starting benchmark nan
-refser.save: 1.82
+refser.save: 1.88
 refser.load: 0.4
 Benchmark completed
 Starting benchmark nested
@@ -19,10 +19,10 @@ refser.save: 0.69
 refser.load: 0.29
 Benchmark completed
 Starting benchmark numbers
-refser.save: 0.8
-refser.load: 0.35
+refser.save: 0.78
+refser.load: 0.32
 Benchmark completed
 Starting benchmark strings
-refser.save: 0.37
+refser.save: 0.38
 refser.load: 0.25
 Benchmark completed

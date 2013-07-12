@@ -20,7 +20,7 @@
 }
 
 // initializes loader
-void loader_init(loader *LO, lua_State *L, const char *s, size_t len, int maxnesting) {
+void loader_init(loader *LO, lua_State *L, const char *s, size_t len, int maxnesting, int maxitems) {
 	LO->L = L;
 	LO->B = malloc(sizeof *LO->B);
 	fixbuf_init(L, LO->B, _LOADER_I_BUFF);
@@ -28,6 +28,8 @@ void loader_init(loader *LO, lua_State *L, const char *s, size_t len, int maxnes
 	LO->s = s;
 	LO->len = len;
 	LO->maxnesting = maxnesting;
+	LO->items = 0;
+	LO->maxitems = maxitems;
 }
 
 static int loader_process_number(loader *LO) {
@@ -143,6 +145,9 @@ static int loader_process_table(loader *LO, int nesting) {
 // puts it on top of lua stack
 // returns 0 or error code
 int loader_process(loader *LO, int role, int nesting) {
+	if(++LO->items > LO->maxitems) {
+		return _LOADER_ERR_ITEMS;
+	}
 	ensure(LO->len);
 	if(!lua_checkstack(LO->L, 2)) {
 		return _LOADER_ERR_STACK;
