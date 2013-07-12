@@ -4,6 +4,14 @@ Allows to save tuples of primitive Lua types into strings and load them back.
 
 refser is similar to identity-preserving table serialization by Metalua([source](https://github.com/fab13n/metalua/blob/no-dll/src/lib/serialize.lua)), but it is much faster as it is written in C. 
 
+## Installation
+
+Install refser using [luarocks](http://luarocks.org): 
+
+```
+luarocks install refser
+```
+
 ## Usage
 
 1. Include refser:

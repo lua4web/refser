@@ -2,7 +2,6 @@
 #define FIXBUF_H
 
 #include "lua.h"
-#include "lualib.h"
 #include "lauxlib.h"
 
 #define FIXBUF_SIZE BUFSIZ

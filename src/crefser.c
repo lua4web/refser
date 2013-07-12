@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include "lua.h"
-#include "lualib.h"
 #include "lauxlib.h"
 #include "fixbuf.h"
 #include "saver.h"
@@ -16,7 +15,6 @@ static int save(lua_State *L) {
 	maxnesting = lua_tonumber(L, _SAVER_I_MAXNESTING);
 	lua_replace(L, _SAVER_I_REG);
 	maxtuple = lua_tonumber(L, _SAVER_I_MAXTUPLE);
-	
 	if(tuplesize > maxtuple) {
 		lua_pushnil(L);
 		lua_pushstring(L, "refser.save error: tuple is too long");
@@ -126,3 +124,4 @@ int luaopen_crefser (lua_State *L) {
 	lua_rawset(L, -3);
 	return 1;
 }
+

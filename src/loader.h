@@ -2,7 +2,6 @@
 #define LOADER_H
 
 #include "lua.h"
-#include "lualib.h"
 #include "lauxlib.h"
 #include "fixbuf.h"
 
