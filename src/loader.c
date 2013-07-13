@@ -45,7 +45,12 @@ static int loader_process_number(loader *LO) {
 	ensure(x || (i == 1 && LO->s[0] == '0'));
 	eat_bytes(LO, i + 1);
 	lua_pushnumber(LO->L, x);
-	return 0;
+	if(lua_rawequal(LO->L, -1, -1)) {
+		return 0;
+	}
+	else {
+		return _LOADER_ERR_MAILFORMED;
+	}
 }
 
 static int loader_process_string(loader *LO) {

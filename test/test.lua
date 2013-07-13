@@ -315,6 +315,13 @@ function test_nan_key()
 	assert_equal("refser.load error: mailformed input", err)
 end
 
+function test_clever_nan_key()
+	local s = "{|Dnan#T}"
+	local data, err = refser.load(s)
+	assert_nil(data)
+	assert_equal("refser.load error: mailformed input", err)
+end
+
 module("tuples", lunit.testcase, package.seeall)
 
 function test_empty()
