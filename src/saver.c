@@ -24,7 +24,6 @@ static int saver_process_number(saver *S, int index) {
 	lua_Number x = lua_tonumber(S->L, index);
 	len = sprintf(fixbuf_prepare(S->B, _FORMAT_NUMBER_MAX), "%.*g", _FORMAT_NUMBER_LEN, x);
 	S->B->used += len;
-	fixbuf_addchar(S->B, _FORMAT_NUMBER_DELIM);
 	return 0;
 }
 

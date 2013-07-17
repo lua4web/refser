@@ -19,6 +19,8 @@
 	LO->len -= (count); \
 }
 
+#define valid_number_char(c) (((c) <= '9' && (c) >= '0') || (c) == 'e' || (c) == '.' || (c) == '-')
+
 // initializes loader
 void loader_init(loader *LO, lua_State *L, const char *s, size_t len, int maxnesting, int maxitems) {
 	LO->L = L;
@@ -36,14 +38,13 @@ static int loader_process_number(loader *LO) {
 	size_t i = 0;
 	lua_Number x;
 	ensure(LO->len);
-	while(LO->s[i] != _FORMAT_NUMBER_DELIM) {
+	while(valid_number_char(LO->s[i])) {
 		i++;
-		ensure(LO->len > i);
 	}
 	ensure(i <= _FORMAT_NUMBER_MAX);
 	x = strtod(LO->s, NULL);
 	ensure(x || (i == 1 && LO->s[0] == '0'));
-	eat_bytes(LO, i + 1);
+	eat_bytes(LO, i);
 	lua_pushnumber(LO->L, x);
 	if(lua_rawequal(LO->L, -1, -1)) {
 		return 0;

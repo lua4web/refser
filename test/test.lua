@@ -88,7 +88,7 @@ function test_integer()
 	local x = math.random(1, 100000)
 	local s = refser.save(x)
 	assert_string(s)
-	assert_equal("D"..tostring(x).."#", s)
+	assert_equal("D"..tostring(x), s)
 	local count, y = refser.load(s)
 	assert_equal(x, y)
 end
@@ -97,7 +97,7 @@ function test_number()
 	local x = math.random() * math.random(-50, 50)
 	local s = refser.save(x)
 	assert_string(s)
-	assert_equal("D"..string.format("%.17g", x).."#", s)
+	assert_equal("D"..string.format("%.17g", x), s)
 	local count, y = refser.load(s)
 	assert_equal(x, y)
 end
@@ -107,7 +107,7 @@ function test_long()
 	x = x * 10 ^ (-130)
 	local s = refser.save(x)
 	assert_string(s)
-	assert_equal("D"..string.format("%.17g", x).."#", s)
+	assert_equal("D"..string.format("%.17g", x), s)
 	local count, y = refser.load(s)
 	assert_equal(x, y)
 end
@@ -163,7 +163,7 @@ function test_recursive()
 	x[x] = x
 	local s = refser.save(x)
 	assert_string(s)
-	assert_equal("{|@1#@1#}", s)
+	assert_equal("{|@1@1}", s)
 	local count, y = refser.load(s)
 	assert_table(y)
 	assert_equal(y, y[y])
@@ -267,56 +267,56 @@ function test_extra()
 end
 
 function test_number_short()
-	local s = "D123"
+	local s = "D"
 	local data, err = refser.load(s)
 	assert_nil(data)
 	assert_equal("refser.load error: mailformed input", err)
 end
 
 function test_number_corrupted()
-	local s = "Dfoo#"
+	local s = "Dfoo"
 	local data, err = refser.load(s)
 	assert_nil(data)
 	assert_equal("refser.load error: mailformed input", err)
 end
 
 function test_number_long()
-	local s = "D11111111111111111111111111111111111111111111111111111111111111#"
+	local s = "D11111111111111111111111111111111111111111111111111111111111111"
 	local data, err = refser.load(s)
 	assert_nil(data)
 	assert_equal("refser.load error: mailformed input", err)
 end
 
 function test_empty_ref()
-	local s = "@1#"
+	local s = "@1"
 	local data, err = refser.load(s)
 	assert_nil(data)
 	assert_equal("refser.load error: mailformed input", err)
 end
 
 function test_strange_ref()
-	local s = "{@1.00000000000000000000000000000000000000000000000000000000000000000000000#|}"
+	local s = "{@1.00000000000000000000000000000000000000000000000000000000000000000000000|}"
 	local data, err = refser.load(s)
 	assert_nil(data)
 	assert_equal("refser.load error: mailformed input", err)
 end
 
 function test_nil_key()
-	local s = "{|nD1#}"
+	local s = "{|nD1}"
 	local data, err = refser.load(s)
 	assert_nil(data)
 	assert_equal("refser.load error: mailformed input", err)
 end
 
 function test_nan_key()
-	local s = "{|ND1#}"
+	local s = "{|ND1}"
 	local data, err = refser.load(s)
 	assert_nil(data)
 	assert_equal("refser.load error: mailformed input", err)
 end
 
 function test_clever_nan_key()
-	local s = "{|Dnan#T}"
+	local s = "{|DnanT}"
 	local data, err = refser.load(s)
 	assert_nil(data)
 	assert_equal("refser.load error: mailformed input", err)
@@ -336,7 +336,7 @@ end
 function test_several()
 	local s = refser.save("foo", 12345, {}, true, nil)
 	assert_string(s)
-	assert_equal([["foo"D12345#{|}Tn]], s)
+	assert_equal([["foo"D12345{|}Tn]], s)
 	local count, a, b, c, d, e = refser.load(s)
 	assert_equal(count, 5)
 	assert_equal("foo", a)
@@ -350,7 +350,7 @@ function test_tuple_refs()
 	local x = {}
 	local s = refser.save(x, nil, x, nil, {[x] = x}, nil)
 	assert_string(s)
-	assert_equal([[{|}n@1#n{|@1#@1#}n]], s)
+	assert_equal([[{|}n@1n{|@1@1}n]], s)
 	local count, a, b, c, d, e, f = refser.load(s)
 	assert_equal(6, count)
 	assert_nil(b)
@@ -412,7 +412,7 @@ function test_restricted()
 	assert_equal(username, username2)
 	assert_equal(password, password2)
 	
-	local attack1 = "{D12345#|TF}"
+	local attack1 = "{D12345|TF}"
 	local attack2 = [["foobar""qwerty""extra"]]
 	
 	assert_nil(refser.load(attack1))

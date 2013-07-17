@@ -10,7 +10,6 @@
 #define _FORMAT_MINF 'i'
 #define _FORMAT_NAN 'N'
 #define _FORMAT_NUMBER 'D'
-#define _FORMAT_NUMBER_DELIM '#'
 #define _FORMAT_STRING '"'
 #define _FORMAT_TABLE_START '{'
 #define _FORMAT_TABLE_END '}'
