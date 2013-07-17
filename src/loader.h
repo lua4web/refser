@@ -1,8 +1,7 @@
 #ifndef LOADER_H
 #define LOADER_H
 
-#include "lua.h"
-#include "lauxlib.h"
+#include "luapp.h"
 #include "fixbuf.h"
 
 #define _LOADER_I_INF 1
@@ -24,26 +23,26 @@
 #define _LOADER_ROLE_KEY 2
 #define _LOADER_ROLE_VALUE 3
 
-typedef struct loader {
-	lua_State *L;
-	fixbuf *B;
-	const char *s;
-	size_t len;
-	int count;
-	int maxnesting;
-	int items;
-	int maxitems;
-} loader;
-
-// initializes loader
-void loader_init(loader *LO, lua_State *L, const char *s, size_t len, int maxnesting, int maxitems);
-
-// reads next value from string
-// puts it on top of lua stack
-// returns 0 or error code
-int loader_process(loader *LO, int role, int nesting);
-
-// prepares loader for freeing
-void loader_free(loader *LO);
+class Loader {
+	private:
+		Lua *L;
+		const char *s;
+		int count;
+		int nesting;
+		int maxnesting;
+		int items;
+		int maxitems;
+		
+		void eat();
+		void eat(size_t size);
+		int process_number();
+		int process_string();
+		int process_table();
+	public:
+		Loader(Lua *L, const char *s, size_t len, int maxnesting, int maxitems);
+		int process(int role);
+		FixBuf *B;
+		size_t len;
+};
 
 #endif

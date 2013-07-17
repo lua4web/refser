@@ -4,8 +4,8 @@ Starting benchmark booleans
     Memory consumed(clean): 9765.68359375
     Output length: 10000003
 
-  refser.load: 0.5
-    Memory consumed(raw): 131080.515625
+  refser.load: 0.46
+    Memory consumed(raw): 131080.51660156
     Memory consumed(clean): -0.296875
 
   Memory consumed(y - x): 0.0625
@@ -17,7 +17,7 @@ Starting benchmark infs
     Memory consumed(clean): 976.62109375
     Output length: 1000003
 
-  refser.load: 0.04
+  refser.load: 0.03
     Memory consumed(raw): 8200.5166015625
     Memory consumed(clean): -0.29296875
 
@@ -38,21 +38,21 @@ Starting benchmark integers
 Benchmark completed
 
 Starting benchmark nan
-  refser.save: 1.91
-    Memory consumed(raw): 42526.356445312
+  refser.save: 1.9
+    Memory consumed(raw): 42526.35546875
     Memory consumed(clean): 9765.68359375
     Output length: 10000003
 
-  refser.load: 0.4
-    Memory consumed(raw): 131080.515625
-    Memory consumed(clean): -0.296875
+  refser.load: 0.38
+    Memory consumed(raw): 131080.51660156
+    Memory consumed(clean): -0.294921875
 
   Memory consumed(y - x): 0.0625
 Benchmark completed
 
 Starting benchmark nested
-  refser.save: 0.69
-    Memory consumed(raw): 52399.885742188
+  refser.save: 0.7
+    Memory consumed(raw): 52399.884765625
     Memory consumed(clean): 3255.263671875
     Output length: 3333333
 
@@ -64,12 +64,12 @@ Starting benchmark nested
 Benchmark completed
 
 Starting benchmark numbers
-  refser.save: 0.76
+  refser.save: 0.79
     Memory consumed(raw): 76875.672851562
     Memory consumed(clean): 19531.44140625
     Output length: 20000139
 
-  refser.load: 0.34
+  refser.load: 0.35
     Memory consumed(raw): 8200.5166015625
     Memory consumed(clean): -0.2998046875
 
@@ -82,7 +82,7 @@ Starting benchmark strings
     Memory consumed(clean): 51270.506835938
     Output length: 52500942
 
-  refser.load: 0.26
+  refser.load: 0.25
     Memory consumed(raw): 59477.778320312
     Memory consumed(clean): -0.30078125
 

@@ -1,8 +1,7 @@
 #ifndef SAVER_H
 #define SAVER_H
 
-#include "lua.h"
-#include "lauxlib.h"
+#include "luapp.h"
 #include "fixbuf.h"
 
 #define _SAVER_I_INF 1
@@ -22,25 +21,22 @@
 #define _SAVER_ERR_ITEMS 6
 #define _SAVER_ERR_UNKNOWN 100
 
-
-typedef struct saver {
-	lua_State *L;
-	fixbuf *B;
-	int count;
-	int maxnesting;
-	int items;
-	int maxitems;
-} saver;
-
-// initializes saver
-void saver_init(saver *S, lua_State *L, int maxnesting, int maxitems);
-
-// adds value at index to buffer
-// stack-balanced
-// returns 0 or error code
-int saver_process(saver *S, int index, int nesting);
-
-// prepares saver for freeing
-void saver_free(saver *S);
+class Saver {
+	private:
+		Lua *L;
+		int count;
+		int nesting;
+		int maxnesting;
+		int items;
+		int maxitems;
+		
+		int process_number(int index);
+		int process_string(int index);
+		int process_table(int index);
+	public:
+		Saver(Lua *L, int maxnesting, int maxitems);
+		int process(int index);
+		FixBuf *B;
+};
 
 #endif

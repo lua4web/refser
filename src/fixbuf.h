@@ -1,27 +1,28 @@
 #ifndef FIXBUF_H
 #define FIXBUF_H
 
-#include "lua.h"
-#include "lauxlib.h"
+#include "luapp.h"
 
 #define FIXBUF_SIZE BUFSIZ
 
-typedef struct fixbuf {
-	char *buff;
-	int index;
-	size_t size;
-	size_t used;
-	lua_State *L;
-} fixbuf;
-
-char *fixbuf_prepare(fixbuf *B, size_t size);
-void fixbuf_init(lua_State *L, fixbuf *B, int index);
-void fixbuf_addchar(fixbuf *B, char c);
-void fixbuf_addlstring(fixbuf *B, const char *s, size_t len);
-void fixbuf_addqstring(fixbuf *B, const char *s, size_t len);
-void fixbuf_addstring(fixbuf *B, const char *s);
-void fixbuf_addvalue(fixbuf *B);
-void fixbuf_pushresult(fixbuf *B);
-void fixbuf_reset(fixbuf *B);
+class FixBuf {
+	private:
+		char *buff;
+		int index;
+		size_t size;
+		size_t used;
+		Lua *L;
+	public:
+		FixBuf(Lua *L, int index);
+		char *prepare(size_t size);
+		void add();
+		void add(char c);
+		void add(const char *s, size_t len);
+		void add(const char *s);
+		void addquoted(const char *s, size_t len);
+		void use(size_t size);
+		void pushresult();
+		void reset();
+};
 
 #endif
