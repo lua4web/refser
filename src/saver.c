@@ -14,7 +14,7 @@ void saver_init(saver *S, lua_State *L, int maxnesting, int maxitems) {
 	S->maxitems = maxitems;
 }
 
-static int luaB_rawgeti(lua_State *L, int index, int i) {
+static int luaL_rawgeti(lua_State *L, int index, int i) {
 	lua_rawgeti(L, index, i);
 	return !lua_isnil(L, -1);
 }
@@ -50,7 +50,7 @@ static int saver_process_table(saver *S, int index, int nesting) {
 		
 	fixbuf_addchar(S->B, _FORMAT_TABLE_START);
 				
-	while(luaB_rawgeti(S->L, index, i++)) {
+	while(luaL_rawgeti(S->L, index, i++)) {
 		if(err = saver_process(S, lua_gettop(S->L), nesting)) {
 			return err;
 		}

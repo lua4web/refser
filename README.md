@@ -4,6 +4,20 @@ Allows to save tuples of primitive Lua types into strings and load them back.
 
 refser is similar to identity-preserving table serialization by Metalua([source](https://github.com/fab13n/metalua/blob/no-dll/src/lib/serialize.lua)), but it is much faster as it is written in C. 
 
+refser can save: 
+
+* `nil`
+* `boolean`
+* `number`, including math.huge and NaN
+* `string`
+* `table`, including nested tables and tables with references
+
+refser can't save:
+
+* `function`
+* `thread`
+* `userdata`
+
 ## Installation
 
 Install refser using [luarocks](http://luarocks.org): 
@@ -67,20 +81,6 @@ print(refser.save([[Newlines
 and embedded]].."\0zeros"))
 -- "Newlines\nand embedded\zzeros"
 ```
-
-refser can save: 
-
-* `nil`
-* `boolean`
-* `number`, including math.huge and NaN
-* `string`
-* `table`, including nested tables and tables with references
-
-refser can't save:
-
-* `function`
-* `thread`
-* `userdata`
 
 #### Identity-preserving table serialization
 
