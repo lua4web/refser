@@ -19,6 +19,7 @@ class FixBuf {
 		void add(char c);
 		void add(const char *s, size_t len);
 		void add(const char *s);
+		void addf(size_t maxsize, const char *fmt, ...);
 		void addquoted(const char *s, size_t len);
 		void use(size_t size);
 		void pushresult();

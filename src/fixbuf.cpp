@@ -1,6 +1,7 @@
 #include "fixbuf.h"
 
 #include <string.h>
+#include <stdarg.h>
 
 FixBuf::FixBuf(Lua *L, int index) {
 	this->L = L;
@@ -53,6 +54,13 @@ void FixBuf::add() {
 	const char *s = this->L->tolstring(-1, &len);
 	this->add(s, len);
 	this->L->pop();
+}
+
+void FixBuf::addf(size_t maxsize, const char *fmt, ...) {
+	va_list args;
+	va_start(args, fmt);
+	this->use(vsprintf(this->prepare(maxsize), fmt, args));
+	va_end(args);
 }
 
 void FixBuf::addquoted(const char *s, size_t len) {

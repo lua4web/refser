@@ -16,8 +16,7 @@ Saver::Saver(Lua *L, int maxnesting, int maxitems) {
 int Saver::process_number(int index) {
 	int len;
 	lua_Number x = this->L->tonumber(index);
-	len = sprintf(this->B->prepare(_FORMAT_NUMBER_MAX), "%.*g", _FORMAT_NUMBER_LEN, x);
-	this->B->use(len);
+	this->B->addf(_FORMAT_NUMBER_MAX, "%.*g", _FORMAT_NUMBER_LEN, x);
 	return 0;
 }
 
