@@ -12,10 +12,10 @@
 #define _LOADER_I_OPTS 6
 #define _LOADER_I_X 6
 
-#define _LOADER_ERR_TOODEEP 1
-#define _LOADER_ERR_MAILFORMED 2
-#define _LOADER_ERR_STACK 3
-#define _LOADER_ERR_ITEMS 4
+#define _LOADER_ERR_TOODEEP "refser.load error: table is too deep"
+#define _LOADER_ERR_MAILFORMED "refser.load error: mailformed input"
+#define _LOADER_ERR_STACK "refser.load error: lua stack exhausted"
+#define _LOADER_ERR_ITEMS "refser.load error: too many items"
 
 #define _LOADER_ROLE_NONE 1
 #define _LOADER_ROLE_KEY 2
@@ -35,14 +35,14 @@ class Loader {
 		
 		void eat();
 		void eat(size_t size);
-		int process_number();
-		int process_string();
-		int process_table();
+		void process_number();
+		void process_string();
+		void process_table();
 	public:
 		int maxtuple;
 		Loader(Lua *L);
 		~Loader();
-		int process(int role);
+		void process(int role);
 		int done();
 };
 

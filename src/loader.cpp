@@ -5,7 +5,7 @@
 
 #define ensure(cond) { \
 	if(!(cond)) { \
-		return _LOADER_ERR_MAILFORMED; \
+		throw _LOADER_ERR_MAILFORMED; \
 	} \
 }
 
@@ -50,7 +50,7 @@ void Loader::eat(size_t size) {
 	this->len -= size;
 }
 
-int Loader::process_number() {
+void Loader::process_number() {
 	size_t i = 0;
 	lua_Number x;
 	ensure(this->len);
@@ -62,15 +62,12 @@ int Loader::process_number() {
 	ensure(x || (i == 1 && *this->s == '0'));
 	this->eat(i);
 	this->L->pushnumber(x);
-	if(this->L->rawequal(-1, -1)) {
-		return 0;
-	}
-	else {
-		return _LOADER_ERR_MAILFORMED;
+	if(!this->L->rawequal(-1, -1)) {
+		throw _LOADER_ERR_MAILFORMED;
 	}
 }
 
-int Loader::process_string() {
+void Loader::process_string() {
 	char esc;
 	size_t i = 0;
 	this->B->reset();
@@ -100,7 +97,7 @@ int Loader::process_string() {
 					break;
 				}
 				default: {
-					return _LOADER_ERR_MAILFORMED;
+					throw _LOADER_ERR_MAILFORMED;
 					break;
 				}
 			}
@@ -120,16 +117,14 @@ int Loader::process_string() {
 	this->eat(i + 1);
 	
 	this->B->pushresult();		
-	return 0;
 }
 
-int Loader::process_table() {
-	int err;
+void Loader::process_table() {
 	int i = 1;
 	
 	this->nesting++;
 	if(this->nesting > this->maxnesting) {
-		return _LOADER_ERR_TOODEEP;
+		throw _LOADER_ERR_TOODEEP;
 	}
 	
 	this->count++;
@@ -140,9 +135,7 @@ int Loader::process_table() {
 	ensure(this->len);
 	
 	while(*this->s != _FORMAT_ARRAY_HASH_SEP) {
-		if(err = this->process(_LOADER_ROLE_VALUE)) {
-			return err;
-		}
+		this->process(_LOADER_ROLE_VALUE);
 		this->L->rawseti(-2, i++);
 		ensure(this->len);
 	}
@@ -151,32 +144,26 @@ int Loader::process_table() {
 	ensure(this->len);
 	
 	while(*this->s != _FORMAT_TABLE_END) {
-		if(err = this->process(_LOADER_ROLE_KEY)) {
-			return err;
-		}
-		if(err = this->process(_LOADER_ROLE_VALUE)) {
-			return err;
-		}
+		this->process(_LOADER_ROLE_KEY);
+		this->process(_LOADER_ROLE_VALUE);
 		this->L->rawset(-3);
 		ensure(this->len);
 	}
 	
 	this->eat();
 	this->nesting--;
-	return 0;
 }
 
 // reads next value from string
 // puts it on top of lua stack
-// returns 0 or error code
-int Loader::process(int role) {
+void Loader::process(int role) {
 	this->items++;
 	if(this->items > this->maxitems) {
-		return _LOADER_ERR_ITEMS;
+		throw _LOADER_ERR_ITEMS;
 	}
 	ensure(this->len);
 	if(!this->L->checkstack(2)) {
-		return _LOADER_ERR_STACK;
+		throw _LOADER_ERR_STACK;
 	}
 	this->eat();
 	switch(this->s[-1]) {
@@ -207,11 +194,8 @@ int Loader::process(int role) {
 			break;
 		}
 		case _FORMAT_TABLE_REF: {
-			int err;
 			lua_Number x;
-			if(err = this->process_number()) {
-				return err;
-			}
+			this->process_number();
 			x = this->L->tonumber(-1);
 			this->L->pop();
 			ensure(is_int(x) && x <= this->count && x >= 1);
@@ -219,23 +203,22 @@ int Loader::process(int role) {
 			break;
 		}
 		case _FORMAT_TABLE_START: {
-			return this->process_table();
+			this->process_table();
 			break;
 		}
 		case _FORMAT_NUMBER: {
-			return this->process_number();
+			this->process_number();
 			break;
 		}
 		case _FORMAT_STRING: {
-			return this->process_string();
+			this->process_string();
 			break;
 		}
 		default: {
-			return _LOADER_ERR_MAILFORMED;
+			throw _LOADER_ERR_MAILFORMED;
 			break;
 		}
 	}
-	return 0;
 }
 
 int Loader::done() {

@@ -11,13 +11,13 @@
 #define _SAVER_I_OPTS 5
 #define _SAVER_I_X 5
 
-#define _SAVER_ERR_TOODEEP 1
-#define _SAVER_ERR_STACK 2
-#define _SAVER_ERR_FUNCTION 3
-#define _SAVER_ERR_USERDATA 4
-#define _SAVER_ERR_THREAD 5
-#define _SAVER_ERR_ITEMS 6
-#define _SAVER_ERR_UNKNOWN 100
+#define _SAVER_ERR_TOODEEP "refser.save error: table is too deep"
+#define _SAVER_ERR_STACK "refser.save error: lua stack exhausted"
+#define _SAVER_ERR_FUNCTION "refser.save error: attempt to save function"
+#define _SAVER_ERR_USERDATA "refser.save error: attempt to save userdata"
+#define _SAVER_ERR_THREAD "refser.save error: attempt to save thread"
+#define _SAVER_ERR_ITEMS "refser.save error: too many items"
+#define _SAVER_ERR_TOOLONG "refser.save error: tuple is too long"
 
 class Saver {
 	private:
@@ -29,15 +29,13 @@ class Saver {
 		int items;
 		int maxitems;
 		
-		int process_number(int index);
-		int process_string(int index);
-		int process_table(int index);
+		void process_number(int index);
+		void process_string(int index);
+		void process_table(int index);
 	public:
-		int ok;
-		
 		Saver(Lua *L);
 		~Saver();
-		int process(int index);
+		void process(int index);
 		void pushresult();
 };
 
