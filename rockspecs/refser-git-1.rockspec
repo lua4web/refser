@@ -26,21 +26,27 @@ build = {
 				"src/saver.cpp",
 				"src/loader.cpp"
 			},
-			incdirs = {
-				"src/"
-			},
+			incdirs = "src/",
 			libraries = "stdc++"
 		},
 		refser = "refser.lua"
 	},
 	platforms = {
+		windows = {
+			modules = {
+				crefser = {
+					incdirs = "src/ /EHsc",
+					libraries = {}
+				}
+			}
+		},
 		win32 = {
 			modules = {
 				crefser = {
+					incdirs = "src/ /EHsc",
 					libraries = {}
 				}
 			}
 		}
 	}
 }
-
