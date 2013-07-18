@@ -24,7 +24,7 @@
 class Saver {
 	private:
 		Lua *L;
-		FixBuf *B;
+		Writer *B;
 		int count;
 		int nesting;
 		int maxnesting;

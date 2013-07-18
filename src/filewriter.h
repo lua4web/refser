@@ -1,19 +1,11 @@
-#ifndef FIXBUF_H
-#define FIXBUF_H
+#ifndef FILEWRITER_H
+#define FILEWRITER_H
 
 #include "luapp.h"
 #include "writer.h"
 
-class FixBuf: public Writer {
-	private:
-		char *buff;
-		size_t size;
-		size_t used;
-		
-		char *prepare(size_t size);
-		void use(size_t size);
+class FileWriter: public Writer {
 	public:
-		FixBuf(Lua *L, int index);
 		void add();
 		void add(char c);
 		void add(const char *s, size_t len);
@@ -21,7 +13,6 @@ class FixBuf: public Writer {
 		void addf(size_t maxsize, const char *fmt, ...);
 		void addquoted(const char *s, size_t len);
 		void pushresult();
-		void reset();
 };
 
 #endif
