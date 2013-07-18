@@ -1,7 +1,7 @@
 #ifndef WRITER_H
 #define WRITER_H
 
-#include "luapp.h"
+#include "lua.hpp"
 
 class Writer {
 	protected:

@@ -1,4 +1,4 @@
-#include "fixbuf.h"
+#include "fixbuf.hpp"
 
 #include <string.h>
 #include <stdarg.h>

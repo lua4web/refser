@@ -1,7 +1,7 @@
-#include "loader.h"
+#include "loader.hpp"
 
 #include <stdlib.h>
-#include "format.h"
+#include "format.hpp"
 
 #define ensure(cond) { \
 	if(!(cond)) { \

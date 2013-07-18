@@ -1,8 +1,8 @@
 #ifndef FIXBUF_H
 #define FIXBUF_H
 
-#include "luapp.h"
-#include "writer.h"
+#include "lua.hpp"
+#include "writer.hpp"
 
 class FixBuf: public Writer {
 	private:

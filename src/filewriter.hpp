@@ -1,8 +1,8 @@
 #ifndef FILEWRITER_H
 #define FILEWRITER_H
 
-#include "luapp.h"
-#include "writer.h"
+#include "lua.hpp"
+#include "writer.hpp"
 
 class FileWriter: public Writer {
 	private:

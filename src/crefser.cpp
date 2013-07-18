@@ -1,7 +1,7 @@
 #include <stdlib.h>
-#include "luapp.h"
-#include "saver.h"
-#include "loader.h"
+#include "lua.hpp"
+#include "saver.hpp"
+#include "loader.hpp"
 
 static int save(lua_State *LS) {
 	Lua *L = new Lua(LS);

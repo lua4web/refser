@@ -1,9 +1,9 @@
-#include "saver.h"
+#include "saver.hpp"
 
 #include <stdlib.h>
-#include "format.h"
-#include "fixbuf.h"
-#include "filewriter.h"
+#include "format.hpp"
+#include "fixbuf.hpp"
+#include "filewriter.hpp"
 
 Saver::Saver(Lua *L) {
 	int maxtuple, tofile;

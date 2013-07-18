@@ -1,8 +1,8 @@
 #ifndef LOADER_H
 #define LOADER_H
 
-#include "luapp.h"
-#include "fixbuf.h"
+#include "lua.hpp"
+#include "fixbuf.hpp"
 
 #define _LOADER_I_INF 1
 #define _LOADER_I_MINF 2

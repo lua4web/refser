@@ -1,8 +1,8 @@
 #ifndef SAVER_H
 #define SAVER_H
 
-#include "luapp.h"
-#include "writer.h"
+#include "lua.hpp"
+#include "writer.hpp"
 
 #define _SAVER_I_INF 1
 #define _SAVER_I_MINF 2

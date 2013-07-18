@@ -1,4 +1,4 @@
-#include "luapp.h"
+#include "lua.hpp"
 
 Lua::Lua(lua_State *L) {
 	this->L = L;

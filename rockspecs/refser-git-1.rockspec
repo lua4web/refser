@@ -12,7 +12,7 @@ refser is similar to identity-preserving table serialization by Metalua, but it 
 	license = "MIT/X11"
 }
 dependencies = {
-	"lua >= 5.1, < 5.3"
+	"lua >= 5.2, < 5.3"
 }
 build = {
 	type = "builtin",
@@ -20,7 +20,7 @@ build = {
 		crefser = {
 			sources = {
 				"src/crefser.cpp",
-				"src/luapp.cpp",
+				"src/lua.cpp",
 				"src/writer.cpp",
 				"src/fixbuf.cpp",
 				"src/filewriter.cpp",
