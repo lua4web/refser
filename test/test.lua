@@ -477,4 +477,26 @@ function test_combo()
 	refser.maxitems = 10 ^ 6
 end
 
+testcase "savetofile"
+
+function tofile_complex()
+	a = {}
+	a[a] = a
+	b = "foo"
+	c = {a}
+	
+	f = io.open("temp.txt", "w")
+	ok = refser.savetofile(f, a, b, c)
+	assert_true(ok)
+	
+	f:close()
+	f = io.open("temp.txt", "r")
+	s = f:read("*a")
+	assert_string(s)
+	assert_equal([[{|@1@1}"foo"{@1|}]], s)
+	
+	f:close()
+	os.remove("temp.txt")
+end
+	
 run()

@@ -2,7 +2,7 @@
 
 Allows to save tuples of primitive Lua types into strings and load them back. 
 
-refser is similar to identity-preserving table serialization by Metalua([source](https://github.com/fab13n/metalua/blob/no-dll/src/lib/serialize.lua)), but it is much faster as it is written in C. 
+refser is similar to identity-preserving table serialization by Metalua([source](https://github.com/fab13n/metalua/blob/no-dll/src/lib/serialize.lua)), but it is much faster as it is written in C++. 
 
 refser can save: 
 
@@ -93,6 +93,12 @@ s = refser.save(x)
 ok, y = refser.load(s)
 assert(y == y[y]) -- OK
 ```
+
+### refser.savetofile(file, ...)
+
+Saves tuple of Lua values into file using provided file handler(obtained through `io.open`). 
+
+This feature is experimental. 
 
 ### refser.maxnesting
 
