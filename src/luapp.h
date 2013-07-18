@@ -40,6 +40,7 @@ class Lua {
 		void pushstring(const char *s);
 		void remove(int index);
 		const char *checklstring(int narg, size_t *l);
+		void *checkudata(int narg, const char *tname);
 };
 
 #endif

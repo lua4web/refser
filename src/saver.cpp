@@ -2,10 +2,17 @@
 
 #include <stdlib.h>
 #include "format.h"
+#include "fixbuf.h"
+#include "filewriter.h"
 
-Saver::Saver(Lua *L, int maxnesting, int maxitems) {
+Saver::Saver(Lua *L, int maxnesting, int maxitems, int tofile) {
 	this->L = L;
-	this->B = new FixBuf(L, _SAVER_I_BUFF);
+	if(tofile) {
+		this->B = new FileWriter(L, _SAVER_I_BUFF);
+	}
+	else {
+		this->B = new FixBuf(L, _SAVER_I_BUFF);
+	}
 	this->count = 0;
 	this->nesting = 0;
 	this->maxnesting = maxnesting;

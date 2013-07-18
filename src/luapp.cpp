@@ -116,3 +116,7 @@ void Lua::remove(int index) {
 const char *Lua::checklstring(int narg, size_t *l) {
 	return luaL_checklstring(this->L, narg, l);
 }
+
+void *Lua::checkudata(int narg, const char *tname) {
+	return luaL_checkudata(this->L, narg, tname);
+}

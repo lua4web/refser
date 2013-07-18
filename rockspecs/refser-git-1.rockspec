@@ -21,7 +21,9 @@ build = {
 			sources = {
 				"src/crefser.cpp",
 				"src/luapp.cpp",
+				"src/writer.cpp",
 				"src/fixbuf.cpp",
+				"src/filewriter.cpp",
 				"src/saver.cpp",
 				"src/loader.cpp"
 			},

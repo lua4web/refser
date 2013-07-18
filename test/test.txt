@@ -1,7 +1,94 @@
 Loaded testsuite with 38 tests in 8 testcases.
 
-    ......................................
+    FFFFFFFFFFFFFFFFFFF.FFFFF.F.F.F.F.F...
 
-144 Assertions checked.
+60 Assertions checked.
 
-Testsuite finished (38 passed, 0 failed, 0 errors).
+  1) Failure (trivial.test_nan):
+test.lua:81: string expected but was [function: 0xb776b590]
+
+  2) Failure (trivial.test_inf):
+test.lua:63: string expected but was [function: 0xb776b590]
+
+  3) Failure (trivial.test_true):
+test.lua:45: string expected but was [function: 0xb776b590]
+
+  4) Failure (trivial.test_nil):
+test.lua:36: string expected but was [function: 0xb776b590]
+
+  5) Failure (trivial.test_minf):
+test.lua:72: string expected but was [function: 0xb776b590]
+
+  6) Failure (trivial.test_long):
+test.lua:109: string expected but was [function: 0xb776b590]
+
+  7) Failure (trivial.test_false):
+test.lua:54: string expected but was [function: 0xb776b590]
+
+  8) Failure (trivial.test_number):
+test.lua:99: string expected but was [function: 0xb776b590]
+
+  9) Failure (trivial.test_string):
+test.lua:118: string expected but was [function: 0xb776b590]
+
+ 10) Failure (trivial.test_integer):
+test.lua:90: string expected but was [function: 0xb776b590]
+
+ 11) Failure (maxitems.test_combo):
+test.lua:463: string expected but was nil
+
+ 12) Failure (maxitems.test_many_items):
+test.lua:443: string expected but was nil
+
+ 13) Failure (tuples.test_empty):
+test.lua:329: string expected but was [function: 0xb776b590]
+
+ 14) Failure (tuples.test_several):
+test.lua:338: string expected but was [function: 0xb776b590]
+
+ 15) Failure (tuples.test_tuple_refs):
+test.lua:352: string expected but was [function: 0xb776b590]
+
+ 16) Failure (maxnesting.test_toodeep):
+test.lua:206: string expected but was [function: 0xb776b590]
+
+ 17) Failure (maxnesting.test_refs_are_not_deep):
+test.lua:223: string expected but was [function: 0xb776b590]
+
+ 18) Failure (maxtuple.test_long_tuple):
+test.lua:377: string expected but was nil
+
+ 19) Failure (maxtuple.test_restricted):
+test.lua:406: string expected but was nil
+
+ 20) Failure (tables.test_array):
+test.lua:141: string expected but was nil
+
+ 21) Failure (tables.test_table):
+test.lua:156: string expected but was nil
+
+ 22) Failure (tables.test_recursive):
+test.lua:165: string expected but was nil
+
+ 23) Failure (tables.test_empty):
+test.lua:129: string expected but was nil
+
+ 24) Failure (tables.test_depth):
+test.lua:182: string expected but was nil
+
+ 25) Failure (mailformed.test_clever_nan_key):
+test.lua:322: expected 'refser.load error: mailformed input' but was 'refser.load error: table is too deep'
+
+ 26) Failure (mailformed.test_nil_key):
+test.lua:308: expected 'refser.load error: mailformed input' but was 'refser.load error: table is too deep'
+
+ 27) Failure (mailformed.test_nan_key):
+test.lua:315: expected 'refser.load error: mailformed input' but was 'refser.load error: table is too deep'
+
+ 28) Failure (mailformed.test_strange_ref):
+test.lua:301: expected 'refser.load error: mailformed input' but was 'refser.load error: table is too deep'
+
+ 29) Failure (mailformed.test_empty_table):
+test.lua:259: expected 'refser.load error: mailformed input' but was 'refser.load error: table is too deep'
+
+Testsuite finished (9 passed, 29 failed, 0 errors).

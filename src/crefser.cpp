@@ -9,6 +9,7 @@ static int save(lua_State *LS) {
 	Saver *S;
 	int err;
 	int maxnesting, maxtuple, maxitems;
+	int tofile;
 	int i;
 	int tuplesize = L->gettop() - _SAVER_I_MAXITEMS;
 	L->newtable();
@@ -23,9 +24,16 @@ static int save(lua_State *LS) {
 	}
 	
 	maxitems = L->tonumber(_SAVER_I_MAXITEMS);
+	tofile = L->toboolean(_SAVER_I_TOFILE);
+	if(tofile) {
+		L->pushvalue(_SAVER_I_FILE);
+		L->replace(_SAVER_I_BUFF);
+		L->remove(_SAVER_I_FILE);
+	}
+	L->remove(_SAVER_I_TOFILE);
 	L->remove(_SAVER_I_MAXITEMS);
 	
-	S = new Saver(L, maxnesting, maxitems);
+	S = new Saver(L, maxnesting, maxitems, tofile);
 	
 	for(i = 0; i < tuplesize; i++) {
 		if(err = S->process(_SAVER_I_X + i)) {
