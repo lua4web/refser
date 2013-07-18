@@ -53,11 +53,10 @@ void Loader::eat(size_t size) {
 void Loader::process_number() {
 	size_t i = 0;
 	lua_Number x;
-	ensure(this->len);
-	while(valid_number_char(this->s[i])) {
+	while(valid_number_char(this->s[i]) && i < _FORMAT_NUMBER_MAX) {
 		i++;
 	}
-	ensure(i <= _FORMAT_NUMBER_MAX);
+	ensure(!valid_number_char(this->s[i]));
 	x = strtod(this->s, NULL);
 	ensure(x || (i == 1 && *this->s == '0'));
 	this->eat(i);
@@ -71,7 +70,6 @@ void Loader::process_string() {
 	char esc;
 	size_t i = 0;
 	this->B->reset();
-	ensure(this->len);
 	while(this->s[i] != '"') {
 		if(this->s[i] == '\\') {
 			ensure(this->len > i + 1);
@@ -132,22 +130,17 @@ void Loader::process_table() {
 	this->L->pushvalue(-1);
 	this->L->rawseti(_LOADER_I_REG, this->count);
 	
-	ensure(this->len);
-	
 	while(*this->s != _FORMAT_ARRAY_HASH_SEP) {
 		this->process(_LOADER_ROLE_VALUE);
 		this->L->rawseti(-2, i++);
-		ensure(this->len);
 	}
 	
 	this->eat();
-	ensure(this->len);
 	
 	while(*this->s != _FORMAT_TABLE_END) {
 		this->process(_LOADER_ROLE_KEY);
 		this->process(_LOADER_ROLE_VALUE);
 		this->L->rawset(-3);
-		ensure(this->len);
 	}
 	
 	this->eat();

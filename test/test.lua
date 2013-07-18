@@ -322,6 +322,55 @@ function test_clever_nan_key()
 	assert_equal("refser.load error: mailformed input", err)
 end
 
+function short_string()
+	local s = [["]]
+	local data, err = refser.load(s)
+	assert_nil(data)
+	assert_equal("refser.load error: mailformed input", err)
+end
+
+function wrong_escape()
+	local s = [["\]]
+	local data, err = refser.load(s)
+	assert_nil(data)
+	assert_equal("refser.load error: mailformed input", err)
+end
+
+function wrong_escape2()
+	local s = [["\"]]
+	local data, err = refser.load(s)
+	assert_nil(data)
+	assert_equal("refser.load error: mailformed input", err)
+end
+
+function wrong_table()
+	local s = [[{{}]]
+	local data, err = refser.load(s)
+	assert_nil(data)
+	assert_equal("refser.load error: mailformed input", err)
+end
+
+function wrong_table2()
+	local s = [[{||}]]
+	local data, err = refser.load(s)
+	assert_nil(data)
+	assert_equal("refser.load error: mailformed input", err)
+end
+
+function wrong_table3()
+	local s = [[{|@1}]]
+	local data, err = refser.load(s)
+	assert_nil(data)
+	assert_equal("refser.load error: mailformed input", err)
+end
+
+function wrong_table4()
+	local s = [[{]]
+	local data, err = refser.load(s)
+	assert_nil(data)
+	assert_equal("refser.load error: mailformed input", err)
+end
+
 testcase "tuples"
 
 function test_empty()
