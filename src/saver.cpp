@@ -2,11 +2,11 @@
 
 #include <stdlib.h>
 #include "format.hpp"
+#include "writer.hpp"
 #include "fixbuf.hpp"
-#include "filewriter.hpp"
 
 Saver::Saver(Lua *L) {
-	int maxtuple, tofile;
+	int maxtuple;
 	this->L = L;
 	this->count = 0;
 	this->nesting = 0;
@@ -24,18 +24,7 @@ Saver::Saver(Lua *L) {
 	this->maxitems = L->tonumber(-1);
 	L->pop();
 	
-	L->rawgeti(_SAVER_I_OPTS, 4);
-	tofile = L->toboolean(-1);
-	L->pop();
-	
-	if(tofile) {
-		L->rawgeti(_SAVER_I_OPTS, 5);
-		L->replace(_SAVER_I_BUFF);
-		this->B = new FileWriter(L, _SAVER_I_BUFF);
-	}
-	else {
-		this->B = new FixBuf(L, _SAVER_I_BUFF);
-	}
+	this->B = new FixBuf(L, _SAVER_I_BUFF);
 	
 	L->remove(_SAVER_I_OPTS);
 	

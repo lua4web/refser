@@ -14,18 +14,7 @@ function _M.save(...)
 		-1/0,
 		{},
 		nil,
-		{_M.maxnesting, _M.maxtuple, _M.maxitems, false},
-		...
-	)
-end
-
-function _M.savetofile(file, ...)
-	return crefser.save(
-		1/0,
-		-1/0,
-		{},
-		nil,
-		{_M.maxnesting, _M.maxtuple, _M.maxitems, true, file},
+		{_M.maxnesting, _M.maxtuple, _M.maxitems},
 		...
 	)
 end

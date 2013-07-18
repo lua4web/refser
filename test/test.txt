@@ -1,19 +1,19 @@
-Completed testsuit with 39 tests in 9 testcases
+Completed testsuit with 38 tests in 8 testcases
 
 OK
 
 Testcases: 
-  Total: 9
-  Passed: 9
+  Total: 8
+  Passed: 8
   Failed: 0
 Tests: 
-  Total: 39
-  Passed: 39
+  Total: 38
+  Passed: 38
   Failed: 0
   Errors: 0
   Skipped: 0
 Assertions: 
-  Total: 147
-  Passed: 147
+  Total: 144
+  Passed: 144
   Failed: 0
 

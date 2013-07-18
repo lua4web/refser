@@ -94,11 +94,9 @@ ok, y = refser.load(s)
 assert(y == y[y]) -- OK
 ```
 
-### refser.savetofile(file, ...)
+### refser.load(s)
 
-Saves tuple of Lua values into file using provided file handler(obtained through `io.open`). Returns `true`. In case of error returns `nil` plus error message. 
-
-This feature is experimental. 
+Loads tuple from string `s`. Returns length of loaded tuple and tuple itself. In case of error returns `nil` plus error message. 
 
 ### refser.maxnesting
 
@@ -139,10 +137,6 @@ assert(refser.save(a, b, c)) -- refser.save error: too many items
 refser.maxitems = 6
 assert(refser.save(a, b, c)) -- OK
 ```
-
-### refser.load(s)
-
-Loads tuple from string `s`. Returns length of loaded tuple and tuple itself. In case of error returns `nil` plus error message. 
 
 ## Output format
 
