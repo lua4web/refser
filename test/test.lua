@@ -1,4 +1,4 @@
-require "lunit"
+require "lunitz"
 
 local refser  = require "refser"
 
@@ -28,7 +28,7 @@ local function random_trivial()
 	end
 end
 
-module("trivial", lunit.testcase, package.seeall)
+testcase "trivial"
 
 function test_nil()
 	local x = nil
@@ -121,7 +121,7 @@ function test_string()
 	assert_equal(x, y)
 end
 
-module("tables", lunit.testcase, package.seeall)
+testcase "tables"
 
 function test_empty()
 	local x = {}
@@ -184,7 +184,7 @@ function test_depth()
 	assert_table(y)
 end
 
-module("maxnesting", lunit.testcase, package.seeall)
+testcase "maxnesting"
 
 function test_toodeep()
 	local x = {}
@@ -227,7 +227,7 @@ function test_refs_are_not_deep()
 	refser.maxnesting = 250
 end
 
-module("nontrivial", lunit.testcase, package.seeall)
+testcase "nontrivial"
 
 function test_function()
 	local x = function() end
@@ -250,7 +250,7 @@ function test_thread()
 	assert_equal("refser.save error: attempt to save thread", err)
 end
 
-module("mailformed", lunit.testcase, package.seeall)
+testcase "mailformed"
 
 function test_empty_table()
 	local s = "{}"
@@ -322,7 +322,7 @@ function test_clever_nan_key()
 	assert_equal("refser.load error: mailformed input", err)
 end
 
-module("tuples", lunit.testcase, package.seeall)
+testcase "tuples"
 
 function test_empty()
 	local s = refser.save()
@@ -360,7 +360,7 @@ function test_tuple_refs()
 	assert_equal(a, e[c])
 end
 
-module("maxtuple", lunit.testcase, package.seeall)
+testcase "maxtuple"
 
 function test_long_tuple()
 	local x = {}
@@ -422,7 +422,7 @@ function test_restricted()
 	refser.maxnesting = 250
 end
 
-module("maxitems", lunit.testcase, package.seeall)
+testcase "maxitems"
 
 function test_many_items()
 	local x = {}
@@ -476,3 +476,5 @@ function test_combo()
 	
 	refser.maxitems = 10 ^ 6
 end
+
+run()

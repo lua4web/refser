@@ -1,94 +1,211 @@
-Loaded testsuite with 38 tests in 8 testcases.
+Completed testsuit with 38 tests in 8 testcases
 
-    FFFFFFFFFFFFFFFFFFF.FFFFF.F.F.F.F.F...
+Fail
 
-60 Assertions checked.
+Testcases: 
+  Total: 8
+  Passed: 5
+  Failed: 3
+Tests: 
+  Total: 38
+  Passed: 31
+  Failed: 7
+  Errors: 0
+  Skipped: 0
+Assertions: 
+  Total: 93
+  Passed: 86
+  Failed: 7
 
-  1) Failure (trivial.test_nan):
-test.lua:81: string expected but was [function: 0xb776b590]
+Testcase trivial: OK (10 tests, skipped 0)
 
-  2) Failure (trivial.test_inf):
-test.lua:63: string expected but was [function: 0xb776b590]
+  Test test_nil: OK (3 assertions)
+    test.lua:36: assert_string is OK
+    test.lua:37: assert_equal is OK
+    test.lua:39: assert_equal is OK
 
-  3) Failure (trivial.test_true):
-test.lua:45: string expected but was [function: 0xb776b590]
+  Test test_true: OK (3 assertions)
+    test.lua:45: assert_string is OK
+    test.lua:46: assert_equal is OK
+    test.lua:48: assert_equal is OK
 
-  4) Failure (trivial.test_nil):
-test.lua:36: string expected but was [function: 0xb776b590]
+  Test test_false: OK (3 assertions)
+    test.lua:54: assert_string is OK
+    test.lua:55: assert_equal is OK
+    test.lua:57: assert_equal is OK
 
-  5) Failure (trivial.test_minf):
-test.lua:72: string expected but was [function: 0xb776b590]
+  Test test_inf: OK (3 assertions)
+    test.lua:63: assert_string is OK
+    test.lua:64: assert_equal is OK
+    test.lua:66: assert_equal is OK
 
-  6) Failure (trivial.test_long):
-test.lua:109: string expected but was [function: 0xb776b590]
+  Test test_minf: OK (3 assertions)
+    test.lua:72: assert_string is OK
+    test.lua:73: assert_equal is OK
+    test.lua:75: assert_equal is OK
 
-  7) Failure (trivial.test_false):
-test.lua:54: string expected but was [function: 0xb776b590]
+  Test test_nan: OK (3 assertions)
+    test.lua:81: assert_string is OK
+    test.lua:82: assert_equal is OK
+    test.lua:84: assert_not_equal is OK
 
-  8) Failure (trivial.test_number):
-test.lua:99: string expected but was [function: 0xb776b590]
+  Test test_integer: OK (3 assertions)
+    test.lua:90: assert_string is OK
+    test.lua:91: assert_equal is OK
+    test.lua:93: assert_equal is OK
 
-  9) Failure (trivial.test_string):
-test.lua:118: string expected but was [function: 0xb776b590]
+  Test test_number: OK (3 assertions)
+    test.lua:99: assert_string is OK
+    test.lua:100: assert_equal is OK
+    test.lua:102: assert_equal is OK
 
- 10) Failure (trivial.test_integer):
-test.lua:90: string expected but was [function: 0xb776b590]
+  Test test_long: OK (3 assertions)
+    test.lua:109: assert_string is OK
+    test.lua:110: assert_equal is OK
+    test.lua:112: assert_equal is OK
 
- 11) Failure (maxitems.test_combo):
-test.lua:463: string expected but was nil
+  Test test_string: OK (3 assertions)
+    test.lua:118: assert_string is OK
+    test.lua:119: assert_equal is OK
+    test.lua:121: assert_equal is OK
 
- 12) Failure (maxitems.test_many_items):
-test.lua:443: string expected but was nil
 
- 13) Failure (tuples.test_empty):
-test.lua:329: string expected but was [function: 0xb776b590]
+Testcase tables: OK (5 tests, skipped 0)
 
- 14) Failure (tuples.test_several):
-test.lua:338: string expected but was [function: 0xb776b590]
+  Test test_empty: OK (3 assertions)
+    test.lua:129: assert_string is OK
+    test.lua:130: assert_equal is OK
+    test.lua:132: assert_nil is OK
 
- 15) Failure (tuples.test_tuple_refs):
-test.lua:352: string expected but was [function: 0xb776b590]
+  Test test_array: OK (2 assertions)
+    test.lua:141: assert_string is OK
+    test.lua:143: assert_table is OK
 
- 16) Failure (maxnesting.test_toodeep):
-test.lua:206: string expected but was [function: 0xb776b590]
+  Test test_table: OK (2 assertions)
+    test.lua:156: assert_string is OK
+    test.lua:158: assert_table is OK
 
- 17) Failure (maxnesting.test_refs_are_not_deep):
-test.lua:223: string expected but was [function: 0xb776b590]
+  Test test_recursive: OK (4 assertions)
+    test.lua:165: assert_string is OK
+    test.lua:166: assert_equal is OK
+    test.lua:168: assert_table is OK
+    test.lua:169: assert_equal is OK
 
- 18) Failure (maxtuple.test_long_tuple):
-test.lua:377: string expected but was nil
+  Test test_depth: OK (2 assertions)
+    test.lua:182: assert_string is OK
+    test.lua:184: assert_table is OK
 
- 19) Failure (maxtuple.test_restricted):
-test.lua:406: string expected but was nil
 
- 20) Failure (tables.test_array):
-test.lua:141: string expected but was nil
+Testcase maxnesting: OK (2 tests, skipped 0)
 
- 21) Failure (tables.test_table):
-test.lua:156: string expected but was nil
+  Test test_toodeep: OK (6 assertions)
+    test.lua:200: assert_nil is OK
+    test.lua:201: assert_equal is OK
+    test.lua:206: assert_string is OK
+    test.lua:209: assert_table is OK
+    test.lua:214: assert_nil is OK
+    test.lua:215: assert_equal is OK
 
- 22) Failure (tables.test_recursive):
-test.lua:165: string expected but was nil
+  Test test_refs_are_not_deep: OK (3 assertions)
+    test.lua:223: assert_string is OK
+    test.lua:225: assert_table is OK
+    test.lua:226: assert_equal is OK
 
- 23) Failure (tables.test_empty):
-test.lua:129: string expected but was nil
 
- 24) Failure (tables.test_depth):
-test.lua:182: string expected but was nil
+Testcase nontrivial: OK (3 tests, skipped 0)
 
- 25) Failure (mailformed.test_clever_nan_key):
-test.lua:322: expected 'refser.load error: mailformed input' but was 'refser.load error: table is too deep'
+  Test test_function: OK (2 assertions)
+    test.lua:235: assert_nil is OK
+    test.lua:236: assert_equal is OK
 
- 26) Failure (mailformed.test_nil_key):
-test.lua:308: expected 'refser.load error: mailformed input' but was 'refser.load error: table is too deep'
+  Test test_userdata: OK (2 assertions)
+    test.lua:242: assert_nil is OK
+    test.lua:243: assert_equal is OK
 
- 27) Failure (mailformed.test_nan_key):
-test.lua:315: expected 'refser.load error: mailformed input' but was 'refser.load error: table is too deep'
+  Test test_thread: OK (2 assertions)
+    test.lua:249: assert_nil is OK
+    test.lua:250: assert_equal is OK
 
- 28) Failure (mailformed.test_strange_ref):
-test.lua:301: expected 'refser.load error: mailformed input' but was 'refser.load error: table is too deep'
 
- 29) Failure (mailformed.test_empty_table):
-test.lua:259: expected 'refser.load error: mailformed input' but was 'refser.load error: table is too deep'
+Testcase mailformed: OK (10 tests, skipped 0)
 
-Testsuite finished (9 passed, 29 failed, 0 errors).
+  Test test_empty_table: OK (2 assertions)
+    test.lua:258: assert_nil is OK
+    test.lua:259: assert_equal is OK
+
+  Test test_extra: OK (2 assertions)
+    test.lua:265: assert_nil is OK
+    test.lua:266: assert_equal is OK
+
+  Test test_number_short: OK (2 assertions)
+    test.lua:272: assert_nil is OK
+    test.lua:273: assert_equal is OK
+
+  Test test_number_corrupted: OK (2 assertions)
+    test.lua:279: assert_nil is OK
+    test.lua:280: assert_equal is OK
+
+  Test test_number_long: OK (2 assertions)
+    test.lua:286: assert_nil is OK
+    test.lua:287: assert_equal is OK
+
+  Test test_empty_ref: OK (2 assertions)
+    test.lua:293: assert_nil is OK
+    test.lua:294: assert_equal is OK
+
+  Test test_strange_ref: OK (2 assertions)
+    test.lua:300: assert_nil is OK
+    test.lua:301: assert_equal is OK
+
+  Test test_nil_key: OK (2 assertions)
+    test.lua:307: assert_nil is OK
+    test.lua:308: assert_equal is OK
+
+  Test test_nan_key: OK (2 assertions)
+    test.lua:314: assert_nil is OK
+    test.lua:315: assert_equal is OK
+
+  Test test_clever_nan_key: OK (2 assertions)
+    test.lua:321: assert_nil is OK
+    test.lua:322: assert_equal is OK
+
+
+Testcase tuples: Failed 3 tests out of 3
+
+  Test test_empty: Failed assertion #2
+    test.lua:329: assert_string is OK
+    test.lua:330: assert_equal expected "", received "n"
+
+  Test test_several: Failed assertion #2
+    test.lua:338: assert_string is OK
+    test.lua:339: assert_equal expected "\"foo\"D12345{|}Tn", received "\"foo\""
+
+  Test test_tuple_refs: Failed assertion #2
+    test.lua:352: assert_string is OK
+    test.lua:353: assert_equal expected "{|}n@1n{|@1@1}n", received "{|}"
+
+
+Testcase maxtuple: Failed 2 tests out of 3
+
+  Test test_long_tuple: Failed assertion #1
+    test.lua:371: assert_nil expected nil, received string
+
+  Test test_load_long_tuple: OK (2 assertions)
+    test.lua:395: assert_nil is OK
+    test.lua:396: assert_equal is OK
+
+  Test test_restricted: Failed assertion #2
+    test.lua:406: assert_string is OK
+    test.lua:407: assert_equal expected "\"foobar\"\"qwerty\"", received "\"foobar\""
+
+
+Testcase maxitems: Failed 2 tests out of 2
+
+  Test test_many_items: Failed assertion #2
+    test.lua:437: assert_nil is OK
+    test.lua:438: assert_equal expected "refser.save error: too many items", received "refser.save error: table is too deep"
+
+  Test test_combo: Failed assertion #2
+    test.lua:457: assert_nil is OK
+    test.lua:458: assert_equal expected "refser.save error: too many items", received "refser.save error: table is too deep"
+

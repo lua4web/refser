@@ -1,3 +1,3 @@
 #! /bin/sh
 
-lunit.sh test.lua > test.txt 2>&1
+lua test.lua -v > test.txt 2>&1
