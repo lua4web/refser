@@ -5,19 +5,46 @@
 #include "fixbuf.h"
 #include "filewriter.h"
 
-Saver::Saver(Lua *L, int maxnesting, int maxitems, int tofile) {
+Saver::Saver(Lua *L) {
+	int maxtuple, tofile;
 	this->L = L;
+	this->count = 0;
+	this->nesting = 0;
+	this->items = 0;
+	
+	L->rawgeti(-1, 1);
+	this->maxnesting = L->tonumber(-1);
+	L->pop();
+	
+	L->rawgeti(-1, 2);
+	maxtuple = L->tonumber(-1);
+	L->pop();
+	
+	L->rawgeti(-1, 3);
+	this->maxitems = L->tonumber(-1);
+	L->pop();
+	
+	L->rawgeti(-1, 4);
+	tofile = L->toboolean(-1);
+	L->pop();
+	
 	if(tofile) {
+		L->rawgeti(-1, 5);
+		L->replace(_SAVER_I_BUFF);
 		this->B = new FileWriter(L, _SAVER_I_BUFF);
 	}
 	else {
 		this->B = new FixBuf(L, _SAVER_I_BUFF);
 	}
-	this->count = 0;
-	this->nesting = 0;
-	this->maxnesting = maxnesting;
-	this->items = 0;
-	this->maxitems = maxitems;
+	
+	L->pop();
+	
+	if(L->gettop() - _SAVER_I_X + 1 > maxtuple) {
+		this->ok = 0;
+	}
+	else {
+		this->ok = 1;
+	}
 }
 
 Saver::~Saver() {

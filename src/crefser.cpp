@@ -6,34 +6,17 @@
 
 static int save(lua_State *LS) {
 	Lua *L = new Lua(LS);
-	Saver *S;
-	int err;
-	int maxnesting, maxtuple, maxitems;
-	int tofile;
-	int i;
-	int tuplesize = L->gettop() - _SAVER_I_MAXITEMS;
-	L->newtable();
-	maxnesting = L->tonumber(_SAVER_I_MAXNESTING);
-	L->replace(_SAVER_I_REG);
-	maxtuple = L->tonumber(_SAVER_I_MAXTUPLE);
-	if(tuplesize > maxtuple) {
+	Saver *S = new Saver(L);
+	if(!S->ok) {
 		L->settop(0);
 		L->pushnil();
 		L->pushstring("refser.save error: tuple is too long");
 		return 2;
 	}
 	
-	maxitems = L->tonumber(_SAVER_I_MAXITEMS);
-	tofile = L->toboolean(_SAVER_I_TOFILE);
-	if(tofile) {
-		L->pushvalue(_SAVER_I_FILE);
-		L->replace(_SAVER_I_BUFF);
-		L->remove(_SAVER_I_FILE);
-	}
-	L->remove(_SAVER_I_TOFILE);
-	L->remove(_SAVER_I_MAXITEMS);
-	
-	S = new Saver(L, maxnesting, maxitems, tofile);
+	int err;
+	int i;
+	int tuplesize = L->gettop() - _SAVER_I_X + 1;
 	
 	for(i = 0; i < tuplesize; i++) {
 		if(err = S->process(_SAVER_I_X + i)) {
@@ -76,25 +59,12 @@ static int save(lua_State *LS) {
 
 static int load(lua_State *LS) {
 	Lua *L = new Lua(LS);
-	size_t len;
-	const char *s;
 	Loader *LO;
 	int err;
-	int tuplesize;
-	int maxnesting, maxtuple, maxitems;
-	maxnesting = L->tonumber(_LOADER_I_MAXNESTING);
-	L->newtable();
-	L->replace(_LOADER_I_REG);
-	maxtuple = L->tonumber(_LOADER_I_MAXTUPLE);
+	LO = new Loader(L);
 	
-	maxitems = L->tonumber(_LOADER_I_MAXITEMS);
-	L->remove(_LOADER_I_MAXITEMS);
-
-	s = L->checklstring(_LOADER_I_X, &len);
-	LO = new Loader(L, s, len, maxnesting, maxitems);
-	
-	tuplesize = 0;
-	while(!LO->done() && tuplesize < maxtuple) {
+	int tuplesize = 0;
+	while(!LO->done() && tuplesize < LO->maxtuple) {
 		if(err = LO->process(_LOADER_ROLE_NONE)) {
 			L->settop(0);
 			L->pushnil();

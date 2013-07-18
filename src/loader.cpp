@@ -11,16 +11,29 @@
 
 #define valid_number_char(c) (((c) <= '9' && (c) >= '0') || (c) == 'e' || (c) == '.' || (c) == '-')
 
-Loader::Loader(Lua *L, const char *s, size_t len, int maxnesting, int maxitems) {
+Loader::Loader(Lua *L) {
 	this->L = L;
-	this->B = new FixBuf(L, _LOADER_I_BUFF);
 	this->count = 0;
-	this->s = s;
-	this->len = len;
 	this->nesting = 0;
-	this->maxnesting = maxnesting;
 	this->items = 0;
-	this->maxitems = maxitems;
+	
+	L->rawgeti(-1, 1);
+	this->maxnesting = L->tonumber(-1);
+	L->pop();
+	
+	L->rawgeti(-1, 2);
+	this->maxtuple = L->tonumber(-1);
+	L->pop();
+	
+	L->rawgeti(-1, 3);
+	this->maxitems = L->tonumber(-1);
+	L->pop();
+	
+	this->B = new FixBuf(L, _LOADER_I_BUFF);
+	
+	L->pop();
+	
+	this->s = L->checklstring(_LOADER_I_X, &this->len);
 }
 
 Loader::~Loader() {
@@ -29,12 +42,12 @@ Loader::~Loader() {
 
 void Loader::eat() {
 	this->s++;
-	this->len++;
+	this->len--;
 }
 
 void Loader::eat(size_t size) {
 	this->s += size;
-	this->len += size;
+	this->len -= size;
 }
 
 int Loader::process_number() {

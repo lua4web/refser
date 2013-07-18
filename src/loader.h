@@ -7,9 +7,6 @@
 #define _LOADER_I_INF 1
 #define _LOADER_I_MINF 2
 #define _LOADER_I_NAN 3
-#define _LOADER_I_MAXNESTING 4
-#define _LOADER_I_MAXTUPLE 5
-#define _LOADER_I_MAXITEMS 6
 #define _LOADER_I_REG 4
 #define _LOADER_I_BUFF 5
 #define _LOADER_I_X 6
@@ -41,7 +38,8 @@ class Loader {
 		int process_string();
 		int process_table();
 	public:
-		Loader(Lua *L, const char *s, size_t len, int maxnesting, int maxitems);
+		int maxtuple;
+		Loader(Lua *L);
 		~Loader();
 		int process(int role);
 		int done();
