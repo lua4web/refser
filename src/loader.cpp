@@ -23,6 +23,10 @@ Loader::Loader(Lua *L, const char *s, size_t len, int maxnesting, int maxitems) 
 	this->maxitems = maxitems;
 }
 
+Loader::~Loader() {
+	delete this->B;
+}
+
 void Loader::eat() {
 	this->s++;
 	this->len++;
@@ -219,4 +223,8 @@ int Loader::process(int role) {
 		}
 	}
 	return 0;
+}
+
+int Loader::done() {
+	return !this->len;
 }

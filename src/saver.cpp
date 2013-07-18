@@ -13,6 +13,10 @@ Saver::Saver(Lua *L, int maxnesting, int maxitems) {
 	this->maxitems = maxitems;
 }
 
+Saver::~Saver() {
+	delete this->B;
+}
+
 int Saver::process_number(int index) {
 	int len;
 	lua_Number x = this->L->tonumber(index);
@@ -159,4 +163,8 @@ int Saver::process(int index) {
 		}
 	}
 	return 0;
+}
+
+void Saver::pushresult() {
+	this->B->pushresult();
 }

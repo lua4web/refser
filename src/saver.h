@@ -24,6 +24,7 @@
 class Saver {
 	private:
 		Lua *L;
+		FixBuf *B;
 		int count;
 		int nesting;
 		int maxnesting;
@@ -35,8 +36,9 @@ class Saver {
 		int process_table(int index);
 	public:
 		Saver(Lua *L, int maxnesting, int maxitems);
+		~Saver();
 		int process(int index);
-		FixBuf *B;
+		void pushresult();
 };
 
 #endif

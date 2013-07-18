@@ -26,7 +26,9 @@
 class Loader {
 	private:
 		Lua *L;
+		FixBuf *B;
 		const char *s;
+		size_t len;
 		int count;
 		int nesting;
 		int maxnesting;
@@ -40,9 +42,9 @@ class Loader {
 		int process_table();
 	public:
 		Loader(Lua *L, const char *s, size_t len, int maxnesting, int maxitems);
+		~Loader();
 		int process(int role);
-		FixBuf *B;
-		size_t len;
+		int done();
 };
 
 #endif

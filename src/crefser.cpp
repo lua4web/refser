@@ -60,7 +60,9 @@ static int save(lua_State *LS) {
 			return 2;
 		}
 	}
-	S->B->pushresult();
+	S->pushresult();
+	delete L;
+	delete S;
 	return 1;
 }
 
@@ -84,7 +86,7 @@ static int load(lua_State *LS) {
 	LO = new Loader(L, s, len, maxnesting, maxitems);
 	
 	tuplesize = 0;
-	while(LO->len && tuplesize < maxtuple) {
+	while(!LO->done() && tuplesize < maxtuple) {
 		if(err = LO->process(_LOADER_ROLE_NONE)) {
 			L->settop(0);
 			L->pushnil();
@@ -114,7 +116,7 @@ static int load(lua_State *LS) {
 		}
 		tuplesize++;
 	}
-	if(LO->len) {
+	if(!LO->done()) {
 		L->settop(0);
 		L->pushnil();
 		L->pushstring("refser.load error: tuple is too long");
@@ -122,6 +124,8 @@ static int load(lua_State *LS) {
 	}
 	L->pushnumber(tuplesize);
 	L->replace(_LOADER_I_X);
+	delete L;
+	delete LO;
 	return tuplesize + 1;
 }
 
