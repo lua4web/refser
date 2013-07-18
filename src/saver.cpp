@@ -12,24 +12,24 @@ Saver::Saver(Lua *L) {
 	this->nesting = 0;
 	this->items = 0;
 	
-	L->rawgeti(-1, 1);
+	L->rawgeti(_SAVER_I_OPTS, 1);
 	this->maxnesting = L->tonumber(-1);
 	L->pop();
 	
-	L->rawgeti(-1, 2);
+	L->rawgeti(_SAVER_I_OPTS, 2);
 	maxtuple = L->tonumber(-1);
 	L->pop();
 	
-	L->rawgeti(-1, 3);
+	L->rawgeti(_SAVER_I_OPTS, 3);
 	this->maxitems = L->tonumber(-1);
 	L->pop();
 	
-	L->rawgeti(-1, 4);
+	L->rawgeti(_SAVER_I_OPTS, 4);
 	tofile = L->toboolean(-1);
 	L->pop();
 	
 	if(tofile) {
-		L->rawgeti(-1, 5);
+		L->rawgeti(_SAVER_I_OPTS, 5);
 		L->replace(_SAVER_I_BUFF);
 		this->B = new FileWriter(L, _SAVER_I_BUFF);
 	}
@@ -37,7 +37,7 @@ Saver::Saver(Lua *L) {
 		this->B = new FixBuf(L, _SAVER_I_BUFF);
 	}
 	
-	L->pop();
+	L->remove(_SAVER_I_OPTS);
 	
 	if(L->gettop() - _SAVER_I_X + 1 > maxtuple) {
 		this->ok = 0;

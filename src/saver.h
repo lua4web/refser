@@ -8,6 +8,7 @@
 #define _SAVER_I_MINF 2
 #define _SAVER_I_REG 3
 #define _SAVER_I_BUFF 4
+#define _SAVER_I_OPTS 5
 #define _SAVER_I_X 5
 
 #define _SAVER_ERR_TOODEEP 1

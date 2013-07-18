@@ -14,8 +14,8 @@ function _M.save(...)
 		-1/0,
 		{},
 		nil,
-		...,
-		{_M.maxnesting, _M.maxtuple, _M.maxitems, false}
+		{_M.maxnesting, _M.maxtuple, _M.maxitems, false},
+		...
 	)
 end
 
@@ -25,8 +25,8 @@ function _M.savetofile(file, ...)
 		-1/0,
 		{},
 		nil,
-		...,
-		{_M.maxnesting, _M.maxtuple, _M.maxitems, true, file}
+		{_M.maxnesting, _M.maxtuple, _M.maxitems, true, file},
+		...
 	)
 end
 
@@ -37,8 +37,8 @@ function _M.load(s)
 		0/0,
 		{},
 		nil,
-		s,
-		{_M.maxnesting, _M.maxtuple, _M.maxitems}
+		{_M.maxnesting, _M.maxtuple, _M.maxitems},
+		s
 	)
 end
 

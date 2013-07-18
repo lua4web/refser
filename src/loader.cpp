@@ -17,21 +17,21 @@ Loader::Loader(Lua *L) {
 	this->nesting = 0;
 	this->items = 0;
 	
-	L->rawgeti(-1, 1);
+	L->rawgeti(_LOADER_I_OPTS, 1);
 	this->maxnesting = L->tonumber(-1);
 	L->pop();
 	
-	L->rawgeti(-1, 2);
+	L->rawgeti(_LOADER_I_OPTS, 2);
 	this->maxtuple = L->tonumber(-1);
 	L->pop();
 	
-	L->rawgeti(-1, 3);
+	L->rawgeti(_LOADER_I_OPTS, 3);
 	this->maxitems = L->tonumber(-1);
 	L->pop();
 	
 	this->B = new FixBuf(L, _LOADER_I_BUFF);
 	
-	L->pop();
+	L->remove(_LOADER_I_OPTS);
 	
 	this->s = L->checklstring(_LOADER_I_X, &this->len);
 }

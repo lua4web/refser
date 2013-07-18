@@ -9,6 +9,7 @@
 #define _LOADER_I_NAN 3
 #define _LOADER_I_REG 4
 #define _LOADER_I_BUFF 5
+#define _LOADER_I_OPTS 6
 #define _LOADER_I_X 6
 
 #define _LOADER_ERR_TOODEEP 1

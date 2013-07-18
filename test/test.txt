@@ -1,21 +1,21 @@
 Completed testsuit with 38 tests in 8 testcases
 
-Fail
+OK
 
 Testcases: 
   Total: 8
-  Passed: 5
-  Failed: 3
+  Passed: 8
+  Failed: 0
 Tests: 
   Total: 38
-  Passed: 31
-  Failed: 7
+  Passed: 38
+  Failed: 0
   Errors: 0
   Skipped: 0
 Assertions: 
-  Total: 93
-  Passed: 86
-  Failed: 7
+  Total: 144
+  Passed: 144
+  Failed: 0
 
 Testcase trivial: OK (10 tests, skipped 0)
 
@@ -170,42 +170,93 @@ Testcase mailformed: OK (10 tests, skipped 0)
     test.lua:322: assert_equal is OK
 
 
-Testcase tuples: Failed 3 tests out of 3
+Testcase tuples: OK (3 tests, skipped 0)
 
-  Test test_empty: Failed assertion #2
+  Test test_empty: OK (4 assertions)
     test.lua:329: assert_string is OK
-    test.lua:330: assert_equal expected "", received "n"
+    test.lua:330: assert_equal is OK
+    test.lua:332: assert_nil is OK
+    test.lua:333: assert_equal is OK
 
-  Test test_several: Failed assertion #2
+  Test test_several: OK (8 assertions)
     test.lua:338: assert_string is OK
-    test.lua:339: assert_equal expected "\"foo\"D12345{|}Tn", received "\"foo\""
+    test.lua:339: assert_equal is OK
+    test.lua:341: assert_equal is OK
+    test.lua:342: assert_equal is OK
+    test.lua:343: assert_equal is OK
+    test.lua:344: assert_nil is OK
+    test.lua:345: assert_true is OK
+    test.lua:346: assert_nil is OK
 
-  Test test_tuple_refs: Failed assertion #2
+  Test test_tuple_refs: OK (8 assertions)
     test.lua:352: assert_string is OK
-    test.lua:353: assert_equal expected "{|}n@1n{|@1@1}n", received "{|}"
+    test.lua:353: assert_equal is OK
+    test.lua:355: assert_equal is OK
+    test.lua:356: assert_nil is OK
+    test.lua:357: assert_nil is OK
+    test.lua:358: assert_nil is OK
+    test.lua:359: assert_equal is OK
+    test.lua:360: assert_equal is OK
 
 
-Testcase maxtuple: Failed 2 tests out of 3
+Testcase maxtuple: OK (3 tests, skipped 0)
 
-  Test test_long_tuple: Failed assertion #1
-    test.lua:371: assert_nil expected nil, received string
+  Test test_long_tuple: OK (25 assertions)
+    test.lua:371: assert_nil is OK
+    test.lua:372: assert_equal is OK
+    test.lua:377: assert_string is OK
+    test.lua:384: assert_equal is OK
+    test.lua:386: assert_equal is OK
+    test.lua:386: assert_equal is OK
+    test.lua:386: assert_equal is OK
+    test.lua:386: assert_equal is OK
+    test.lua:386: assert_equal is OK
+    test.lua:386: assert_equal is OK
+    test.lua:386: assert_equal is OK
+    test.lua:386: assert_equal is OK
+    test.lua:386: assert_equal is OK
+    test.lua:386: assert_equal is OK
+    test.lua:386: assert_equal is OK
+    test.lua:386: assert_equal is OK
+    test.lua:386: assert_equal is OK
+    test.lua:386: assert_equal is OK
+    test.lua:386: assert_equal is OK
+    test.lua:386: assert_equal is OK
+    test.lua:386: assert_equal is OK
+    test.lua:386: assert_equal is OK
+    test.lua:386: assert_equal is OK
+    test.lua:386: assert_equal is OK
+    test.lua:386: assert_equal is OK
 
   Test test_load_long_tuple: OK (2 assertions)
     test.lua:395: assert_nil is OK
     test.lua:396: assert_equal is OK
 
-  Test test_restricted: Failed assertion #2
+  Test test_restricted: OK (7 assertions)
     test.lua:406: assert_string is OK
-    test.lua:407: assert_equal expected "\"foobar\"\"qwerty\"", received "\"foobar\""
+    test.lua:407: assert_equal is OK
+    test.lua:411: assert_equal is OK
+    test.lua:412: assert_equal is OK
+    test.lua:413: assert_equal is OK
+    test.lua:418: assert_nil is OK
+    test.lua:419: assert_nil is OK
 
 
-Testcase maxitems: Failed 2 tests out of 2
+Testcase maxitems: OK (2 tests, skipped 0)
 
-  Test test_many_items: Failed assertion #2
+  Test test_many_items: OK (3 assertions)
     test.lua:437: assert_nil is OK
-    test.lua:438: assert_equal expected "refser.save error: too many items", received "refser.save error: table is too deep"
+    test.lua:438: assert_equal is OK
+    test.lua:443: assert_string is OK
 
-  Test test_combo: Failed assertion #2
+  Test test_combo: OK (9 assertions)
     test.lua:457: assert_nil is OK
-    test.lua:458: assert_equal expected "refser.save error: too many items", received "refser.save error: table is too deep"
+    test.lua:458: assert_equal is OK
+    test.lua:463: assert_string is OK
+    test.lua:466: assert_equal is OK
+    test.lua:467: assert_equal is OK
+    test.lua:468: assert_equal is OK
+    test.lua:469: assert_equal is OK
+    test.lua:474: assert_nil is OK
+    test.lua:475: assert_equal is OK
 
