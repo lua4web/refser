@@ -29,11 +29,11 @@ Loader::Loader(Lua *L) {
 	this->maxitems = L->tonumber(-1);
 	L->pop();
 	
-	this->B = new FixBuf(L, _LOADER_I_BUFF);
-	
 	L->remove(_LOADER_I_OPTS);
 	
 	this->s = L->checklstring(_LOADER_I_X, &this->len);
+	
+	this->B = new FixBuf(L, _LOADER_I_BUFF);
 }
 
 Loader::~Loader() {

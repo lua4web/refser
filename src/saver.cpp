@@ -24,13 +24,13 @@ Saver::Saver(Lua *L) {
 	this->maxitems = L->tonumber(-1);
 	L->pop();
 	
-	this->B = new FixBuf(L, _SAVER_I_BUFF);
-	
 	L->remove(_SAVER_I_OPTS);
 	
 	if(L->gettop() - _SAVER_I_X + 1 > maxtuple) {
 		throw _SAVER_ERR_TOOLONG;
 	}
+	
+	this->B = new FixBuf(L, _SAVER_I_BUFF);
 }
 
 Saver::~Saver() {

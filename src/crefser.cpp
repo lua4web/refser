@@ -4,57 +4,55 @@
 #include "loader.hpp"
 
 static int save(lua_State *LS) {
-	Lua *L = new Lua(LS);
-	Saver *S;
+	Lua L(LS);
 	
 	try {
-		S = new Saver(L);
+		Saver S(&L);
 		
 		int i;
-		int tuplesize = L->gettop() - _SAVER_I_X + 1;
+		int tuplesize = L.gettop() - _SAVER_I_X + 1;
 		
 		for(i = 0; i < tuplesize; i++) {
-			S->process(_SAVER_I_X + i);
+			S.process(_SAVER_I_X + i);
 		}
-		S->pushresult();
+		S.pushresult();
 		return 1;
 	}
 	
 	catch(const char *msg) {
-		L->settop(0);
-		L->pushnil();
-		L->pushstring(msg);
+		L.settop(0);
+		L.pushnil();
+		L.pushstring(msg);
 		return 2;
 	}
 }
 
 static int load(lua_State *LS) {
-	Lua *L = new Lua(LS);
-	Loader *LO;
+	Lua L(LS);
 	
 	try {
-		LO = new Loader(L);
+		Loader LO(&L);
 		
 		int tuplesize = 0;
-		while(!LO->done() && tuplesize < LO->maxtuple) {
-			LO->process(_LOADER_ROLE_NONE);
+		while(!LO.done() && tuplesize < LO.maxtuple) {
+			LO.process(_LOADER_ROLE_NONE);
 			tuplesize++;
 		}
-		if(!LO->done()) {
-			L->settop(0);
-			L->pushnil();
-			L->pushstring("refser.load error: tuple is too long");
+		if(!LO.done()) {
+			L.settop(0);
+			L.pushnil();
+			L.pushstring("refser.load error: tuple is too long");
 			return 2;
 		}
-		L->pushnumber(tuplesize);
-		L->replace(_LOADER_I_X);
+		L.pushnumber(tuplesize);
+		L.replace(_LOADER_I_X);
 		return tuplesize + 1;
 	}
 	
 	catch(const char *msg) {
-		L->settop(0);
-		L->pushnil();
-		L->pushstring(msg);
+		L.settop(0);
+		L.pushnil();
+		L.pushstring(msg);
 		return 2;
 	}
 }
