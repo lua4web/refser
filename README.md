@@ -96,7 +96,7 @@ assert(y == y[y]) -- OK
 
 ### refser.savetofile(file, ...)
 
-Saves tuple of Lua values into file using provided file handler(obtained through `io.open`). 
+Saves tuple of Lua values into file using provided file handler(obtained through `io.open`). Returns `true`. In case of error returns `nil` plus error message. 
 
 This feature is experimental. 
 

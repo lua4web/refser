@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include "luapp.h"
-#include "fixbuf.h"
 #include "saver.h"
 #include "loader.h"
 

@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-FileWriter::FileWriter(Lua *L, int index) : Writer(L, index) {}; // I should look up C++ OOP manual
+FileWriter::FileWriter(Lua *L, int index) : Writer(L, index) {};
 
 FILE *FileWriter::tofile() {
 	luaL_Stream *p = (luaL_Stream *) this->L->checkudata(this->index, LUA_FILEHANDLE);
@@ -15,17 +15,23 @@ FILE *FileWriter::tofile() {
 }
 
 void FileWriter::add(char c) {
-	fwrite(&c, 1, 1, this->tofile());
+	if(!fwrite(&c, 1, 1, this->tofile())) {
+		this->L->error("failed writing to file");
+	}
 }
 
 void FileWriter::add(const char *s, size_t len) {
-	fwrite(s, 1, len, this->tofile());
+	if(fwrite(s, 1, len, this->tofile()) != len) {
+		this->L->error("failed writing to file");
+	}
 }
 
 void FileWriter::addf(size_t maxsize, const char *fmt, ...) {
 	va_list args;
 	va_start(args, fmt);
-	vfprintf(this->tofile(), fmt, args);
+	if(vfprintf(this->tofile(), fmt, args) < 0) {
+		this->L->error("failed writing to file");
+	}
 	va_end(args);
 }
 
