@@ -1,6 +1,6 @@
 local _M = {}
 
-local crefser = require "crefser"
+local crefser = require "refser.crefser"
 
 _M.maxnesting = 250
 

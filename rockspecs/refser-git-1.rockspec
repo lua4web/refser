@@ -17,7 +17,7 @@ dependencies = {
 build = {
 	type = "builtin",
 	modules = {
-		crefser = {
+		["refser.crefser"] = {
 			sources = {
 				"src/crefser.cpp",
 				"src/lua.cpp",
