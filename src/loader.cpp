@@ -13,9 +13,12 @@
 
 Loader::Loader(Lua *L) {
 	this->L = L;
-	this->count = 0;
 	this->nesting = 0;
 	this->items = 0;
+	
+	L->rawgeti(_LOADER_I_REG, 0);
+	this->count = L->tonumber(-1);
+	L->pop();
 	
 	L->rawgeti(_LOADER_I_OPTS, 1);
 	this->maxnesting = L->tonumber(-1);

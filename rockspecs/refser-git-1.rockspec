@@ -29,6 +29,12 @@ build = {
 				"src/loader.cpp"
 			},
 			incdirs = "src/"
+		},
+		["refser.auxiliary"] = {
+			sources = {
+				"src/auxiliary/auxiliary.c"
+			},
+			incdirs = "src/auxiliary/"
 		}
 	},
 	copy_directories = {}

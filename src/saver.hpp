@@ -28,6 +28,7 @@ class Saver {
 		int maxnesting;
 		int items;
 		int maxitems;
+		int doublecontext;
 		
 		void process_number(int index);
 		void process_string(int index);
