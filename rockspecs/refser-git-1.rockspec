@@ -12,11 +12,13 @@ refser is similar to identity-preserving table serialization by Metalua, but it 
 	license = "MIT/X11"
 }
 dependencies = {
-	"lua >= 5.1, < 5.3"
+	"lua >= 5.1, < 5.3",
+	"luarocks-build-cpp"
 }
 build = {
-	type = "builtin",
+	type = "cpp",
 	modules = {
+		refser = "refser.lua",
 		["refser.crefser"] = {
 			sources = {
 				"src/crefser.cpp",
@@ -26,21 +28,8 @@ build = {
 				"src/saver.cpp",
 				"src/loader.cpp"
 			},
-			incdirs = {
-				"src/"
-			},
-			libraries = "stdc++"
-		},
-		refser = "refser.lua"
-	},
-	platforms = {
-		win32 = {
-			modules = {
-				crefser = {
-					libraries = {}
-				}
-			}
+			incdirs = "src/"
 		}
-	}
+	},
+	copy_directories = {}
 }
-
