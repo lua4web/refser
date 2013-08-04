@@ -35,4 +35,3 @@ int luaopen_refser_auxiliary(lua_State *L) {
 	lua_rawset(L, -3);
 	return 1;
 }
-	
