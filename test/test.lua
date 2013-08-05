@@ -291,7 +291,7 @@ function test_empty_ref()
 	local s = "@1"
 	local data, err = refser.load(s)
 	assert_nil(data)
-	assert_equal("refser.load error: mailformed input", err)
+	assert_equal("refser.load error: broken context reference", err)
 end
 
 function test_strange_ref()

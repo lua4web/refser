@@ -32,6 +32,10 @@ Loader::Loader(Lua *L) {
 	this->maxitems = L->tonumber(-1);
 	L->pop();
 	
+	L->rawgeti(_LOADER_I_OPTS, 4);
+	this->doublecontext = L->toboolean(-1);
+	L->pop();
+	
 	L->remove(_LOADER_I_OPTS);
 	
 	this->s = L->checklstring(_LOADER_I_X, &this->len);
@@ -133,6 +137,12 @@ void Loader::process_table() {
 	this->L->pushvalue(-1);
 	this->L->rawseti(_LOADER_I_REG, this->count);
 	
+	if(this->doublecontext) {
+		this->L->pushvalue(-1);
+		this->L->pushnumber(this->count);
+		this->L->rawset(_LOADER_I_REG);
+	}
+	
 	while(*this->s != _FORMAT_ARRAY_HASH_SEP) {
 		this->process(_LOADER_ROLE_VALUE);
 		this->L->rawseti(-2, i++);
@@ -190,12 +200,11 @@ void Loader::process(int role) {
 			break;
 		}
 		case _FORMAT_TABLE_REF: {
-			lua_Number x;
 			this->process_number();
-			x = this->L->tonumber(-1);
-			this->L->pop();
-			ensure(is_int(x) && x <= this->count && x >= 1);
-			this->L->rawgeti(_LOADER_I_REG, x);
+			this->L->rawget(_LOADER_I_REG);
+			if(this->L->isnil(-1)) {
+				throw _LOADER_ERR_CONTEXT;
+			}
 			break;
 		}
 		case _FORMAT_TABLE_START: {

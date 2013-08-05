@@ -63,9 +63,10 @@ function _M.customload(s)
 		return crefser.load(
 			1/0,
 			-1/0,
+			0/0,
 			aux.makecontext(opts.context or {}),
 			nil,
-			{opts.maxnesting or _M.maxnesting, opts.maxtuple or _M.maxtuple, opts.maxitems or _M.maxitems},
+			{opts.maxnesting or _M.maxnesting, opts.maxtuple or _M.maxtuple, opts.maxitems or _M.maxitems, opts.doublecontext},
 			s
 		)
 	end

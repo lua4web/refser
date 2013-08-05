@@ -16,6 +16,7 @@
 #define _LOADER_ERR_MAILFORMED "refser.load error: mailformed input"
 #define _LOADER_ERR_STACK "refser.load error: lua stack exhausted"
 #define _LOADER_ERR_ITEMS "refser.load error: too many items"
+#define _LOADER_ERR_CONTEXT "refser.load error: broken context reference"
 
 #define _LOADER_ROLE_NONE 1
 #define _LOADER_ROLE_KEY 2
@@ -32,6 +33,7 @@ class Loader {
 		int maxnesting;
 		int items;
 		int maxitems;
+		int doublecontext;
 		
 		void eat();
 		void eat(size_t size);
