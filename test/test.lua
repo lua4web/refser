@@ -525,5 +525,55 @@ function test_combo()
 	
 	refser.maxitems = 10 ^ 6
 end
+
+testcase "custom"
+
+function persist_context()
+	x = {1, 2, 3, 4, 5}
+	c = {}
+
+	refser.customsave(x) {
+		context = c
+	}
+
+	y = {x}
+	s = refser.customsave(y) {
+		context = c
+	}
+	assert_equal("{@1|}", s)
+end
+
+function message_context()
+	c1 = {}
+	c2 = {}
+	x1 = {}
+	y1 = {}
+	x1[x1] = y1
+	y1[x1] = x1
+
+	s1 = refser.customsave(x1, y1) {
+		context = c1,
+		doublecontext = true
+	}
+
+	ok, x2, y2 = refser.customload(s1) {
+		context = c2,
+		doublecontext = true
+	}
+
+	z2 = {[x2] = y2}
+
+	s2 = refser.customsave(z2) {
+		context = c2,
+		doublecontext = true
+	}
+
+	ok, z1 = refser.customload(s2) {
+		context = c1,
+		doublecontext = true
+	}
+
+	assert_equal(z1[x1], y1)
+end
 	
 run()
