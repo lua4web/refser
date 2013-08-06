@@ -68,6 +68,8 @@ refser provides several methods to restrict saved and loaded data.
 * Tuple length can't be larger than [refser.maxtuple](#refsermaxtuple). 
 * Number of items can't be larger than [refser.maxitems](#refsermaxitems). 
 
+Additionally, local versions of these options can be specified for [refser.customsave](#refsercustomsave) and [refser.customload](#refsercustomload). 
+
 ## Reference
 
 ### refser.save(...)
@@ -136,6 +138,113 @@ refser.maxitems = 5
 assert(refser.save(a, b, c)) -- refser.save error: too many items
 refser.maxitems = 6
 assert(refser.save(a, b, c)) -- OK
+```
+
+### refser.customsave(...)
+
+A version of [refser.save](#refsersave) which returns a function which should be called with options table. See [Custom options](#custom-options). 
+
+### refser.customload(s)
+
+A version of [refser.load](#refserload) which returns a function which should be called with options table. See [Custom options](#customoptions). 
+
+### Custom options
+
+There are several options which may be used in the options table for [refser.customsave](#refsercustomsave) and [refser.customload](#refsercustomload). 
+
+#### maxnesting
+
+Local version of [refser.maxnesting](#refsermaxnesting). 
+
+#### maxtuple
+
+Local version of [refser.maxtuple](#refsermaxtuple). 
+
+#### maxitems
+
+Local version of [refser.maxitems](#refsermaxitems). 
+
+#### context
+
+When specified, refser will use provided table as context instead of a new, empty context. 
+Context determines which tables are recognised by refser. New records may be added into context during save and load. 
+
+Example:
+
+```lua
+
+x = {1, 2, 3, 4, 5}
+c = {} -- context table
+
+refser.customsave(x) {
+	context = c
+}
+
+y = {x}
+s = refser.customsave(y) {
+	context = c
+}
+print(s) -- prints {@1|} - x is recognised and not serialized
+
+```
+
+#### doublecontext
+
+By default, refser uses tables as keys and IDs as values in context when saving, and the opposite when loading. 
+If doublecontext evaluates to true, refser will combine these approaches, so that the same context can be used for save and loading. 
+A disadvantage is that size of context doubles. 
+
+A number of problems can be solved using double context, i.e. exchanging data between two lua states. 
+
+Example:
+
+```lua
+
+-- first state
+c1 = {}
+
+-- second state
+c2 = {}
+
+-- first state creates and sends data
+
+x1 = {}
+y1 = {}
+x1[x1] = y1
+y1[x1] = x1
+
+s1 = refser.customsave(x1, y1) {
+	context = c1,
+	doublecontext = true
+}
+
+-- send(s1)
+
+-- second state receives data and sends back some new data
+
+ok, x2, y2 = refser.customload(s1) {
+	context = c2,
+	doublecontext = true
+}
+
+z2 = {[x2] = y2}
+
+s2 = refser.customsave(z2) {
+	context = c2,
+	doublecontext = true
+}
+
+-- send(s2)
+
+-- first state receives data
+
+ok, z1 = refser.customload(s2) {
+	context = c1,
+	doublecontext = true
+}
+
+assert(z1[x1] == y1) -- OK
+
 ```
 
 ## Output format
