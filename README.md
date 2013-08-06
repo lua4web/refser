@@ -1,22 +1,14 @@
-# refser - fast serialization of tables with references
+# refser - Lua table serialization library
 
-Allows to save tuples of primitive Lua types into strings and load them back. 
+refser is yet another Lua table serialization library mostly written in C++. 
 
-refser is similar to identity-preserving table serialization by Metalua([source](https://github.com/fab13n/metalua/blob/no-dll/src/lib/serialize.lua)), but it is much faster as it is written in C++. 
+Features:
 
-refser can save: 
-
-* `nil`
-* `boolean`
-* `number`, including math.huge and NaN
-* `string`
-* `table`, including nested tables and tables with references
-
-refser can't save:
-
-* `function`
-* `thread`
-* `userdata`
+* Can save and load nil, booleans, numbers, strings, tables and tuples of them. 
+* Output is endian-portable and binary safe. 
+* Recursive tables and cross-references are handled correctly. 
+* Options to restrict saved and loaded data at run-time. 
+* Options to persist context across several operations. 
 
 ## Installation
 
