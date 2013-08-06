@@ -180,6 +180,5 @@ void Saver::process(int index) {
 void Saver::pushresult() {
 	this->L->pushnumber(this->count);
 	this->L->rawseti(_SAVER_I_REG, 0);
-	this->L->pop();
 	this->B->pushresult();
 }

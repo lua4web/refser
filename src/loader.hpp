@@ -46,6 +46,7 @@ class Loader {
 		~Loader();
 		void process(int role);
 		int done();
+		void pushresult();
 };
 
 #endif

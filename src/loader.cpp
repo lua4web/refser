@@ -229,3 +229,11 @@ void Loader::process(int role) {
 int Loader::done() {
 	return !this->len;
 }
+
+void Loader::pushresult() {
+	this->L->pushnumber(this->count);
+	this->L->rawseti(_LOADER_I_REG, 0);
+	this->L->pushnumber(this->L->gettop() - _LOADER_I_X);
+	this->L->replace(_LOADER_I_X);
+	
+}

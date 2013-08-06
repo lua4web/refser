@@ -44,8 +44,7 @@ static int load(lua_State *LS) {
 			L.pushstring("refser.load error: tuple is too long");
 			return 2;
 		}
-		L.pushnumber(tuplesize);
-		L.replace(_LOADER_I_X);
+		LO.pushresult();
 		return tuplesize + 1;
 	}
 	
