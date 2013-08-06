@@ -68,7 +68,7 @@ refser provides several methods to restrict saved and loaded data.
 * Tuple length can't be larger than [refser.maxtuple](#refsermaxtuple). 
 * Number of items can't be larger than [refser.maxitems](#refsermaxitems). 
 
-Additionally, local versions of these options can be specified for [refser.customsave](#refsercustomsave) and [refser.customload](#refsercustomload). 
+Additionally, local versions of these options can be specified for [refser.customsave](#refsercustomsave) and [refser.customload](#refsercustomloads). 
 
 ## Reference
 
@@ -146,11 +146,11 @@ A version of [refser.save](#refsersave) which returns a function which should be
 
 ### refser.customload(s)
 
-A version of [refser.load](#refserload) which returns a function which should be called with options table. See [Custom options](#customoptions). 
+A version of [refser.load](#refserloads) which returns a function which should be called with options table. See [Custom options](#custom-options). 
 
 ### Custom options
 
-There are several options which may be used in the options table for [refser.customsave](#refsercustomsave) and [refser.customload](#refsercustomload). 
+There are several options which may be used in the options table for [refser.customsave](#refsercustomsave) and [refser.customload](#refsercustomloads). 
 
 #### maxnesting
 
