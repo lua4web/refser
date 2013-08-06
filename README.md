@@ -26,8 +26,6 @@ Install refser using [luarocks](http://luarocks.org):
 luarocks install refser
 ```
 
-Note: currently only 0.1 version is uploaded to luarocks. 
-
 ## Usage
 
 1. Include refser:
@@ -41,8 +39,8 @@ Note: currently only 0.1 version is uploaded to luarocks.
 2. Save data and check for errors:
 
 	```lua
-	local output, err = refser.save(data)
-	if err then
+	local output, err = refser.save(...)
+	if not output then
 		-- error handling
 	else
 		-- ...
@@ -52,8 +50,8 @@ Note: currently only 0.1 version is uploaded to luarocks.
 3. Load data and check for errors:
 
 	```lua
-	local ok, ... = refser.save(...)
-	if not ok then
+	local count, ... = refser.load(input)
+	if not count then
 		-- error handling
 	else
 		-- ...
