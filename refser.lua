@@ -3,7 +3,7 @@ local _M = {}
 local crefser = require "refser.crefser"
 local aux = require "refser.auxiliary"
 
-function aux.makecontext(t)
+local function makecontext(t)
 	local mt = getmetatable(t) or {}
 	if not mt.__mode then
 		mt.__mode = "kv"
@@ -22,26 +22,11 @@ _M.maxtuple = 20
 _M.maxitems = 10 ^ 6
 
 function _M.save(...)
-	return crefser.save(
-		1/0,
-		-1/0,
-		aux.makecontext{},
-		nil,
-		{_M.maxnesting, _M.maxtuple, _M.maxitems},
-		...
-	)
+	return _M.customsave(...) {}
 end
 
 function _M.load(s)
-	return crefser.load(
-		1/0,
-		-1/0,
-		0/0,
-		aux.makecontext{},
-		nil,
-		{_M.maxnesting, _M.maxtuple, _M.maxitems},
-		s
-	)
+	return _M.customload(s) {}
 end
 
 function _M.customsave(...)
@@ -50,7 +35,7 @@ function _M.customsave(...)
 		return crefser.save(
 			1/0,
 			-1/0,
-			aux.makecontext(opts.context or {}),
+			makecontext(opts.context or {}),
 			nil,
 			{opts.maxnesting or _M.maxnesting, opts.maxtuple or _M.maxtuple, opts.maxitems or _M.maxitems, opts.doublecontext},
 			aux.unpack(args)
@@ -64,7 +49,7 @@ function _M.customload(s)
 			1/0,
 			-1/0,
 			0/0,
-			aux.makecontext(opts.context or {}),
+			makecontext(opts.context or {}),
 			nil,
 			{opts.maxnesting or _M.maxnesting, opts.maxtuple or _M.maxtuple, opts.maxitems or _M.maxitems, opts.doublecontext},
 			s
