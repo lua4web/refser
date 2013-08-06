@@ -191,7 +191,7 @@ print(s) -- prints {@1|} - x is recognised and not serialized
 #### doublecontext
 
 By default, refser uses tables as keys and IDs as values in context when saving, and the opposite when loading. 
-If doublecontext evaluates to true, refser will combine these approaches, so that the same context can be used for save and loading. 
+If doublecontext evaluates to true, refser will combine these approaches, so that the same context can be used both for saving and loading. 
 A disadvantage is that size of context doubles. 
 
 A number of problems can be solved using double context, i.e. exchanging data between two lua states. 
