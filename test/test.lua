@@ -530,48 +530,36 @@ testcase "custom"
 
 function persist_context()
 	x = {1, 2, 3, 4, 5}
-	c = {}
-
-	refser.customsave(x) {
-		context = c
-	}
-
 	y = {x}
-	s = refser.customsave(y) {
-		context = c
-	}
+	
+	worker = refser.new()
+	worker:save(x)
+	s = worker:save(y)
 	assert_equal("{@1|}", s)
 end
 
 function message_context()
-	c1 = {}
-	c2 = {}
+	worker1 = refser.new{
+		doublecontext = true
+	}
+	worker2 = refser.new{
+		doublecontext = true
+	}
+	
 	x1 = {}
 	y1 = {}
 	x1[x1] = y1
 	y1[x1] = x1
 
-	s1 = refser.customsave(x1, y1) {
-		context = c1,
-		doublecontext = true
-	}
+	s1 = worker1:save(x1, y1)
 
-	ok, x2, y2 = refser.customload(s1) {
-		context = c2,
-		doublecontext = true
-	}
+	ok, x2, y2 = worker2:load(s1)
 
 	z2 = {[x2] = y2}
 
-	s2 = refser.customsave(z2) {
-		context = c2,
-		doublecontext = true
-	}
+	s2 = worker2:save(z2)
 
-	ok, z1 = refser.customload(s2) {
-		context = c1,
-		doublecontext = true
-	}
+	ok, z1 = worker1:load(s2)
 
 	assert_equal(z1[x1], y1)
 end

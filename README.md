@@ -58,8 +58,6 @@ refser provides several methods to restrict saved and loaded data.
 * Tuple length can't be larger than [refser.maxtuple](#refsermaxtuple). 
 * Number of items can't be larger than [refser.maxitems](#refsermaxitems). 
 
-Additionally, local versions of these options can be specified for [refser.customsave](#refsercustomsave) and [refser.customload](#refsercustomloads). 
-
 ## Reference
 
 ### refser.save(...)
@@ -130,29 +128,23 @@ refser.maxitems = 6
 assert(refser.save(a, b, c)) -- OK
 ```
 
-### refser.customsave(...)
+### refser.new(options)
 
-A version of [refser.save](#refsersave) which returns a function which should be called with options table. See [Custom options](#custom-options). 
+Returns a refser worker object which may be used for a number of save/load operations in the same context. 
 
-### refser.customload(s)
-
-A version of [refser.load](#refserloads) which returns a function which should be called with options table. See [Custom options](#custom-options). 
-
-### Custom options
-
-There are several options which may be used in the options table for [refser.customsave](#refsercustomsave) and [refser.customload](#refsercustomloads). 
+`options` argument should be nil or a table. Possible fields:
 
 #### maxnesting
 
-Local version of [refser.maxnesting](#refsermaxnesting). 
+Sets maximum nesting level for all operations of the worker. Overrides [refser.maxnesting](#refsermaxnesting). 
 
 #### maxtuple
 
-Local version of [refser.maxtuple](#refsermaxtuple). 
+Sets maximum tuple length for all operations of the worker. Overrides [refser.maxtuple](#refsermaxtuple). 
 
 #### maxitems
 
-Local version of [refser.maxitems](#refsermaxitems). 
+Sets maximum items count for all operations of the worker. Overrides [refser.maxitems](#refsermaxitems). 
 
 #### context
 
@@ -164,16 +156,14 @@ Example:
 ```lua
 
 x = {1, 2, 3, 4, 5}
-c = {} -- context table
+c = {x} -- context table includes x
 
-refser.customsave(x) {
+worker = refser.new{
 	context = c
 }
 
 y = {x}
-s = refser.customsave(y) {
-	context = c
-}
+s = worker:save(y)
 print(s) -- prints {@1|} - x is recognised and not serialized
 
 ```
@@ -190,11 +180,15 @@ Example:
 
 ```lua
 
--- first state
-c1 = {}
+-- worker of first state
+worker1 = refser.new{
+	doublecontext = true
+}
 
--- second state
-c2 = {}
+-- worker of second state
+worker2 = refser.new{
+	doublecontext = true
+}
 
 -- first state creates and sends data
 
@@ -203,39 +197,43 @@ y1 = {}
 x1[x1] = y1
 y1[x1] = x1
 
-s1 = refser.customsave(x1, y1) {
-	context = c1,
-	doublecontext = true
-}
+s1 = worker1:save(x1, y1)
 
 -- send(s1)
 
 -- second state receives data and sends back some new data
 
-ok, x2, y2 = refser.customload(s1) {
-	context = c2,
-	doublecontext = true
-}
+ok, x2, y2 = worker2:load(s1)
 
 z2 = {[x2] = y2}
 
-s2 = refser.customsave(z2) {
-	context = c2,
-	doublecontext = true
-}
+s2 = worker2:save(z2)
 
 -- send(s2)
 
 -- first state receives data
 
-ok, z1 = refser.customload(s2) {
-	context = c1,
-	doublecontext = true
-}
+ok, z1 = worker1:load(s2)
 
 assert(z1[x1] == y1) -- OK
 
 ```
+
+###	worker:save(...)
+
+Similar to [refser.save](#refsersave), but uses worker's options and context. 
+
+###	worker:load(...)
+
+Similar to [refser.load](#refserloads), but uses worker's options and context. 
+
+###	worker:setoptions(options)
+
+Sets options of worker in the same way it is done on initialization. 
+
+###	worker:setcontext(context)
+
+Sets context of worker. 
 
 ## Output format
 

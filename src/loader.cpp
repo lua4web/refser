@@ -16,23 +16,23 @@ Loader::Loader(Lua *L) {
 	this->nesting = 0;
 	this->items = 0;
 	
-	L->rawgeti(_LOADER_I_REG, 0);
+	L->gettablei(_LOADER_I_REG, 0);
 	this->count = L->tonumber(-1);
 	L->pop();
 	
-	L->rawgeti(_LOADER_I_OPTS, 1);
+	L->getfield(_LOADER_I_OPTS, "maxnesting");
 	this->maxnesting = L->tonumber(-1);
 	L->pop();
 	
-	L->rawgeti(_LOADER_I_OPTS, 2);
+	L->getfield(_LOADER_I_OPTS, "maxtuple");
 	this->maxtuple = L->tonumber(-1);
 	L->pop();
 	
-	L->rawgeti(_LOADER_I_OPTS, 3);
+	L->getfield(_LOADER_I_OPTS, "maxitems");
 	this->maxitems = L->tonumber(-1);
 	L->pop();
 	
-	L->rawgeti(_LOADER_I_OPTS, 4);
+	L->getfield(_LOADER_I_OPTS, "doublecontext");
 	this->doublecontext = L->toboolean(-1);
 	L->pop();
 	
@@ -135,12 +135,12 @@ void Loader::process_table() {
 	this->count++;
 	this->L->newtable();
 	this->L->pushvalue(-1);
-	this->L->rawseti(_LOADER_I_REG, this->count);
+	this->L->settablei(_LOADER_I_REG, this->count);
 	
 	if(this->doublecontext) {
 		this->L->pushvalue(-1);
 		this->L->pushnumber(this->count);
-		this->L->rawset(_LOADER_I_REG);
+		this->L->settable(_LOADER_I_REG);
 	}
 	
 	while(*this->s != _FORMAT_ARRAY_HASH_SEP) {
@@ -201,7 +201,7 @@ void Loader::process(int role) {
 		}
 		case _FORMAT_TABLE_REF: {
 			this->process_number();
-			this->L->rawget(_LOADER_I_REG);
+			this->L->gettable(_LOADER_I_REG);
 			if(this->L->isnil(-1)) {
 				throw _LOADER_ERR_CONTEXT;
 			}
@@ -232,7 +232,7 @@ int Loader::done() {
 
 void Loader::pushresult() {
 	this->L->pushnumber(this->count);
-	this->L->rawseti(_LOADER_I_REG, 0);
+	this->L->settablei(_LOADER_I_REG, 0);
 	this->L->pushnumber(this->L->gettop() - _LOADER_I_X);
 	this->L->replace(_LOADER_I_X);
 	

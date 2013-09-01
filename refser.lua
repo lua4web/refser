@@ -1,60 +1,81 @@
-local _M = {}
+local refser = {}
 
 local crefser = require "refser.crefser"
-local aux = require "refser.auxiliary"
+local class = require "30log"
 
-local function makecontext(t)
-	local mt = getmetatable(t) or {}
+refser.maxnesting = 250
+refser.maxtuple = 20
+refser.maxitems = 10 ^ 6
+
+local worker = class()
+
+function worker:__init(options)
+	self.maxnesting = refser.maxnesting
+	self.maxtuple = refser.maxtuple
+	self.maxitems = refser.maxitems
+	self:setoptions(options)
+end
+
+function worker:setoptions(options)
+	options = options or {}
+	self.maxnesting = options.maxnesting or self.maxnesting
+	self.maxtuple = options.maxtuple or self.maxtuple
+	self.maxitems = options.maxitems or self.maxitems
+	if options.context then
+		self:setcontext(options.context)
+	end
+	if options.doublecontext ~= nil then
+		self.doublecontext = options.doublecontext
+	end
+end
+
+function worker:setcontext(context)
+	context = context or {}
+	local mt = getmetatable(context) or {}
 	if not mt.__mode then
 		mt.__mode = "kv"
-		setmetatable(t, mt)
+		setmetatable(context, mt)
 	end
-	if not t[0] then
-		t[0] = 0
+	if not context[0] then
+		context[0] = 0
 	end
-	return t
+	self.context = context
+	return context
 end
 
-_M.maxnesting = 250
-
-_M.maxtuple = 20
-
-_M.maxitems = 10 ^ 6
-
-function _M.save(...)
-	return _M.customsave(...) {}
+function worker:save(...)
+	return crefser.save(
+		1/0,
+		-1/0,
+		self:setcontext(self.context),
+		nil,
+		self,
+		...
+	)
 end
 
-function _M.load(s)
-	return _M.customload(s) {}
+function worker:load(s)
+	return crefser.load(
+		1/0,
+		-1/0,
+		0/0,
+		self:setcontext(self.context),
+		nil,
+		self,
+		s
+	)
 end
 
-function _M.customsave(...)
-	local args = aux.pack(...)
-	return function(opts)
-		return crefser.save(
-			1/0,
-			-1/0,
-			makecontext(opts.context or {}),
-			nil,
-			{opts.maxnesting or _M.maxnesting, opts.maxtuple or _M.maxtuple, opts.maxitems or _M.maxitems, opts.doublecontext},
-			aux.unpack(args)
-		)
-	end
+function refser.new(options)
+	return worker(options)
 end
 
-function _M.customload(s)
-	return function(opts)
-		return crefser.load(
-			1/0,
-			-1/0,
-			0/0,
-			makecontext(opts.context or {}),
-			nil,
-			{opts.maxnesting or _M.maxnesting, opts.maxtuple or _M.maxtuple, opts.maxitems or _M.maxitems, opts.doublecontext},
-			s
-		)
-	end
+function refser.save(...)
+	return worker():save(...)
 end
 
-return _M
+function refser.load(s)
+	return worker():load(s)
+end
+
+return refser

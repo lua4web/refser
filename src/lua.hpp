@@ -20,7 +20,7 @@ class Lua {
 		void pop(int n);
 		void pop();
 		void pushlstring(const char *s, size_t len);
-		int rawgeti(int index, int i);
+		int rawgeti(int index, int n);
 		lua_Number tonumber(int index);
 		void pushnumber(lua_Number n);
 		void pushvalue(int index);
@@ -30,7 +30,7 @@ class Lua {
 		int checkstack(int extra);
 		int toboolean(int index);
 		int rawequal(int index1, int index2);
-		void rawget(int index);
+		int rawget(int index);
 		int isnil(int index);
 		void newtable();
 		void rawseti(int index, int n);
@@ -41,6 +41,11 @@ class Lua {
 		void remove(int index);
 		const char *checklstring(int narg, size_t *l);
 		void *checkudata(int narg, const char *tname);
+		void settable(int index);
+		void settablei(int index, int n);
+		int gettable(int index);
+		int gettablei(int index, int n);
+		void getfield(int index, const char *field);
 };
 
 #endif

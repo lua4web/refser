@@ -11,23 +11,23 @@ Saver::Saver(Lua *L) {
 	this->nesting = 0;
 	this->items = 0;
 	
-	L->rawgeti(_SAVER_I_REG, 0);
+	L->gettablei(_SAVER_I_REG, 0);
 	this->count = L->tonumber(-1);
 	L->pop();
 	
-	L->rawgeti(_SAVER_I_OPTS, 1);
+	L->getfield(_SAVER_I_OPTS, "maxnesting");
 	this->maxnesting = L->tonumber(-1);
 	L->pop();
 	
-	L->rawgeti(_SAVER_I_OPTS, 2);
+	L->getfield(_SAVER_I_OPTS, "maxtuple");
 	maxtuple = L->tonumber(-1);
 	L->pop();
 	
-	L->rawgeti(_SAVER_I_OPTS, 3);
+	L->getfield(_SAVER_I_OPTS, "maxitems");
 	this->maxitems = L->tonumber(-1);
 	L->pop();
 	
-	L->rawgeti(_SAVER_I_OPTS, 4);
+	L->getfield(_SAVER_I_OPTS, "doublecontext");
 	this->doublecontext = L->toboolean(-1);
 	L->pop();
 	
@@ -67,11 +67,11 @@ void Saver::process_table(int index) {
 	this->count++;
 	this->L->pushvalue(index);
 	this->L->pushnumber(this->count);
-	this->L->rawset(_SAVER_I_REG);
+	this->L->settable(_SAVER_I_REG);
 	
 	if(this->doublecontext) {
 		this->L->pushvalue(index);
-		this->L->rawseti(_SAVER_I_REG, this->count);
+		this->L->settablei(_SAVER_I_REG, this->count);
 	}
 	
 	this->B->add(_FORMAT_TABLE_START);
@@ -146,7 +146,7 @@ void Saver::process(int index) {
 		}
 		case LUA_TTABLE: {
 			this->L->pushvalue(index);
-			this->L->rawget(_SAVER_I_REG);
+			this->L->gettable(_SAVER_I_REG);
 			if(this->L->isnil(-1)) {
 				this->L->pop();
 				this->process_table(index);
@@ -179,6 +179,6 @@ void Saver::process(int index) {
 
 void Saver::pushresult() {
 	this->L->pushnumber(this->count);
-	this->L->rawseti(_SAVER_I_REG, 0);
+	this->L->settablei(_SAVER_I_REG, 0);
 	this->B->pushresult();
 }
