@@ -156,7 +156,7 @@ Example:
 ```lua
 
 x = {1, 2, 3, 4, 5}
-c = {x} -- context table includes x
+c = {[x] = 1} -- context table includes x, its id is 1
 
 worker = refser.new{
 	context = c
