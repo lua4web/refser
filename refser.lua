@@ -36,8 +36,8 @@ function worker:setcontext(context)
 		mt.__mode = "kv"
 		setmetatable(context, mt)
 	end
-	if not context[0] then
-		context[0] = 0
+	if not context.n then
+		context.n = 0
 	end
 	self.context = context
 	return context

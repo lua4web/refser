@@ -18,6 +18,8 @@ Install refser using [luarocks](http://luarocks.org):
 luarocks install refser
 ```
 
+Last version uploaded to luarocks is v0.2. 
+
 ## Usage
 
 1. Include refser:
@@ -156,7 +158,7 @@ Example:
 ```lua
 
 x = {1, 2, 3, 4, 5}
-c = {[x] = 1} -- context table includes x, its id is 1
+c = {[x] = 1, n = 1} -- context table includes x, its id is 1, size of context is 1
 
 worker = refser.new{
 	context = c

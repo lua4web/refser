@@ -11,7 +11,7 @@ Saver::Saver(Lua *L) {
 	this->nesting = 0;
 	this->items = 0;
 	
-	L->gettablei(_SAVER_I_REG, 0);
+	L->getfield(_SAVER_I_REG, "n");
 	this->count = L->tonumber(-1);
 	L->pop();
 	

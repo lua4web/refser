@@ -16,7 +16,7 @@ Loader::Loader(Lua *L) {
 	this->nesting = 0;
 	this->items = 0;
 	
-	L->gettablei(_LOADER_I_REG, 0);
+	L->getfield(_LOADER_I_REG, "n");
 	this->count = L->tonumber(-1);
 	L->pop();
 	
