@@ -237,6 +237,18 @@ Sets options of worker in the same way it is done on initialization.
 
 Sets context of worker. 
 
+###	worker:setmaxnesting(maxnesting)
+
+Sets maxnesting option. 
+
+###	worker:setmaxtuples(maxtuples)
+
+Sets maxtuples option. 
+
+###	worker:setmaxitems(maxitems)
+
+Sets maxitems option. 
+
 ## Output format
 
 Output format is developed to be easily read by computer, not human, but it still can be used for debugging purposes, if necessary. 
