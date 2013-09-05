@@ -22,9 +22,9 @@ build = {
 	type = "cpp",
 	modules = {
 		refser = "refser.lua",
-		["refser.crefser"] = {
+		["refser.c"] = {
 			sources = {
-				"src/crefser.cpp",
+				"src/refser.cpp",
 				"src/lua.cpp",
 				"src/writer.cpp",
 				"src/fixbuf.cpp",

@@ -232,7 +232,7 @@ int Loader::done() {
 
 void Loader::pushresult() {
 	this->L->pushnumber(this->count);
-	this->L->settablei(_LOADER_I_REG, 0);
+	this->L->setfield(_LOADER_I_REG, "n");
 	this->L->pushnumber(this->L->gettop() - _LOADER_I_X);
 	this->L->replace(_LOADER_I_X);
 	

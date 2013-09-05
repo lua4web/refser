@@ -46,6 +46,7 @@ class Lua {
 		int gettable(int index);
 		int gettablei(int index, int n);
 		void getfield(int index, const char *field);
+		void setfield(int index, const char *field);
 };
 
 #endif

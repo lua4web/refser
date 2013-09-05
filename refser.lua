@@ -1,6 +1,6 @@
 local refser = {}
 
-local crefser = require "refser.crefser"
+refser.c = require "refser.c"
 local class = require "30log"
 
 refser.maxnesting = 250
@@ -44,7 +44,7 @@ function worker:setcontext(context)
 end
 
 function worker:save(...)
-	return crefser.save(
+	return refser.c.save(
 		1/0,
 		-1/0,
 		self:setcontext(self.context),
@@ -55,7 +55,7 @@ function worker:save(...)
 end
 
 function worker:load(s)
-	return crefser.load(
+	return refser.c.load(
 		1/0,
 		-1/0,
 		0/0,

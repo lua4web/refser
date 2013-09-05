@@ -57,7 +57,7 @@ static int load(lua_State *LS) {
 }
 
 extern "C" {
-	int luaopen_refser_crefser(lua_State *L) {
+	int luaopen_refser_c(lua_State *L) {
 		lua_newtable(L);
 		lua_pushstring(L, "save");
 		lua_pushcfunction(L, save);

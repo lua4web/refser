@@ -146,3 +146,7 @@ int Lua::gettablei(int index, int n) {
 void Lua::getfield(int index, const char *field) {
 	lua_getfield(this->L, index, field);
 }
+
+void Lua::setfield(int index, const char *field) {
+	lua_setfield(this->L, index, field);
+}

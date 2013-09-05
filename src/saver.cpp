@@ -179,6 +179,6 @@ void Saver::process(int index) {
 
 void Saver::pushresult() {
 	this->L->pushnumber(this->count);
-	this->L->settablei(_SAVER_I_REG, 0);
+	this->L->setfield(_SAVER_I_REG, "n");
 	this->B->pushresult();
 }
