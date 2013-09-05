@@ -43,6 +43,18 @@ function worker:setcontext(context)
 	return context
 end
 
+function worker:setmaxnesting(maxnesting)
+	self.maxnesting = maxnesting
+end
+
+function worker:setmaxtuple(maxtuple)
+	self.maxtuple = maxtuple
+end
+
+function worker:setmaxnesting(maxitems)
+	self.maxitems = maxitems
+end
+
 function worker:save(...)
 	return refser.c.save(
 		1/0,
