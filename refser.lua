@@ -21,9 +21,7 @@ function worker:setoptions(options)
 	self.maxnesting = options.maxnesting or self.maxnesting
 	self.maxtuple = options.maxtuple or self.maxtuple
 	self.maxitems = options.maxitems or self.maxitems
-	if options.context then
-		self:setcontext(options.context)
-	end
+	self:setcontext(options.context)
 	if options.doublecontext ~= nil then
 		self.doublecontext = options.doublecontext
 	end
@@ -51,7 +49,7 @@ function worker:setmaxtuple(maxtuple)
 	self.maxtuple = maxtuple
 end
 
-function worker:setmaxnesting(maxitems)
+function worker:setmaxitems(maxitems)
 	self.maxitems = maxitems
 end
 
