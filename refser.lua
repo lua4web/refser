@@ -54,21 +54,11 @@ function worker:setmaxitems(maxitems)
 end
 
 function worker:save(...)
-	return refser.c.save(
-		self:setcontext(self.context),
-		nil,
-		self,
-		...
-	)
+	return refser.c.save(self, ...)
 end
 
 function worker:load(s)
-	return refser.c.load(
-		self:setcontext(self.context),
-		nil,
-		self,
-		s
-	)
+	return refser.c.load(self, s)
 end
 
 function refser.new(options)

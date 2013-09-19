@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include <limits.h>
-
 #include "format.hpp"
 
 #define ensure(cond) { \
@@ -19,31 +18,32 @@ Loader::Loader(Lua *L) {
 	this->nesting = 0;
 	this->items = 0;
 	
-	L->getfield(_LOADER_I_REG, "n");
+	L->getfield(_LOADER_I_SELF, "context");
+	L->insert(_LOADER_I_CONTEXT);
+	
+	L->getfield(_LOADER_I_CONTEXT, "n");
 	this->count = L->tonumber(-1);
 	L->pop();
 	
-	L->getfield(_LOADER_I_OPTS, "maxnesting");
+	L->getfield(_LOADER_I_SELF, "maxnesting");
 	this->maxnesting = L->tonumber(-1);
 	L->pop();
 	
-	L->getfield(_LOADER_I_OPTS, "maxtuple");
+	L->getfield(_LOADER_I_SELF, "maxtuple");
 	this->maxtuple = L->tonumber(-1);
 	L->pop();
 	
-	L->getfield(_LOADER_I_OPTS, "maxitems");
+	L->getfield(_LOADER_I_SELF, "maxitems");
 	this->maxitems = L->tonumber(-1);
 	L->pop();
 	
-	L->getfield(_LOADER_I_OPTS, "doublecontext");
+	L->getfield(_LOADER_I_SELF, "doublecontext");
 	this->doublecontext = L->toboolean(-1);
 	L->pop();
 	
-	L->remove(_LOADER_I_OPTS);
-	
 	this->s = L->checklstring(_LOADER_I_X, &this->len);
 	
-	this->B = new FixBuf(L, _LOADER_I_BUFF);
+	this->B = new FixBuf(L, L->gettop() + 1);
 }
 
 Loader::~Loader() {
@@ -136,12 +136,12 @@ void Loader::process_table() {
 	this->count++;
 	this->L->newtable();
 	this->L->pushvalue(-1);
-	this->L->settablei(_LOADER_I_REG, this->count);
+	this->L->settablei(_LOADER_I_CONTEXT, this->count);
 	
 	if(this->doublecontext) {
 		this->L->pushvalue(-1);
 		this->L->pushnumber(this->count);
-		this->L->settable(_LOADER_I_REG);
+		this->L->settable(_LOADER_I_CONTEXT);
 	}
 	
 	while(*this->s != _FORMAT_ARRAY_HASH_SEP) {
@@ -202,7 +202,7 @@ void Loader::process(int role) {
 		}
 		case _FORMAT_TABLE_REF: {
 			this->process_number();
-			this->L->gettable(_LOADER_I_REG);
+			this->L->gettable(_LOADER_I_CONTEXT);
 			if(this->L->isnil(-1)) {
 				throw _LOADER_ERR_CONTEXT;
 			}
@@ -233,8 +233,7 @@ int Loader::done() {
 
 void Loader::pushresult() {
 	this->L->pushnumber(this->count);
-	this->L->setfield(_LOADER_I_REG, "n");
-	this->L->pushnumber(this->L->gettop() - _LOADER_I_X);
-	this->L->replace(_LOADER_I_X);
-	
+	this->L->setfield(_LOADER_I_CONTEXT, "n");
+	this->L->pushnumber(this->L->gettop() - _LOADER_I_X - 1);
+	this->L->replace(_LOADER_I_X + 1);
 }

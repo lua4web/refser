@@ -4,9 +4,8 @@
 #include "lua.hpp"
 #include "fixbuf.hpp"
 
-#define _LOADER_I_REG 1
-#define _LOADER_I_BUFF 2
-#define _LOADER_I_OPTS 3
+#define _LOADER_I_SELF 1
+#define _LOADER_I_CONTEXT 2
 #define _LOADER_I_X 3
 
 #define _LOADER_ERR_TOODEEP "refser.load error: table is too deep"

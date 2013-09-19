@@ -16,6 +16,7 @@ class Lua {
 		void *newuserdata(size_t size);
 		int gettop();
 		void replace(int index);
+		void insert(int index);
 		const char *tolstring(int index, size_t *len);
 		void pop(int n);
 		void pop();

@@ -20,6 +20,10 @@ void Lua::replace(int index) {
 	lua_replace(this->L, index);
 }
 
+void Lua::insert(int index) {
+	lua_insert(this->L, index);
+}
+
 const char *Lua::tolstring(int index, size_t *len) {
 	return lua_tolstring(this->L, index, len);
 }

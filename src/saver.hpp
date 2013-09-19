@@ -4,9 +4,8 @@
 #include "lua.hpp"
 #include "writer.hpp"
 
-#define _SAVER_I_REG 1
-#define _SAVER_I_BUFF 2
-#define _SAVER_I_OPTS 3
+#define _SAVER_I_SELF 1
+#define _SAVER_I_CONTEXT 2
 #define _SAVER_I_X 3
 
 #define _SAVER_ERR_TOODEEP "refser.save error: table is too deep"

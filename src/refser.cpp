@@ -10,7 +10,7 @@ static int save(lua_State *LS) {
 		Saver S(&L);
 		
 		int i;
-		int tuplesize = L.gettop() - _SAVER_I_X + 1;
+		int tuplesize = L.gettop() - _SAVER_I_X;
 		
 		for(i = 0; i < tuplesize; i++) {
 			S.process(_SAVER_I_X + i);
