@@ -30,8 +30,8 @@ class Saver {
 		int maxitems;
 		int doublecontext;
 		
-		void process_number(int index);
-		void process_string(int index);
+		void process_number(lua_Number x);
+		void process_string(const char *s, size_t len);
 		void process_table(int index);
 	public:
 		Saver(Lua *L);

@@ -44,14 +44,11 @@ Saver::~Saver() {
 	delete this->B;
 }
 
-void Saver::process_number(int index) {
-	lua_Number x = this->L->tonumber(index);
+void Saver::process_number(lua_Number x) {
 	this->B->addf(_FORMAT_NUMBER_MAX, "%.*g", _FORMAT_NUMBER_LEN, x);
 }
 
-void Saver::process_string(int index) {
-	size_t len;
-	const char *s = this->L->tolstring(index, &len);
+void Saver::process_string(const char *s, size_t len) {
 	this->B->addquoted(s, len);
 }
 
@@ -112,36 +109,27 @@ void Saver::process(int index) {
 			break;
 		}
 		case LUA_TBOOLEAN: {
-			if(this->L->toboolean(index)) {
-				this->B->add(_FORMAT_TRUE);
-			}
-			else {
-				this->B->add(_FORMAT_FALSE);
-			}
+			this->B->add(this->L->toboolean(index) ? _FORMAT_TRUE : _FORMAT_FALSE);
 			break;
 		}
 		case LUA_TNUMBER: {
-			if(this->L->rawequal(index, index)) {
-				if(this->L->rawequal(index, _SAVER_I_INF)) {
-					this->B->add(_FORMAT_INF);
-				}
-				else {
-					if(this->L->rawequal(index, _SAVER_I_MINF)) {
-						this->B->add(_FORMAT_MINF);
-					}
-					else {
-						this->B->add(_FORMAT_NUMBER);
-						this->process_number(index);
-					}
-				}
+			lua_Number x = this->L->tonumber(index);
+			if(isnan(x)) {
+				this->B->add(_FORMAT_NAN);
+			}
+			else if(isinf(x)) {
+				this->B->add((x > 0) ? _FORMAT_INF : _FORMAT_MINF);
 			}
 			else {
-				this->B->add(_FORMAT_NAN);
+				this->B->add(_FORMAT_NUMBER);
+				this->process_number(x);
 			}
 			break;
 		}
 		case LUA_TSTRING: {
-			this->process_string(index);
+			size_t len;
+			const char *s = this->L->tolstring(index, &len);
+			this->process_string(s, len);
 			break;
 		}
 		case LUA_TTABLE: {
@@ -152,8 +140,9 @@ void Saver::process(int index) {
 				this->process_table(index);
 			}
 			else {
+				lua_Number x = this->L->tonumber(this->L->gettop());
 				this->B->add(_FORMAT_TABLE_REF);
-				this->process_number(this->L->gettop());
+				this->process_number(x);
 				this->L->pop();
 			}
 			break;
