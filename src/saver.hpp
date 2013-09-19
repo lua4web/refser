@@ -4,12 +4,10 @@
 #include "lua.hpp"
 #include "writer.hpp"
 
-#define _SAVER_I_INF 1
-#define _SAVER_I_MINF 2
-#define _SAVER_I_REG 3
-#define _SAVER_I_BUFF 4
-#define _SAVER_I_OPTS 5
-#define _SAVER_I_X 5
+#define _SAVER_I_REG 1
+#define _SAVER_I_BUFF 2
+#define _SAVER_I_OPTS 3
+#define _SAVER_I_X 3
 
 #define _SAVER_ERR_TOODEEP "refser.save error: table is too deep"
 #define _SAVER_ERR_STACK "refser.save error: lua stack exhausted"

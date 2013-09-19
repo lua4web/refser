@@ -1,6 +1,9 @@
 #include "loader.hpp"
 
 #include <stdlib.h>
+#include <math.h>
+#include <limits.h>
+
 #include "format.hpp"
 
 #define ensure(cond) { \
@@ -67,10 +70,8 @@ void Loader::process_number() {
 	x = strtod(this->s, NULL);
 	ensure(x || (i == 1 && *this->s == '0'));
 	this->eat(i);
+	ensure(!isnan(x));
 	this->L->pushnumber(x);
-	if(!this->L->rawequal(-1, -1)) {
-		throw _LOADER_ERR_MAILFORMED;
-	}
 }
 
 void Loader::process_string() {
@@ -187,16 +188,16 @@ void Loader::process(int role) {
 			break;
 		}
 		case _FORMAT_INF: {
-			this->L->pushvalue(_LOADER_I_INF);
+			this->L->pushnumber(HUGE_VAL);
 			break;
 		}
 		case _FORMAT_MINF: {
-			this->L->pushvalue(_LOADER_I_MINF);
+			this->L->pushnumber(HUGE_VAL * -1);
 			break;
 		}
 		case _FORMAT_NAN: {
 			ensure(role != _LOADER_ROLE_KEY);
-			this->L->pushvalue(_LOADER_I_NAN);
+			this->L->pushnumber(NAN);
 			break;
 		}
 		case _FORMAT_TABLE_REF: {

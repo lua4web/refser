@@ -55,8 +55,6 @@ end
 
 function worker:save(...)
 	return refser.c.save(
-		1/0,
-		-1/0,
 		self:setcontext(self.context),
 		nil,
 		self,
@@ -66,9 +64,6 @@ end
 
 function worker:load(s)
 	return refser.c.load(
-		1/0,
-		-1/0,
-		0/0,
 		self:setcontext(self.context),
 		nil,
 		self,

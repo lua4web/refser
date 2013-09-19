@@ -4,13 +4,10 @@
 #include "lua.hpp"
 #include "fixbuf.hpp"
 
-#define _LOADER_I_INF 1
-#define _LOADER_I_MINF 2
-#define _LOADER_I_NAN 3
-#define _LOADER_I_REG 4
-#define _LOADER_I_BUFF 5
-#define _LOADER_I_OPTS 6
-#define _LOADER_I_X 6
+#define _LOADER_I_REG 1
+#define _LOADER_I_BUFF 2
+#define _LOADER_I_OPTS 3
+#define _LOADER_I_X 3
 
 #define _LOADER_ERR_TOODEEP "refser.load error: table is too deep"
 #define _LOADER_ERR_MAILFORMED "refser.load error: mailformed input"
