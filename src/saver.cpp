@@ -49,7 +49,45 @@ void Saver::process_number(lua_Number x) {
 }
 
 void Saver::process_string(const char *s, size_t len) {
-	this->B->addquoted(s, len);
+	size_t i = 0;
+	char esc;
+	this->B->add(_FORMAT_STRING);
+	while(i < len) {
+		switch(s[i]) {
+			case '\\': {
+				esc = '\\';
+				break;
+			}
+			case '\n': {
+				esc = 'n';
+				break;
+			}
+			case '\r': {
+				esc = 'r';
+				break;
+			}
+			case '"': {
+				esc = '"';
+				break;
+			}
+			case '\0': {
+				esc = 'z';
+				break;
+			}
+			default: {
+				i++;
+				continue;
+			}
+		}
+		this->B->add(s, i);
+		this->B->add('\\');
+		this->B->add(esc);
+		s += i + 1;
+		len -= i + 1;
+		i = 0;
+	}
+	this->B->add(s, len);
+	this->B->add(_FORMAT_STRING);
 }
 
 void Saver::process_table(int index) {

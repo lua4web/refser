@@ -14,7 +14,6 @@ class Writer {
 		virtual void add(const char *s, size_t len) = 0;
 		void add(const char *s);
 		virtual void addf(size_t maxsize, const char *fmt, ...) = 0;
-		void addquoted(const char *s, size_t len);
 		virtual void pushresult() = 0;
 };
 
