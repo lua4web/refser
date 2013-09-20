@@ -170,27 +170,57 @@ print(s) -- prints {@1|} - x is recognised and not serialized
 
 ```
 
-#### doublecontext
+#### mode
 
-By default, refser uses tables as keys and IDs as values in context when saving, and the opposite when loading. 
-If doublecontext evaluates to true, refser will combine these approaches, so that the same context can be used both for saving and loading. 
-A disadvantage is that size of context doubles. 
+A string defining which operations worker can perform. 
 
-A number of problems can be solved using double context, i.e. exchanging data between two lua states. 
+If character "s" can be found in the string, saving is enabled; if "l" is present, loading is enabled. 
+
+Default value is "sl". 
+
+###	worker:save(...)
+
+Similar to [refser.save](#refsersave), but uses worker's options and context. 
+
+###	worker:load(...)
+
+Similar to [refser.load](#refserloads), but uses worker's options and context. 
+
+###	worker:setoptions(options)
+
+Sets options of worker in the same way it is done on initialization. 
+
+###	worker:setcontext(context)
+
+Sets context of worker. 
+
+###	worker:setmaxnesting(maxnesting)
+
+Sets maxnesting option. 
+
+###	worker:setmaxtuples(maxtuples)
+
+Sets maxtuples option. 
+
+###	worker:setmaxitems(maxitems)
+
+Sets maxitems option. 
+
+## Using refser for continious exchange of data
+
+This section is work in process. 
+
+---
 
 Example:
 
 ```lua
 
 -- worker of first state
-worker1 = refser.new{
-	doublecontext = true
-}
+worker1 = refser.new()
 
 -- worker of second state
-worker2 = refser.new{
-	doublecontext = true
-}
+worker2 = refser.new()
 
 -- first state creates and sends data
 
@@ -220,34 +250,6 @@ ok, z1 = worker1:load(s2)
 assert(z1[x1] == y1) -- OK
 
 ```
-
-###	worker:save(...)
-
-Similar to [refser.save](#refsersave), but uses worker's options and context. 
-
-###	worker:load(...)
-
-Similar to [refser.load](#refserloads), but uses worker's options and context. 
-
-###	worker:setoptions(options)
-
-Sets options of worker in the same way it is done on initialization. 
-
-###	worker:setcontext(context)
-
-Sets context of worker. 
-
-###	worker:setmaxnesting(maxnesting)
-
-Sets maxnesting option. 
-
-###	worker:setmaxtuples(maxtuples)
-
-Sets maxtuples option. 
-
-###	worker:setmaxitems(maxitems)
-
-Sets maxitems option. 
 
 ## Output format
 

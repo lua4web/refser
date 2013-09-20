@@ -10,6 +10,10 @@ static int save(lua_State *LS) {
 	try {
 		Saver S(&L);
 		
+		if(!S.savemode) {
+			throw _SAVER_ERR_MODE;
+		}
+		
 		int i;
 		int tuplesize = L.gettop() - _I_X;
 		
@@ -33,6 +37,10 @@ static int load(lua_State *LS) {
 	
 	try {
 		Loader LO(&L);
+		
+		if(!LO.loadmode) {
+			throw _LOADER_ERR_MODE;
+		}
 		
 		int tuplesize = 0;
 		while(!LO.done() && tuplesize < LO.maxtuple) {

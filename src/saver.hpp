@@ -11,6 +11,7 @@
 #define _SAVER_ERR_THREAD "refser.save error: attempt to save thread"
 #define _SAVER_ERR_ITEMS "refser.save error: too many items"
 #define _SAVER_ERR_TOOLONG "refser.save error: tuple is too long"
+#define _SAVER_ERR_MODE "refser.save error: mode prohibits saving"
 
 class Saver: public Worker {
 	private:

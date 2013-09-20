@@ -539,12 +539,8 @@ function persist_context()
 end
 
 function message_context()
-	worker1 = refser.new{
-		doublecontext = true
-	}
-	worker2 = refser.new{
-		doublecontext = true
-	}
+	worker1 = refser.new()
+	worker2 = refser.new()
 	
 	x1 = {}
 	y1 = {}
