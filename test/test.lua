@@ -559,5 +559,39 @@ function message_context()
 
 	assert_equal(z1[x1], y1)
 end
+
+testcase "explicit"
 	
+function empty()
+	worker = refser.new()
+	
+	ok, x = worker:load("#3|}")
+	
+	assert_equal(1, ok)
+	assert_table(x)
+	assert_equal(3, worker.context.n)
+	assert_equal(x, worker.context[3])
+	assert_equal(3, worker.context[x])
+	assert_nil(next(x))
+end
+
+function nested()
+	worker = refser.new()
+	
+	ok, x, y = worker:load("#3#2|}|@3@2}@2")
+	
+	assert_equal(2, ok)
+	assert_table(x)
+	assert_table(y)
+	assert_equal(3, worker.context.n)
+	assert_equal(x, worker.context[3])
+	assert_equal(3, worker.context[x])
+	assert_equal(y, worker.context[2])
+	assert_equal(2, worker.context[y])
+	assert_nil(next(y))
+	
+	assert_equal(x[1], y)
+	assert_equal(x[x], y)
+end
+
 run()

@@ -59,7 +59,7 @@ void Worker::setid(int index, int id) {
 	
 	if(this->loadmode) {
 		this->L->pushvalue(index);
-		this->L->settablei(_I_CONTEXT, this->count);
+		this->L->settablei(_I_CONTEXT, id);
 	}
 }
 

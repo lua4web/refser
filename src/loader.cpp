@@ -165,6 +165,8 @@ void Loader::process(int role) {
 			int x;
 			this->process_number();
 			x = this->L->tonumber(-1);
+			this->L->pop();
+			
 			this->count = (this->count > x) ? this->count : x;
 			this->L->newtable();
 			this->setid(this->L->gettop(), x);
