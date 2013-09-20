@@ -25,7 +25,7 @@ class Worker {
 		int loadmode;
 		explicit Worker(Lua *L);
 		~Worker();
-		virtual int pushresult() = 0;
+		int pushresult();
 };
 
 #endif

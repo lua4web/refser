@@ -189,8 +189,7 @@ int Loader::done() {
 }
 
 int Loader::pushresult() {
-	this->L->pushnumber(this->count);
-	this->L->setfield(_I_CONTEXT, "n");
+	Worker::pushresult();
 	this->L->pushnumber(this->L->gettop() - _I_X - 1);
 	this->L->replace(_I_X + 1);
 	return this->L->gettop() - _I_X;

@@ -157,8 +157,7 @@ void Saver::process(int index) {
 }
 
 int Saver::pushresult() {
-	this->L->pushnumber(this->count);
-	this->L->setfield(_I_CONTEXT, "n");
+	Worker::pushresult();
 	this->B->pushresult();
 	return 1;
 }

@@ -62,3 +62,9 @@ void Worker::setid(int index, int id) {
 		this->L->settablei(_I_CONTEXT, this->count);
 	}
 }
+
+int Worker::pushresult() {
+	this->L->pushnumber(this->count);
+	this->L->setfield(_I_CONTEXT, "n");
+	return 0;
+}
