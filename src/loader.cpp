@@ -5,6 +5,7 @@
 #include <limits.h>
 #include "format.hpp"
 
+
 #define ensure(cond) { \
 	if(!(cond)) { \
 		throw _LOADER_ERR_MAILFORMED; \

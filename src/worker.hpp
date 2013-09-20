@@ -14,12 +14,12 @@ class Worker {
 		FixBuf *B;
 		int count;
 		int nesting;
-		int maxnesting;
 		int items;
-		int maxitems;
-		int maxtuple;
-		int doublecontext;
 	public:
+		int maxnesting;
+		int maxtuple;
+		int maxitems;
+		int doublecontext;
 		explicit Worker(Lua *L);
 		~Worker();
 		virtual int pushresult() = 0;

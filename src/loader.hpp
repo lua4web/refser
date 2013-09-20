@@ -25,7 +25,6 @@ class Loader: public Worker {
 		void process_string();
 		void process_table();
 	public:
-		int maxtuple;
 		explicit Loader(Lua *L) : Worker(L) {
 			this->s = this->L->tolstring(_I_X, &this->len);
 		}

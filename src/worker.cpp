@@ -17,11 +17,15 @@ Worker::Worker(Lua *L) {
 	L->pop();
 	
 	L->getfield(_I_SELF, "maxtuple");
-	maxtuple = L->tonumber(-1);
+	this->maxtuple = L->tonumber(-1);
 	L->pop();
 	
 	L->getfield(_I_SELF, "maxitems");
 	this->maxitems = L->tonumber(-1);
+	L->pop();
+	
+	L->getfield(_I_SELF, "doublecontext");
+	this->doublecontext = L->toboolean(-1);
 	L->pop();
 	
 	this->B = new FixBuf(L, L->gettop() + 1);
