@@ -97,10 +97,6 @@ void Loader::process_table() {
 		throw _LOADER_ERR_TOODEEP;
 	}
 	
-	this->count++;
-	this->L->newtable();
-	this->setid(this->L->gettop(), this->count);
-	
 	while(*this->s != _FORMAT_ARRAY_HASH_SEP) {
 		this->process(_LOADER_ROLE_VALUE);
 		this->L->rawseti(-2, i++);
@@ -165,7 +161,20 @@ void Loader::process(int role) {
 			}
 			break;
 		}
+		case _FORMAT_TABLE_EXPLICIT: {
+			int x;
+			this->process_number();
+			x = this->L->tonumber(-1);
+			this->count = (this->count > x) ? this->count : x;
+			this->L->newtable();
+			this->setid(this->L->gettop(), x);
+			this->process_table();
+			break;
+		}
 		case _FORMAT_TABLE_START: {
+			this->count++;
+			this->L->newtable();
+			this->setid(this->L->gettop(), this->count);
 			this->process_table();
 			break;
 		}

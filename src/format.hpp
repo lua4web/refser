@@ -12,6 +12,7 @@
 #define _FORMAT_NUMBER 'D'
 #define _FORMAT_STRING '"'
 #define _FORMAT_TABLE_START '{'
+#define _FORMAT_TABLE_EXPLICIT '#'
 #define _FORMAT_TABLE_END '}'
 #define _FORMAT_ARRAY_HASH_SEP '|'
 #define _FORMAT_TABLE_REF '@'
