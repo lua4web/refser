@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "lua.hpp"
+#include "worker.hpp"
 #include "saver.hpp"
 #include "loader.hpp"
 
@@ -10,10 +11,10 @@ static int save(lua_State *LS) {
 		Saver S(&L);
 		
 		int i;
-		int tuplesize = L.gettop() - _SAVER_I_X;
+		int tuplesize = L.gettop() - _I_X;
 		
 		for(i = 0; i < tuplesize; i++) {
-			S.process(_SAVER_I_X + i);
+			S.process(_I_X + i);
 		}
 		S.pushresult();
 		return 1;

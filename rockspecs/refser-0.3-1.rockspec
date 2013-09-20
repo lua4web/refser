@@ -28,6 +28,7 @@ build = {
 				"src/lua.cpp",
 				"src/writer.cpp",
 				"src/fixbuf.cpp",
+				"src/worker.cpp",
 				"src/saver.cpp",
 				"src/loader.cpp"
 			},

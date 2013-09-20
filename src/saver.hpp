@@ -2,11 +2,7 @@
 #define SAVER_H
 
 #include "lua.hpp"
-#include "writer.hpp"
-
-#define _SAVER_I_SELF 1
-#define _SAVER_I_CONTEXT 2
-#define _SAVER_I_X 3
+#include "worker.hpp"
 
 #define _SAVER_ERR_TOODEEP "refser.save error: table is too deep"
 #define _SAVER_ERR_STACK "refser.save error: lua stack exhausted"
@@ -16,25 +12,15 @@
 #define _SAVER_ERR_ITEMS "refser.save error: too many items"
 #define _SAVER_ERR_TOOLONG "refser.save error: tuple is too long"
 
-class Saver {
+class Saver: public Worker {
 	private:
-		Lua *L;
-		Writer *B;
-		int count;
-		int nesting;
-		int maxnesting;
-		int items;
-		int maxitems;
-		int doublecontext;
-		
 		void process_number(lua_Number x);
 		void process_string(const char *s, size_t len);
 		void process_table(int index);
 	public:
-		Saver(Lua *L);
-		~Saver();
+		explicit Saver(Lua *L) : Worker(L) { };
 		void process(int index);
-		void pushresult();
+		int pushresult();
 };
 
 #endif
