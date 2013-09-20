@@ -2,11 +2,7 @@
 #define LOADER_H
 
 #include "lua.hpp"
-#include "fixbuf.hpp"
-
-#define _LOADER_I_SELF 1
-#define _LOADER_I_CONTEXT 2
-#define _LOADER_I_X 3
+#include "worker.hpp"
 
 #define _LOADER_ERR_TOODEEP "refser.load error: table is too deep"
 #define _LOADER_ERR_MAILFORMED "refser.load error: mailformed input"
@@ -18,18 +14,10 @@
 #define _LOADER_ROLE_KEY 2
 #define _LOADER_ROLE_VALUE 3
 
-class Loader {
+class Loader: public Worker {
 	private:
-		Lua *L;
-		FixBuf *B;
 		const char *s;
 		size_t len;
-		int count;
-		int nesting;
-		int maxnesting;
-		int items;
-		int maxitems;
-		int doublecontext;
 		
 		void eat();
 		void eat(size_t size);
@@ -38,11 +26,12 @@ class Loader {
 		void process_table();
 	public:
 		int maxtuple;
-		Loader(Lua *L);
-		~Loader();
+		explicit Loader(Lua *L) : Worker(L) {
+			this->s = this->L->tolstring(_I_X, &this->len);
+		}
 		void process(int role);
 		int done();
-		void pushresult();
+		int pushresult();
 };
 
 #endif

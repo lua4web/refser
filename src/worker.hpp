@@ -20,7 +20,7 @@ class Worker {
 		int maxtuple;
 		int doublecontext;
 	public:
-		Worker(Lua *L);
+		explicit Worker(Lua *L);
 		~Worker();
 		virtual int pushresult() = 0;
 };
