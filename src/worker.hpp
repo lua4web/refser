@@ -22,7 +22,7 @@ class Worker {
 	public:
 		Worker(Lua *L);
 		~Worker();
-		virtual int pushresult();
+		virtual int pushresult() = 0;
 };
 
 #endif
