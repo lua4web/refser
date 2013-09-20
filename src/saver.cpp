@@ -59,14 +59,7 @@ void Saver::process_table(int index) {
 	}
 	
 	this->count++;
-	this->L->pushvalue(index);
-	this->L->pushnumber(this->count);
-	this->L->settable(_I_CONTEXT);
-	
-	if(this->doublecontext) {
-		this->L->pushvalue(index);
-		this->L->settablei(_I_CONTEXT, this->count);
-	}
+	this->setid(index, this->count);
 	
 	this->B->add(_FORMAT_TABLE_START);
 				

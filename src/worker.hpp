@@ -15,11 +15,14 @@ class Worker {
 		int count;
 		int nesting;
 		int items;
+		
+		void setid(int index, int id);
 	public:
 		int maxnesting;
 		int maxtuple;
 		int maxitems;
-		int doublecontext;
+		int savemode;
+		int loadmode;
 		explicit Worker(Lua *L);
 		~Worker();
 		virtual int pushresult() = 0;

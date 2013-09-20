@@ -99,14 +99,7 @@ void Loader::process_table() {
 	
 	this->count++;
 	this->L->newtable();
-	this->L->pushvalue(-1);
-	this->L->settablei(_I_CONTEXT, this->count);
-	
-	if(this->doublecontext) {
-		this->L->pushvalue(-1);
-		this->L->pushnumber(this->count);
-		this->L->settable(_I_CONTEXT);
-	}
+	this->setid(this->L->gettop(), this->count);
 	
 	while(*this->s != _FORMAT_ARRAY_HASH_SEP) {
 		this->process(_LOADER_ROLE_VALUE);

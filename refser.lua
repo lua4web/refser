@@ -21,10 +21,8 @@ function worker:setoptions(options)
 	self.maxnesting = options.maxnesting or self.maxnesting
 	self.maxtuple = options.maxtuple or self.maxtuple
 	self.maxitems = options.maxitems or self.maxitems
+	self.mode = options.mode or "sl"
 	self:setcontext(options.context)
-	if options.doublecontext ~= nil then
-		self.doublecontext = options.doublecontext
-	end
 end
 
 function worker:setcontext(context)
@@ -70,11 +68,15 @@ function refser.new(options)
 end
 
 function refser.save(...)
-	return worker():save(...)
+	return worker{
+		mode = "s"
+	}:save(...)
 end
 
 function refser.load(s)
-	return worker():load(s)
+	return worker{
+		mode = "l"
+	}:load(s)
 end
 
 return refser
