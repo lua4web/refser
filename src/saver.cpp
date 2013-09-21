@@ -127,10 +127,10 @@ void Saver::process(int index) {
 			if(this->L->isnil(-1)) {
 				this->L->pop();
 				
-				this->L->pushvalue(index);
-				this->L->gettable(_I_CONTEXT2);
-				if(this->L->isnil(-1)) {
-					this->L->pop();
+				if(L->isnil(_I_CONTEXT2) || !this->L->gettable(_I_CONTEXT2, index)) {
+					if(!L->isnil(_I_CONTEXT2)) {
+						this->L->pop();
+					}
 					this->B->add(_FORMAT_TABLE_START);
 					this->process_table(index, ++this->count);
 				}

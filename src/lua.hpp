@@ -45,6 +45,7 @@ class Lua {
 		void settable(int index);
 		void settablei(int index, int n);
 		int gettable(int index);
+		int gettable(int indext, int indexk);
 		int gettablei(int index, int n);
 		void getfield(int index, const char *field);
 		void setfield(int index, const char *field);

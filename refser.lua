@@ -52,7 +52,7 @@ function worker:setmaxitems(maxitems)
 end
 
 function worker:save(...)
-	return self:resave({}, ...)
+	return self:resave(nil, ...)
 end
 
 function worker:load(s)

@@ -141,6 +141,12 @@ int Lua::gettable(int index) {
 	return !lua_isnil(this->L, -1);
 }
 
+int Lua::gettable(int indext, int indexk) {
+	lua_pushvalue(this->L, indexk);
+	lua_gettable(this->L, indext);
+	return !lua_isnil(this->L, -1);
+}
+
 int Lua::gettablei(int index, int n) {
 	lua_pushnumber(this->L, n);
 	lua_gettable(this->L, index);
