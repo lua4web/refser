@@ -16,6 +16,7 @@ class Worker {
 		int count;
 		int nesting;
 		int items;
+		const char *mode;
 		
 		void setid(int index, int id);
 	public:

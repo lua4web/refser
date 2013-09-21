@@ -19,7 +19,7 @@ class Saver: public Worker {
 		void process_string(const char *s, size_t len);
 		void process_table(int index, int id);
 	public:
-		explicit Saver(Lua *L) : Worker(L) { };
+		explicit Saver(Lua *L);
 		void process(int index);
 		int pushresult();
 };

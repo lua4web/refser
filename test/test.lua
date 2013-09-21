@@ -563,7 +563,9 @@ end
 testcase "explicit"
 	
 function empty()
-	worker = refser.new()
+	worker = refser.new{
+		mode = "lse"
+	}
 	
 	ok, x = worker:load("#3|}")
 	
@@ -576,7 +578,9 @@ function empty()
 end
 
 function nested()
-	worker = refser.new()
+	worker = refser.new{
+		mode = "lse"
+	}
 	
 	ok, x, y = worker:load("#3#2|}|@3@2}@2")
 	

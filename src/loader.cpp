@@ -4,7 +4,17 @@
 #include <math.h>
 #include <limits.h>
 #include "format.hpp"
+#include <string.h>
 
+Loader::Loader(Lua *L) : Worker(L) {
+	this->s = L->tolstring(_I_X, &this->len);
+	if(strchr(this->mode, 'e')) {
+		this->explicitmode = 1;
+	}
+	else {
+		this->explicitmode = 0;
+	}
+}
 
 #define ensure(cond) { \
 	if(!(cond)) { \
@@ -162,6 +172,7 @@ void Loader::process(int role) {
 			break;
 		}
 		case _FORMAT_TABLE_EXPLICIT: {
+			ensure(this->explicitmode);
 			int x;
 			this->process_number();
 			x = this->L->tonumber(-1);

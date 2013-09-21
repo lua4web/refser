@@ -26,9 +26,9 @@ class Loader: public Worker {
 		void process_string();
 		void process_table();
 	public:
-		explicit Loader(Lua *L) : Worker(L) {
-			this->s = this->L->tolstring(_I_X, &this->len);
-		}
+		int explicitmode;
+		
+		explicit Loader(Lua *L);
 		void process(int role);
 		int done();
 		int pushresult();

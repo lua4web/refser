@@ -28,14 +28,14 @@ Worker::Worker(Lua *L) {
 	L->pop();
 	
 	L->getfield(_I_SELF, "mode");
-	mode = L->tolstring(-1, NULL);
-	if(strchr(mode, 's')) {
+	this->mode = L->tolstring(-1, NULL);
+	if(strchr(this->mode, 's')) {
 		this->savemode = 1;
 	}
 	else {
 		this->savemode = 0;
 	}
-	if(strchr(mode, 'l')) {
+	if(strchr(this->mode, 'l')) {
 		this->loadmode = 1;
 	}
 	else {

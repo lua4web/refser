@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include "format.hpp"
 
+Saver::Saver(Lua *L) : Worker(L) { }
+
 void Saver::process_number(lua_Number x) {
 	this->B->addf(_FORMAT_NUMBER_MAX, "%.*g", _FORMAT_NUMBER_LEN, x);
 }
