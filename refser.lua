@@ -52,15 +52,19 @@ function worker:setmaxitems(maxitems)
 end
 
 function worker:save(...)
-	if select("#", ...) > self.maxtuple then
-		return nil, "refser.save error: tuple is too long"
-	end
-	return refser.c.save(self, ...)
+	return self:resave({}, ...)
 end
 
 function worker:load(s)
 	assert(type(s) == "string", ("bad argument #1 to 'load' (string expected, got %s"):format(type(s)))
-	return refser.c.load(self, s)
+	return refser.c.load(self, nil, s)
+end
+
+function worker:resave(context2, ...)
+	if select("#", ...) > self.maxtuple then
+		return nil, "refser.save error: tuple is too long"
+	end
+	return refser.c.save(self, context2, ...)
 end
 
 function refser.new(options)

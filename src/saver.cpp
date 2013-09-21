@@ -49,7 +49,7 @@ void Saver::process_string(const char *s, size_t len) {
 	this->B->add(_FORMAT_STRING);
 }
 
-void Saver::process_table(int index) {
+void Saver::process_table(int index, int id) {
 	lua_Number x;
 	int i = 1;
 	
@@ -58,10 +58,7 @@ void Saver::process_table(int index) {
 		throw _SAVER_ERR_TOODEEP;
 	}
 	
-	this->count++;
-	this->setid(index, this->count);
-	
-	this->B->add(_FORMAT_TABLE_START);
+	this->setid(index, id);
 				
 	while(this->L->rawgeti(index, i++)) {
 		this->process(this->L->gettop());
@@ -127,7 +124,22 @@ void Saver::process(int index) {
 			this->L->gettable(_I_CONTEXT);
 			if(this->L->isnil(-1)) {
 				this->L->pop();
-				this->process_table(index);
+				
+				this->L->pushvalue(index);
+				this->L->gettable(_I_CONTEXT2);
+				if(this->L->isnil(-1)) {
+					this->L->pop();
+					this->B->add(_FORMAT_TABLE_START);
+					this->process_table(index, ++this->count);
+				}
+				else {
+					lua_Number x = this->L->tonumber(-1);
+					this->L->pop();
+					this->B->add(_FORMAT_TABLE_EXPLICIT);
+					this->process_number(x);
+					this->count = (this->count > x) ? this->count : x;
+					this->process_table(index, x);
+				}
 			}
 			else {
 				lua_Number x = this->L->tonumber(this->L->gettop());

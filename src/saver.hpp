@@ -17,7 +17,7 @@ class Saver: public Worker {
 	private:
 		void process_number(lua_Number x);
 		void process_string(const char *s, size_t len);
-		void process_table(int index);
+		void process_table(int index, int id);
 	public:
 		explicit Saver(Lua *L) : Worker(L) { };
 		void process(int index);

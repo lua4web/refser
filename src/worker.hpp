@@ -6,7 +6,8 @@
 
 #define _I_SELF 1
 #define _I_CONTEXT 2
-#define _I_X 3
+#define _I_CONTEXT2 3
+#define _I_X 4
 
 class Worker {
 	protected:
