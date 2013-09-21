@@ -598,4 +598,70 @@ function nested()
 	assert_equal(x[x], y)
 end
 
+testcase "resave"
+
+function simple()
+	worker1 = refser.new{
+		mode = "lse"
+	}
+	
+	worker2 = refser.new{
+		mode = "lse"
+	}
+	
+	x = {}
+	y = {}
+	
+	s = worker1:resave({[x] = 2, [y] = 1}, x, y, {y, x})
+	assert_equal("#2|}#1|}{@1@2|}", s)
+	
+	ok, x2, y2, z2 = worker2:load(s)
+	assert_equal(3, ok)
+	assert_table(x2)
+	assert_table(y2)
+	assert_table(z2)
+	assert_equal(y2, z2[1])
+	assert_equal(x2, z2[2])
+end
+
+function persist_context()
+	worker1 = refser.new{
+		mode = "lse"
+	}
+	
+	x = {}
+	y = {}
+	z = {}
+	t = {x, [y] = z}
+	
+	worker1:save(t)
+	
+	t[1] = nil
+	x = nil
+	collectgarbage()
+	
+	c = worker1.context	
+	worker1:setcontext{}
+	s = worker1:resave(c, t)
+	
+	assert_equal("#1|#3|}#4|}}", s)
+	
+	---
+	
+	worker2 = refser.new{
+		mode = "lse"
+	}
+	
+	ok, t2 = worker2:load(s)
+	assert_equal(1, ok)
+	assert_table(t2)
+	
+	assert_equal(c.n, worker2.context.n)
+	for k, v in pairs(c) do
+		if type(k) == "number" then
+			assert_not_nil(worker2.context[k])
+		end
+	end
+end
+
 run()

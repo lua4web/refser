@@ -1,4 +1,4 @@
 Running testsuit...
 
-OK (49 tests, 10 testcases)
+OK (51 tests, 11 testcases)
 
